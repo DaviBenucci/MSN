@@ -19,6 +19,7 @@ Arquivos:
 - `components/header/msn-header.html`
 - `components/header/msn-header.css`
 - `components/header/msn-header.js`
+- `components/header/sections/*` para montagem por containers separados.
 
 Onde aplicar:
 
@@ -31,7 +32,7 @@ Funcoes:
 
 - Busca nativa WooCommerce.
 - Conta, pedidos e carrinho.
-- Contador de carrinho fica preparado por `data-msn-cart-count`, mas deve ser conectado por widget/menu cart do WooCommerce ou fragment nativo antes de ser exibido.
+- Contador de carrinho usa `data-msn-cart-count` e e preenchido pela bridge.
 - Categorias principais.
 - WhatsApp consultivo.
 - Menu mobile off-canvas.
@@ -64,9 +65,15 @@ Arquivos:
 - `components/home/msn-home.css`
 - `components/home/msn-home.js`
 
-Slots WooCommerce:
+Containers:
 
-- Produtos em destaque: widget Products ou shortcode `[products limit="8" columns="4" orderby="date" order="DESC"]`.
+- Versao combinada: `components/home/msn-home.html`
+- Versao por partes: `components/home/sections/01-hero` ate `05-help`
+
+Dados WooCommerce:
+
+- Produtos em destaque: preferir bridge `data-msn-products` com query `{"per_page":8,"orderby":"date","order":"DESC"}`.
+- Fallback: widget Products ou shortcode `[products limit="8" columns="4" orderby="date" order="DESC"]`.
 
 ## Loja, categorias e busca
 

@@ -1,0 +1,30 @@
+.msn-home-help__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 0.9fr) minmax(300px, 0.6fr);
+	align-items: start;
+	gap: 34px;
+}
+
+.msn-home-help h2 {
+	margin: 14px 0 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+	font-size: clamp(1.55rem, 3vw, 2.35rem);
+	line-height: 1.15;
+	letter-spacing: 0;
+}
+
+.msn-home-help p {
+	color: var(--msn-muted);
+	line-height: 1.72;
+}
+
+.msn-home-help__card .msn-button {
+	margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+	.msn-home-help__grid {
+		grid-template-columns: 1fr;
+	}
+}

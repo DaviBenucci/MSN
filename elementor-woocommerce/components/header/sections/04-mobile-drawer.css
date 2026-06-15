@@ -1,0 +1,107 @@
+.msn-header__backdrop,
+.msn-header__drawer {
+	display: none;
+}
+
+@media (max-width: 768px) {
+	.msn-header__backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 1000;
+		display: block;
+		background: rgba(8, 47, 73, 0.58);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 180ms ease;
+	}
+
+	.msn-header__backdrop.is-open {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.msn-header__drawer {
+		position: fixed;
+		inset: 0 0 0 auto;
+		z-index: 1001;
+		display: flex;
+		width: min(88vw, 390px);
+		height: 100dvh;
+		transform: translateX(100%);
+		flex-direction: column;
+		background: #ffffff;
+		box-shadow: -18px 0 45px rgba(15, 23, 42, 0.18);
+		transition: transform 220ms ease;
+	}
+
+	.msn-header__drawer.is-open {
+		transform: translateX(0);
+	}
+
+	.msn-header__drawer-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom: 1px solid var(--msn-border);
+		padding: 16px;
+	}
+
+	.msn-header__drawer-head strong {
+		color: var(--msn-primary);
+		font-family: var(--msn-font-display);
+		font-size: 1.15rem;
+	}
+
+	.msn-header__drawer-head button {
+		border: 1px solid var(--msn-border);
+		border-radius: var(--msn-radius);
+		background: #ffffff;
+		color: var(--msn-primary);
+		padding: 9px 12px;
+		font-weight: 800;
+	}
+
+	.msn-header__drawer-search {
+		display: grid;
+		gap: 8px;
+		border-bottom: 1px solid var(--msn-border);
+		padding: 16px;
+	}
+
+	.msn-header__drawer-search label {
+		color: var(--msn-primary);
+		font-weight: 900;
+	}
+
+	.msn-header__drawer-search input {
+		border: 1px solid var(--msn-border);
+		border-radius: var(--msn-radius);
+		padding: 12px;
+	}
+
+	.msn-header__drawer-nav {
+		display: grid;
+		gap: 4px;
+		padding: 16px;
+		overflow-y: auto;
+	}
+
+	.msn-header__drawer-nav a {
+		border-radius: var(--msn-radius);
+		color: var(--msn-text);
+		padding: 12px;
+		font-weight: 800;
+		text-decoration: none;
+	}
+
+	.msn-header__drawer-nav a:hover {
+		background: var(--msn-primary-soft);
+		color: var(--msn-primary);
+	}
+
+	.msn-header__drawer-cta {
+		margin-top: auto;
+		border-top: 1px solid var(--msn-border);
+		padding: 16px;
+	}
+}

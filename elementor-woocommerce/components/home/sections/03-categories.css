@@ -1,0 +1,36 @@
+.msn-home-section-head {
+	max-width: 720px;
+	margin-bottom: 30px;
+}
+
+.msn-home-section-head h2 {
+	margin: 14px 0 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+	font-size: clamp(1.55rem, 3vw, 2.35rem);
+	line-height: 1.15;
+	letter-spacing: 0;
+}
+
+.msn-home-category {
+	min-height: 170px;
+	color: var(--msn-primary);
+	text-decoration: none;
+}
+
+.msn-home-category span {
+	display: inline-flex;
+	border-radius: 999px;
+	background: var(--msn-primary-soft);
+	padding: 7px 10px;
+	font-size: 0.82rem;
+	font-weight: 900;
+}
+
+.msn-home-category strong {
+	display: block;
+	margin-top: 26px;
+	font-family: var(--msn-font-display);
+	font-size: 1.25rem;
+	line-height: 1.2;
+}

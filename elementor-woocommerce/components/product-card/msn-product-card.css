@@ -11,19 +11,31 @@
 
 .msn-product-card-model ul.products li.product,
 .msn-product-card-model .e-loop-item,
-.msn-product-card {
+.msn-product-card,
+#msn-card-produto {
 	overflow: hidden;
 	border: 1px solid rgba(15, 61, 94, 0.12);
 	border-radius: 24px;
 	background: #fff8f8;
 	box-shadow: 0 16px 32px rgba(15, 23, 42, 0.18);
-	padding: 12px 12px 14px;
+	padding: 12px;
 	text-align: center;
+}
+
+.msn-product-card,
+#msn-card-produto {
+	display: flex;
+	width: min(100%, 480px);
+	min-height: 100%;
+	flex-direction: column;
+	justify-content: space-between;
+	margin-inline: auto;
 }
 
 .msn-product-card-model ul.products li.product img,
 .msn-product-card-model .msn-product-card__image img,
-.msn-product-card__image img {
+.msn-product-card__image img,
+#msn-card-imagem img {
 	display: block;
 	width: 100%;
 	aspect-ratio: 4 / 3;
@@ -33,9 +45,19 @@
 	padding: 26px;
 }
 
+.msn-product-card__image,
+#msn-card-imagem {
+	display: block;
+	width: 100%;
+	margin: 0;
+}
+
 .msn-product-card-model .woocommerce-loop-product__title,
 .msn-product-card-model .msn-product-card__title,
-.msn-product-card__title {
+.msn-product-card__title,
+.msn-product-card__title .elementor-heading-title,
+#msn-card-nome,
+#msn-card-nome .elementor-heading-title {
 	min-height: 48px;
 	margin: 20px 0 0;
 	color: #073b78;
@@ -46,9 +68,20 @@
 	text-align: left;
 }
 
+.msn-product-card__title a,
+#msn-card-nome a {
+	color: inherit;
+	text-decoration: none;
+}
+
 .msn-product-card-model .price,
 .msn-product-card-model .msn-product-card__price,
-.msn-product-card__price {
+.msn-product-card__price,
+.msn-product-card__price .price,
+.msn-product-card__price .woocommerce-Price-amount,
+#msn-card-preco,
+#msn-card-preco .price,
+#msn-card-preco .woocommerce-Price-amount {
 	display: block;
 	margin: 20px 0 0;
 	color: #0b1728 !important;
@@ -58,11 +91,33 @@
 	text-decoration: underline;
 }
 
+.msn-product-card__price ins,
+#msn-card-preco ins {
+	text-decoration: none;
+}
+
+.msn-product-card__price del,
+#msn-card-preco del {
+	display: block;
+	margin-bottom: 4px;
+	color: #64748b;
+	font-size: 0.92rem;
+	font-weight: 700;
+	opacity: 0.76;
+}
+
 .msn-product-card-model a.button,
 .msn-product-card-model button.button,
 .msn-product-card-model .add_to_cart_button,
 .msn-product-card-model .msn-product-card__button,
-.msn-product-card__button {
+.msn-product-card__button,
+.msn-product-card__button .elementor-button,
+.msn-product-card__button .button,
+.msn-product-card__button a,
+#msn-card-botao,
+#msn-card-botao .elementor-button,
+#msn-card-botao .button,
+#msn-card-botao a {
 	display: inline-flex;
 	width: 100%;
 	min-height: 48px;
@@ -76,6 +131,7 @@
 	color: #ffffff !important;
 	font-size: 0.98rem;
 	font-weight: 900;
+	line-height: 1.1;
 	text-decoration: none;
 }
 
@@ -83,7 +139,12 @@
 .msn-product-card-model button.button::before,
 .msn-product-card-model .add_to_cart_button::before,
 .msn-product-card-model .msn-product-card__button::before,
-.msn-product-card__button::before {
+.msn-product-card__button::before,
+.msn-product-card__button .elementor-button::before,
+.msn-product-card__button .button::before,
+#msn-card-botao::before,
+#msn-card-botao .elementor-button::before,
+#msn-card-botao .button::before {
 	content: "+";
 	font-size: 1.8rem;
 	line-height: 1;
@@ -93,9 +154,26 @@
 .msn-product-card-model button.button:hover,
 .msn-product-card-model .add_to_cart_button:hover,
 .msn-product-card-model .msn-product-card__button:hover,
-.msn-product-card__button:hover {
+.msn-product-card__button:hover,
+.msn-product-card__button .elementor-button:hover,
+.msn-product-card__button .button:hover,
+.msn-product-card__button a:hover,
+#msn-card-botao:hover,
+#msn-card-botao .elementor-button:hover,
+#msn-card-botao .button:hover,
+#msn-card-botao a:hover {
 	background: #073b78;
 	transform: translateY(-1px);
+}
+
+.msn-product-card .added_to_cart,
+#msn-card-produto .added_to_cart {
+	display: inline-flex;
+	justify-content: center;
+	margin-top: 10px;
+	color: #073b78;
+	font-size: 0.9rem;
+	font-weight: 900;
 }
 
 @media (max-width: 1024px) {

@@ -16,6 +16,7 @@ Este pacote implementa a reforma planejada para o e-commerce da MSN Distribuidor
 - `components/account`: minha conta.
 - `components/contact`: contato e formulario para WhatsApp.
 - `docs`: guia de instalacao, QA, compatibilidade de versoes, diagnostico de produtos e auditoria do catalogo.
+- `docs/GUIA-CONTAINERS-HOME-HEADER.md`: montagem por containers separados para Home e Header usando a bridge.
 
 ## Como usar
 
@@ -35,4 +36,12 @@ Este pacote implementa a reforma planejada para o e-commerce da MSN Distribuidor
 - Validar mobile antes de aprovar desktop.
 - Os arquivos `.js` foram escritos em sintaxe ES5, sem `=>`, para evitar erro de caracteres especiais no editor do Elementor.
 - Ao colar JS em um widget HTML, envolva o conteudo com `<script>...</script>`. No Elementor Pro Custom Code, use o padrao exigido pela propria tela.
-- Produtos, preco, imagem, estoque e botao de compra devem vir de Loop Grid tipo `Products`, widget Products/Archive Products ou shortcode WooCommerce. O HTML widget nao puxa produtos sozinho.
+- Produtos, preco, imagem, estoque e CTA devem vir da bridge `data-msn-products` ou de Loop Grid tipo `Products`, widget Products/Archive Products ou shortcode WooCommerce. O HTML widget sozinho nao puxa produtos sem a bridge.
+
+## Fluxo novo de producao
+
+Para construir as paginas em conjunto, use primeiro:
+
+- `docs/FLUXO-DE-TRABALHO-ELEMENTOR.md`
+- `docs/HOME-ELEMENTOR-PASSO-A-PASSO.md`
+- `docs/GUIA-CONTAINERS-HOME-HEADER.md`

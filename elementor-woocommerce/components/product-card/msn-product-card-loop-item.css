@@ -1,0 +1,216 @@
+
+selector {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	width: min(100%, 430px);
+	min-height: 100%;
+	flex-direction: column;
+	overflow: hidden;
+	margin-inline: auto;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	background: #ffffff;
+	box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+	padding: 14px;
+	text-align: left;
+	transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+selector::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto;
+	z-index: 1;
+	height: 4px;
+	background: linear-gradient(90deg, #1e73be 0%, #0ea5e9 58%, #10b981 100%);
+	opacity: 0.88;
+}
+
+selector:hover {
+	border-color: rgba(14, 165, 233, 0.48);
+	box-shadow: 0 18px 42px rgba(15, 61, 94, 0.14);
+	transform: translateY(-2px);
+}
+
+selector .elementor-widget-image,
+selector .elementor-widget-theme-post-featured-image,
+selector .elementor-widget-woocommerce-product-images {
+	width: 100%;
+	margin: 0;
+}
+
+selector img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	border: 1px solid #e2e8f0;
+	border-radius: 6px;
+	background: linear-gradient(180deg, #f8fafc 0%, #eef6fb 100%);
+	object-fit: contain;
+	padding: 24px;
+	transition: transform 180ms ease;
+}
+
+selector:hover img {
+	transform: scale(1.025);
+}
+
+selector .elementor-widget-heading,
+selector .elementor-widget-theme-post-title,
+selector .elementor-widget-woocommerce-product-title {
+	margin: 16px 0 0;
+}
+
+selector .elementor-heading-title,
+selector .elementor-widget-theme-post-title a,
+selector .woocommerce-loop-product__title {
+	display: -webkit-box;
+	min-height: 44px;
+	margin: 0;
+	overflow: hidden;
+	color: #0f3d5e;
+	font-family: Poppins, Montserrat, Inter, Arial, sans-serif;
+	font-size: 1rem;
+	font-weight: 900;
+	letter-spacing: 0;
+	line-height: 1.35;
+	text-align: left;
+	text-decoration: none;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+selector .elementor-heading-title:hover,
+selector .elementor-widget-theme-post-title a:hover {
+	color: #0ea5e9;
+}
+
+selector .elementor-widget-woocommerce-product-price,
+selector .price {
+	position: relative;
+	margin: 16px 0 0;
+	border-top: 1px solid #e2e8f0;
+	padding-top: 14px;
+	color: #082f49 !important;
+	font-family: Inter, Roboto, Arial, sans-serif;
+	font-size: 1.24rem;
+	font-weight: 950;
+	line-height: 1.2;
+	text-align: left;
+	text-decoration: none;
+}
+
+selector .elementor-widget-woocommerce-product-price::before,
+selector .price::before {
+	content: "Preco";
+	display: block;
+	margin-bottom: 4px;
+	color: #64748b;
+	font-size: 0.72rem;
+	font-weight: 900;
+	letter-spacing: 0;
+	text-transform: uppercase;
+}
+
+selector .woocommerce-Price-amount {
+	color: #082f49 !important;
+	font-weight: 950;
+}
+
+selector ins {
+	text-decoration: none;
+}
+
+selector del {
+	display: block;
+	margin-bottom: 4px;
+	color: #64748b;
+	font-size: 0.88rem;
+	font-weight: 700;
+	opacity: 0.76;
+}
+
+selector .elementor-widget-woocommerce-product-add-to-cart,
+selector .elementor-widget-button {
+	margin-top: auto;
+	padding-top: 18px;
+}
+
+selector .elementor-button,
+selector .button,
+selector .add_to_cart_button {
+	position: relative;
+	display: inline-flex;
+	width: 100%;
+	min-height: 48px;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	overflow: hidden;
+	border: 1px solid #0f3d5e;
+	border-radius: 8px;
+	background: #0f3d5e;
+	color: #ffffff !important;
+	font-family: Inter, Roboto, Arial, sans-serif;
+	font-size: 0.96rem;
+	font-weight: 900;
+	line-height: 1.1;
+	text-decoration: none;
+	box-shadow: 0 10px 22px rgba(15, 61, 94, 0.18);
+	transition: background 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+selector .elementor-button::before,
+selector .button::before,
+selector .add_to_cart_button::before {
+	content: "+";
+	display: inline-grid;
+	width: 22px;
+	height: 22px;
+	place-items: center;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.16);
+	font-size: 1.35rem;
+	line-height: 1;
+}
+
+selector .elementor-button:hover,
+selector .button:hover,
+selector .add_to_cart_button:hover {
+	border-color: #082f49;
+	background: #082f49;
+	box-shadow: 0 14px 28px rgba(15, 61, 94, 0.24);
+	transform: translateY(-1px);
+}
+
+selector .added_to_cart {
+	display: inline-flex;
+	justify-content: center;
+	margin-top: 10px;
+	color: #0f3d5e;
+	font-size: 0.9rem;
+	font-weight: 900;
+	text-decoration: none;
+}
+
+selector .added_to_cart:hover {
+	color: #0ea5e9;
+}
+
+@media (max-width: 640px) {
+	selector {
+		width: 100%;
+		padding: 12px;
+	}
+
+	selector img {
+		padding: 20px;
+	}
+
+	selector .elementor-heading-title,
+	selector .elementor-widget-theme-post-title a,
+	selector .woocommerce-loop-product__title {
+		font-size: 0.96rem;
+	}
+}

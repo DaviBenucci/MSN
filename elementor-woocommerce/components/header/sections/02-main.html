@@ -1,0 +1,31 @@
+<div class="msn-header__main msn-container">
+  <button class="msn-header__menu-button" type="button" aria-label="Abrir menu" aria-controls="msn-mobile-menu" aria-expanded="false" data-msn-menu-open>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </button>
+
+  <a class="msn-header__logo" href="/" aria-label="MSN Distribuidora - pagina inicial">
+    <img src="https://msndistribuidora.com.br/wp-content/uploads/2025/10/LOGO_HD-Photoroom-300x212.png" alt="MSN Distribuidora" width="150" height="106" loading="eager">
+    <span>
+      <strong>MSN Distribuidora</strong>
+      <small>Produtos para impressao</small>
+    </span>
+  </a>
+
+  <form class="msn-header__search" role="search" method="get" action="/">
+    <label class="msn-sr-only" for="msn-header-search">Buscar produtos</label>
+    <input id="msn-header-search" type="search" name="s" placeholder="Buscar toner, cartucho, impressora ou codigo..." autocomplete="off">
+    <input type="hidden" name="post_type" value="product">
+    <button type="submit">Pesquisar</button>
+  </form>
+
+  <nav class="msn-header__actions" aria-label="Acoes do cliente">
+    <a href="/minha-conta/">Conta</a>
+    <a href="/minha-conta/orders/">Pedidos</a>
+    <a class="msn-header__cart" href="/carrinho/" aria-label="Abrir carrinho">
+      Carrinho
+      <span class="msn-header__cart-count" data-msn-cart-count aria-live="polite" hidden></span>
+    </a>
+  </nav>
+</div>
