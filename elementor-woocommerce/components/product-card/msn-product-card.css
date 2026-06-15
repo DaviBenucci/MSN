@@ -1,0 +1,111 @@
+/* Modelo visual dos cards de produto da MSN.
+	Use esta classe no wrapper do widget Products, Archive Products ou Loop Grid. */
+
+.msn-product-card-model ul.products {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 24px;
+	margin: 0;
+	padding: 0;
+}
+
+.msn-product-card-model ul.products li.product,
+.msn-product-card-model .e-loop-item,
+.msn-product-card {
+	overflow: hidden;
+	border: 1px solid rgba(15, 61, 94, 0.12);
+	border-radius: 24px;
+	background: #fff8f8;
+	box-shadow: 0 16px 32px rgba(15, 23, 42, 0.18);
+	padding: 12px 12px 14px;
+	text-align: center;
+}
+
+.msn-product-card-model ul.products li.product img,
+.msn-product-card-model .msn-product-card__image img,
+.msn-product-card__image img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	border: 1px solid rgba(236, 72, 153, 0.35);
+	background: #ffffff;
+	object-fit: contain;
+	padding: 26px;
+}
+
+.msn-product-card-model .woocommerce-loop-product__title,
+.msn-product-card-model .msn-product-card__title,
+.msn-product-card__title {
+	min-height: 48px;
+	margin: 20px 0 0;
+	color: #073b78;
+	font-family: var(--msn-font-display);
+	font-size: 1rem;
+	font-weight: 900;
+	line-height: 1.35;
+	text-align: left;
+}
+
+.msn-product-card-model .price,
+.msn-product-card-model .msn-product-card__price,
+.msn-product-card__price {
+	display: block;
+	margin: 20px 0 0;
+	color: #0b1728 !important;
+	font-size: 1.18rem;
+	font-weight: 900;
+	text-align: center;
+	text-decoration: underline;
+}
+
+.msn-product-card-model a.button,
+.msn-product-card-model button.button,
+.msn-product-card-model .add_to_cart_button,
+.msn-product-card-model .msn-product-card__button,
+.msn-product-card__button {
+	display: inline-flex;
+	width: 100%;
+	min-height: 48px;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 26px !important;
+	border: 0;
+	border-radius: 999px;
+	background: #0b55a6;
+	color: #ffffff !important;
+	font-size: 0.98rem;
+	font-weight: 900;
+	text-decoration: none;
+}
+
+.msn-product-card-model a.button::before,
+.msn-product-card-model button.button::before,
+.msn-product-card-model .add_to_cart_button::before,
+.msn-product-card-model .msn-product-card__button::before,
+.msn-product-card__button::before {
+	content: "+";
+	font-size: 1.8rem;
+	line-height: 1;
+}
+
+.msn-product-card-model a.button:hover,
+.msn-product-card-model button.button:hover,
+.msn-product-card-model .add_to_cart_button:hover,
+.msn-product-card-model .msn-product-card__button:hover,
+.msn-product-card__button:hover {
+	background: #073b78;
+	transform: translateY(-1px);
+}
+
+@media (max-width: 1024px) {
+	.msn-product-card-model ul.products {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 640px) {
+	.msn-product-card-model ul.products {
+		grid-template-columns: 1fr;
+	}
+}

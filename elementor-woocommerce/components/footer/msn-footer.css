@@ -1,0 +1,128 @@
+.msn-footer {
+	background: var(--msn-primary-dark);
+	color: #ffffff;
+}
+
+.msn-footer__grid {
+	display: grid;
+	grid-template-columns: 1.2fr 0.8fr 0.9fr 1fr;
+	gap: 34px;
+	padding-block: 48px;
+}
+
+.msn-footer__logo {
+	display: inline-flex;
+	margin-bottom: 16px;
+}
+
+.msn-footer__logo img {
+	width: 142px;
+	height: auto;
+	object-fit: contain;
+}
+
+.msn-footer p {
+	margin: 0 0 10px;
+	color: rgba(255, 255, 255, 0.72);
+	line-height: 1.65;
+}
+
+.msn-footer__title {
+	width: 100%;
+	border: 0;
+	background: transparent;
+	color: #ffffff;
+	padding: 0;
+	text-align: left;
+	font-family: var(--msn-font-display);
+	font-size: 1rem;
+	font-weight: 900;
+}
+
+.msn-footer__links {
+	display: grid;
+	gap: 10px;
+	margin-top: 16px;
+}
+
+.msn-footer__links a,
+.msn-footer__links span {
+	color: rgba(255, 255, 255, 0.72);
+	font-size: 0.94rem;
+	line-height: 1.4;
+	text-decoration: none;
+}
+
+.msn-footer__links a:hover {
+	color: #ffffff;
+}
+
+.msn-footer__bottom {
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.msn-footer__bottom .msn-container {
+	display: flex;
+	justify-content: space-between;
+	gap: 18px;
+	padding-block: 18px;
+}
+
+.msn-footer__bottom p {
+	margin: 0;
+	font-size: 0.85rem;
+}
+
+@media (min-width: 769px) {
+	.msn-footer__title {
+		pointer-events: none;
+	}
+}
+
+@media (max-width: 900px) {
+	.msn-footer__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 768px) {
+	.msn-footer__grid {
+		grid-template-columns: 1fr;
+		gap: 0;
+		padding-block: 34px;
+	}
+
+	.msn-footer__brand {
+		margin-bottom: 22px;
+	}
+
+	.msn-footer__group {
+		border-top: 1px solid rgba(255, 255, 255, 0.14);
+		padding-block: 14px;
+	}
+
+	.msn-footer__title {
+		position: relative;
+		padding-right: 32px;
+	}
+
+	.msn-footer__title::after {
+		content: "+";
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	.msn-footer__title[aria-expanded="true"]::after {
+		content: "-";
+	}
+
+	.msn-footer__links {
+		margin-top: 14px;
+	}
+
+	.msn-footer__bottom .msn-container {
+		flex-direction: column;
+	}
+}
+

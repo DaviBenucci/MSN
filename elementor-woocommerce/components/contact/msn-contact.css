@@ -1,0 +1,65 @@
+.msn-contact-hero__grid,
+.msn-contact-content__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 360px;
+	align-items: start;
+	gap: 30px;
+}
+
+.msn-contact-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 24px;
+}
+
+.msn-contact-card p {
+	margin-top: 12px;
+}
+
+.msn-contact-form h2,
+.msn-contact-side h2 {
+	margin: 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+}
+
+.msn-contact-form > p {
+	margin: 6px 0 8px;
+}
+
+.msn-contact-form__status {
+	min-height: 22px;
+	margin: 0;
+	color: var(--msn-danger);
+	font-weight: 800;
+}
+
+.msn-contact-side {
+	position: sticky;
+	top: 118px;
+	display: grid;
+	gap: 16px;
+}
+
+.msn-contact-side .msn-chip {
+	margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+	.msn-contact-hero__grid,
+	.msn-contact-content__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.msn-contact-side {
+		position: static;
+	}
+}
+
+@media (max-width: 640px) {
+	.msn-contact-hero__actions {
+		flex-direction: column;
+	}
+}
+

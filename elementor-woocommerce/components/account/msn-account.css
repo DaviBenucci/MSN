@@ -1,0 +1,77 @@
+.msn-account-hero__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 340px;
+	align-items: start;
+	gap: 28px;
+}
+
+.msn-account-hero .msn-card .msn-button {
+	margin-top: 18px;
+}
+
+.msn-account-woo-slot .woocommerce {
+	display: grid;
+	gap: 22px;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation {
+	width: 260px;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation ul {
+	display: grid;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li a {
+	display: block;
+	border: 1px solid var(--msn-border);
+	border-radius: var(--msn-radius);
+	background: #ffffff;
+	color: var(--msn-primary);
+	padding: 12px 14px;
+	font-weight: 800;
+	text-decoration: none;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li.is-active a,
+.woocommerce-account .woocommerce-MyAccount-navigation li a:hover {
+	background: var(--msn-primary-soft);
+	border-color: var(--msn-accent);
+}
+
+.woocommerce-account .woocommerce-MyAccount-content {
+	width: calc(100% - 300px);
+	border: 1px solid var(--msn-border);
+	border-radius: var(--msn-radius);
+	background: #ffffff;
+	padding: 22px;
+}
+
+.woocommerce-account form.login,
+.woocommerce-account form.register,
+.woocommerce-account form.lost_reset_password {
+	border-color: var(--msn-border);
+	border-radius: var(--msn-radius);
+	background: #ffffff;
+}
+
+@media (max-width: 900px) {
+	.msn-account-hero__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.woocommerce-account .woocommerce-MyAccount-navigation,
+	.woocommerce-account .woocommerce-MyAccount-content {
+		float: none;
+		width: 100%;
+	}
+
+	.woocommerce-account .woocommerce-MyAccount-navigation {
+		margin-bottom: 18px;
+	}
+}
+

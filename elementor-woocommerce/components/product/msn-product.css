@@ -1,0 +1,114 @@
+.msn-product-shell__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.85fr);
+	align-items: start;
+	gap: clamp(28px, 5vw, 56px);
+}
+
+.msn-product-media-slot,
+.msn-product-summary {
+	border: 1px solid var(--msn-border);
+	border-radius: var(--msn-radius);
+	background: #ffffff;
+	padding: 18px;
+	box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.msn-product-summary {
+	position: sticky;
+	top: 118px;
+}
+
+.msn-product-title-slot h1,
+.single-product .product_title {
+	margin: 16px 0 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+	font-size: clamp(1.8rem, 3vw, 2.6rem);
+	line-height: 1.1;
+}
+
+.msn-product-price-slot {
+	margin-top: 16px;
+}
+
+.msn-product-actions {
+	display: grid;
+	gap: 12px;
+	margin-top: 22px;
+}
+
+.msn-product-actions .cart {
+	display: grid;
+	gap: 12px;
+}
+
+.msn-product-actions .quantity input.qty {
+	min-height: 44px;
+	border: 1px solid var(--msn-border);
+	border-radius: var(--msn-radius);
+}
+
+.msn-product-confidence {
+	display: grid;
+	gap: 10px;
+	margin-top: 22px;
+}
+
+.msn-product-confidence span {
+	border-left: 3px solid var(--msn-accent);
+	background: var(--msn-primary-soft);
+	color: var(--msn-primary);
+	padding: 10px 12px;
+	font-weight: 800;
+}
+
+.msn-product-details__grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 18px;
+}
+
+.msn-product-mobile-bar {
+	display: none;
+}
+
+@media (max-width: 900px) {
+	.msn-product-shell__grid,
+	.msn-product-details__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.msn-product-summary {
+		position: static;
+	}
+}
+
+@media (max-width: 640px) {
+	.msn-product-template {
+		padding-bottom: 84px;
+	}
+
+	.msn-product-mobile-bar {
+		position: fixed;
+		inset: auto 0 0;
+		z-index: 998;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 8px;
+		border-top: 1px solid var(--msn-border);
+		background: rgba(255, 255, 255, 0.96);
+		padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+		box-shadow: 0 -12px 24px rgba(15, 23, 42, 0.08);
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(100%);
+		transition: opacity 180ms ease, transform 180ms ease;
+	}
+
+	.msn-product-mobile-bar.is-visible {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateY(0);
+	}
+}
