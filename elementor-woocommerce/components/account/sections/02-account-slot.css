@@ -1,14 +1,3 @@
-.msn-account-hero__grid {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) 340px;
-	align-items: start;
-	gap: 28px;
-}
-
-.msn-account-hero .msn-card .msn-button {
-	margin-top: 18px;
-}
-
 .msn-account-woo-slot .woocommerce {
 	display: grid;
 	gap: 22px;
@@ -60,10 +49,6 @@
 }
 
 @media (max-width: 900px) {
-	.msn-account-hero__grid {
-		grid-template-columns: 1fr;
-	}
-
 	.woocommerce-account .woocommerce-MyAccount-navigation,
 	.woocommerce-account .woocommerce-MyAccount-content {
 		float: none;
@@ -74,4 +59,3 @@
 		margin-bottom: 18px;
 	}
 }
-

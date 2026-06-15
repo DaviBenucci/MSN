@@ -1,0 +1,16 @@
+.msn-account-hero__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 340px;
+	align-items: start;
+	gap: 28px;
+}
+
+.msn-account-hero .msn-card .msn-button {
+	margin-top: 18px;
+}
+
+@media (max-width: 900px) {
+	.msn-account-hero__grid {
+		grid-template-columns: 1fr;
+	}
+}

@@ -7,5 +7,6 @@ Use estes blocos na ordem abaixo em containers separados do Elementor. O CSS pod
 3. `03-categories.html` + `03-categories.css`
 4. `04-featured-products.html` + `04-featured-products.css`
 5. `05-help.html` + `05-help.css`
+6. `00-smooth-scroll.js` apenas se houver links internos com `#ancora`
 
 O bloco `04-featured-products.html` depende do plugin `msn-woocommerce-layout-bridge` ativo, pois usa `data-msn-products` para buscar dados publicos do WooCommerce.

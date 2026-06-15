@@ -1,0 +1,11 @@
+.msn-product-details__grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 18px;
+}
+
+@media (max-width: 900px) {
+	.msn-product-details__grid {
+		grid-template-columns: 1fr;
+	}
+}

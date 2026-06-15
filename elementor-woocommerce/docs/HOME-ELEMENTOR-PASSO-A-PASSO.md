@@ -4,205 +4,125 @@ Objetivo da Home:
 
 > Fazer o cliente entender rapidamente que a MSN vende impressoras, toners, cartuchos e suprimentos, consegue ajudar na compatibilidade e permite compra pela loja com suporte no WhatsApp.
 
-## Estrutura recomendada
+## Estrutura oficial
 
-1. Hero comercial.
-2. Barra de beneficios.
-3. Produtos em destaque.
-4. Categorias principais.
-5. Bloco de ajuda por WhatsApp.
-6. Bloco de confianca.
+Use somente:
 
-## Arquivos prontos ate a parte 3
+```text
+components/home/sections/
+```
 
-Use estes arquivos para montar a Home ate a area de produtos:
+Ordem de montagem:
 
-- `components/home/msn-home-ate-produtos.html`
-- `components/home/msn-home-ate-produtos.css`
-- `components/home/README-HOME-ATE-PRODUTOS.md`
+1. `01-hero`
+2. `02-benefits`
+3. `03-categories`
+4. `04-featured-products`
+5. `05-help`
 
-Eles incluem:
-
-- Hero comercial.
-- Barra de beneficios.
-- Cabecalho da secao Produtos em destaque.
-- Aviso/slot para voce inserir o widget Products ou Shortcode do WooCommerce.
+O CSS pode ser colado por section ou reunido no CSS da pagina. O JS `00-smooth-scroll.js` e opcional e so deve ser usado se houver links internos com ancora.
 
 ## 1. Hero comercial
 
+Arquivo:
+
+```text
+components/home/sections/01-hero.html
+components/home/sections/01-hero.css
+```
+
 Tipo: Manual Elementor.
 
-Container:
+Conteudo:
 
-- Classe: `msn-home-hero`
-- Largura do conteudo: 1180px.
-- Desktop: 2 colunas.
-- Mobile: 1 coluna.
-- Fundo: `#f8fafc` ou azul muito claro.
-
-Conteudo sugerido:
-
-Titulo:
-
-```text
-Suprimentos de impressao com compra simples e atendimento especializado.
-```
-
-Texto:
-
-```text
-Encontre impressoras, toners, cartuchos e itens de reposicao com apoio para confirmar compatibilidade antes da compra.
-```
-
-Botoes:
-
-- `Ver produtos` apontando para `/loja/`.
-- `Falar no WhatsApp` apontando para `https://wa.me/551134393836`.
-
-Imagem:
-
-- Usar imagem real de impressora, toner ou composicao de produtos.
-- Evitar imagem escura ou generica.
+- Chamada comercial direta.
+- CTAs para loja, WhatsApp e toner.
+- Imagem real de impressora/produto.
 
 ## 2. Barra de beneficios
 
+Arquivo:
+
+```text
+components/home/sections/02-benefits.html
+components/home/sections/02-benefits.css
+```
+
 Tipo: Manual Elementor.
 
-Criar 4 cards pequenos:
+Beneficios:
 
-- Atendimento especializado.
+- Atendimento consultivo.
 - Compra segura.
 - Estoque visivel.
-- Entrega/frete conforme calculo no carrinho.
+- Venda B2B e B2C.
 
-Texto curto. Evite paragrafos grandes.
+## 3. Categorias principais
 
-## 3. Produtos em destaque
-
-Tipo: Dinamico WooCommerce.
-
-Esta e a secao mais importante para comecar a vender.
-
-### Configuracao recomendada
-
-No WooCommerce:
-
-1. Va em `Produtos > Todos os produtos`.
-2. Marque como destaque os produtos que devem aparecer na Home.
-3. Use a estrela de destaque do WooCommerce.
-4. Confirme que os produtos estao publicados, com preco e visibilidade de catalogo ativa.
-
-No Elementor:
-
-1. Crie um container para a secao.
-2. Adicione titulo: `Produtos em destaque`.
-3. Adicione subtitulo curto: `Itens selecionados para compra rapida e reposicao.`
-4. Insira widget `Products` do Elementor Pro.
-5. Configure Query para produtos em destaque.
-6. Colunas:
-   - Desktop: 4.
-   - Tablet: 2.
-   - Mobile: 1.
-7. Limite inicial: 4 produtos.
-8. Ative imagem, titulo, preco e botao de compra.
-9. No container externo do widget, adicione a classe:
+Arquivo:
 
 ```text
-msn-product-card-model
+components/home/sections/03-categories.html
+components/home/sections/03-categories.css
 ```
-
-10. Cole o CSS de `components/product-card/msn-product-card.css` no CSS adicional da pagina ou do site.
-
-### Alternativa com shortcode
-
-Use widget Shortcode, nao widget HTML:
-
-```text
-[products limit="4" columns="4" visibility="featured"]
-```
-
-Se nao aparecer nada, use o teste minimo:
-
-```text
-[products limit="4" columns="4" visibility="visible"]
-```
-
-Se o teste minimo aparecer e featured nao aparecer, o problema e que nenhum produto foi marcado como destaque.
-
-## 4. Categorias principais
 
 Tipo: Manual Elementor.
 
-Criar 4 cards:
+Categorias iniciais:
 
 - Impressoras.
 - Toners.
 - Cartuchos.
-- Sulfite.
+- Novidades.
 
-Cada card aponta para a URL real da categoria:
+## 4. Produtos em destaque
 
-- `/categoria-produto/impressora/`
-- `/categoria-produto/toner/`
-- `/categoria-produto/cartucho/`
-- `/categoria-produto/sulfite/`
+Arquivo:
 
-## 5. Bloco WhatsApp
+```text
+components/home/sections/04-featured-products.html
+components/home/sections/04-featured-products.css
+```
+
+Tipo: Dinamico via bridge WooCommerce.
+
+O bloco usa:
+
+```html
+<div class="msn-home__woo-slot" data-msn-products data-msn-query='{"per_page":8,"orderby":"date","order":"DESC"}'></div>
+```
+
+Produto simples recebe CTA por URL nativa do WooCommerce. Produto variavel ou agrupado recebe CTA para a pagina do produto para escolha correta das opcoes.
+
+Fallback, se necessario:
+
+- Widget Products do Elementor Pro.
+- Loop Grid tipo Products.
+- Widget Shortcode com `[products]`.
+
+## 5. Ajuda por WhatsApp
+
+Arquivo:
+
+```text
+components/home/sections/05-help.html
+components/home/sections/05-help.css
+```
 
 Tipo: Manual Elementor.
 
-Titulo:
+Objetivo:
 
-```text
-Nao sabe qual toner ou cartucho comprar?
-```
-
-Texto:
-
-```text
-Envie o modelo da impressora para nossa equipe confirmar a compatibilidade antes do pedido.
-```
-
-Botao:
-
-```text
-Falar com especialista
-```
-
-Link:
-
-```text
-https://wa.me/551134393836?text=Ola!%20Quero%20confirmar%20compatibilidade%20de%20um%20produto.
-```
-
-## 6. Bloco de confianca
-
-Tipo: Manual Elementor.
-
-Itens:
-
-- CNPJ visivel.
-- Endereco/atendimento em Diadema-SP.
-- Telefone e e-mail.
-- Politica de troca e privacidade.
-- Compra processada pelo WooCommerce.
-
-## Estetica recomendada
-
-- Fundo geral claro.
-- Cards brancos ou levemente rosados, como no modelo visual enviado.
-- Azul forte para botoes de compra.
-- Verde apenas para WhatsApp.
-- Bordas discretas.
-- Sombra moderada.
-- Pouco texto nos cards.
+- Resolver duvida de compatibilidade.
+- Reforcar atendimento consultivo.
+- Dar uma alternativa para quem nao encontrou o produto.
 
 ## Ordem de validacao
 
-1. O produto aparece no widget?
-2. A imagem esta boa?
-3. O titulo quebra bem no mobile?
-4. O preco aparece?
-5. O botao comprar funciona?
-6. O WhatsApp abre?
-7. O layout fica bom em 375px?
+1. O hero carrega sem quebra no mobile.
+2. Os beneficios ficam legiveis em 375px.
+3. As categorias apontam para URLs reais.
+4. A bridge renderiza produtos na section 04.
+5. Produto variavel abre a pagina do produto, nao adiciona direto.
+6. WhatsApp abre com mensagem correta.
+7. Nao existem arquivos combinados antigos fora de `sections`.

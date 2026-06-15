@@ -1,0 +1,12 @@
+.msn-cart-empty__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 18px;
+}
+
+@media (max-width: 640px) {
+	.msn-cart-empty__actions {
+		flex-direction: column;
+	}
+}

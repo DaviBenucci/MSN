@@ -8,35 +8,34 @@
 - Desative plugins abandonados ou duplicados.
 - Confirme HTTPS ativo.
 
-## 2. CSS e JS globais
+## 2. Globais
 
-1. Copie `shared/msn-global.css` para o CSS global do Elementor ou para CSS adicional do tema.
-2. Copie CSS especifico de pagina no CSS adicional da propria pagina/template.
-3. Cole HTML em widget HTML.
-4. Se o CSS for colado dentro do widget HTML, envolva com `<style>...</style>`.
-5. Se o JS for colado dentro do widget HTML, envolva com `<script>...</script>`.
-6. Mantenha o carregamento global leve. JS de componentes deve ser ativado apenas onde o componente aparece.
+1. Copie `shared/msn-global.css` para o CSS global do Elementor ou CSS adicional do tema.
+2. Copie `shared/msn-global.js` para Custom Code no footer.
+3. Ative o plugin `msn-woocommerce-layout-bridge` quando for usar vitrines com `data-msn-products`.
 
-Observacao: os arquivos `.js` usam sintaxe ES5, sem arrow functions (`=>`), para evitar erro de caracteres especiais no editor do Elementor.
+Nao cole `msn-woo-layout.css` ou `msn-woo-layout.js` manualmente no Elementor; o plugin carrega esses arquivos.
 
-## 3. Templates Elementor
+## 3. Templates por sections
 
-Crie templates separados:
+Use apenas os arquivos dentro de `sections`:
 
-- Header global: `components/header/msn-header.html`, `.css`, `.js`.
-- Footer global: `components/footer/msn-footer.html`, `.css`, `.js`.
-- Home: `components/home/msn-home.html`, `.css`, `.js`.
-- Loja/categorias/busca: `components/shop/msn-shop.html`, `.css`, `.js`.
-- Produto unico: `components/product/msn-product.html`, `.css`, `.js`.
-- Carrinho: `components/cart/msn-cart.html`, `.css`, `.js`.
-- Minha conta: `components/account/msn-account.html`, `.css`, `.js`.
-- Contato: `components/contact/msn-contact.html`, `.css`, `.js`.
+- Header: `components/header/sections`
+- Footer: `components/footer/sections`
+- Home: `components/home/sections`
+- Loja/categorias/busca: `components/shop/sections`
+- Produto unico: `components/product/sections`
+- Carrinho: `components/cart/sections`
+- Minha conta: `components/account/sections`
+- Contato: `components/contact/sections`
+
+Cada pasta tem um `README.md` com a ordem de colagem.
 
 ## 4. Uso de WooCommerce
 
 Nos pontos marcados como slot WooCommerce, use widgets nativos do Elementor Pro ou widget Shortcode. Exemplos:
 
-- Produtos recentes: `[products limit="8" columns="4" orderby="date" order="DESC" visibility="visible"]`
+- Produtos recentes: bridge `data-msn-products` ou `[products limit="8" columns="4" orderby="date" order="DESC" visibility="visible"]`
 - Loja com paginacao: `[products limit="12" columns="3" paginate="true" visibility="visible"]`
 - Ofertas: `[sale_products limit="8" columns="4"]`
 - Carrinho: `[woocommerce_cart]`
@@ -55,10 +54,13 @@ Importante: shortcode WooCommerce deve ser colado em widget Shortcode, nao em wi
 - Depois carrinho, minha conta e contato.
 - Por fim, saneie catalogo e teste o fluxo completo de compra.
 
-## 6. Documentos de apoio
+## 6. Limpeza
 
-- `COMO-COLAR-NO-ELEMENTOR.md`
-- `VERSOES-E-COMPATIBILIDADE.md`
-- `PRODUTOS-NAO-APARECEM.md`
-- `MAPA-DE-COMPONENTES.md`
-- `AUDITORIA-CATALOGO.md`
+Depois de criar ou trocar sections:
+
+1. Remova arquivos antigos substituidos.
+2. Confirme que nao existem arquivos combinados `components/<pagina>/msn-*.html/css/js`.
+3. Atualize `MAPA-DE-COMPONENTES.md`.
+4. Limpe cache do WP Rocket e regenere CSS do Elementor.
+
+Documento de referencia: `GUIA-SECTIONS-E-LIMPEZA.md`.

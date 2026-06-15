@@ -1,14 +1,8 @@
-.msn-cart-hero__grid,
 .msn-cart-content__grid {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) 320px;
 	align-items: start;
 	gap: 28px;
-}
-
-.msn-cart-help .msn-button,
-.msn-cart-sidebar .msn-chip {
-	margin-top: 16px;
 }
 
 .msn-cart-woo-slot {
@@ -20,6 +14,10 @@
 	top: 118px;
 	display: grid;
 	gap: 16px;
+}
+
+.msn-cart-sidebar .msn-chip {
+	margin-top: 16px;
 }
 
 .woocommerce-cart table.cart td.actions .coupon {
@@ -46,15 +44,7 @@
 	font-family: var(--msn-font-display);
 }
 
-.msn-cart-empty__actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 12px;
-	margin-top: 18px;
-}
-
 @media (max-width: 900px) {
-	.msn-cart-hero__grid,
 	.msn-cart-content__grid {
 		grid-template-columns: 1fr;
 	}
@@ -72,9 +62,4 @@
 	.woocommerce-cart table.cart td.actions .coupon .input-text {
 		width: 100%;
 	}
-
-	.msn-cart-empty__actions {
-		flex-direction: column;
-	}
 }
-

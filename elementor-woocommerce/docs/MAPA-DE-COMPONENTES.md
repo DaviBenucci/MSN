@@ -14,124 +14,97 @@ Onde aplicar:
 
 ## Header
 
-Arquivos:
+Sections:
 
-- `components/header/msn-header.html`
-- `components/header/msn-header.css`
-- `components/header/msn-header.js`
-- `components/header/sections/*` para montagem por containers separados.
-
-Onde aplicar:
-
-- Elementor Theme Builder > Header.
-- HTML em widget HTML.
-- CSS no template do header ou CSS global.
-- JS no footer, carregado em todo o site.
+- `components/header/sections/01-topbar`
+- `components/header/sections/02-main`
+- `components/header/sections/03-quickbar`
+- `components/header/sections/04-mobile-drawer`
+- `components/header/sections/00-header.js`
 
 Funcoes:
 
 - Busca nativa WooCommerce.
 - Conta, pedidos e carrinho.
-- Contador de carrinho usa `data-msn-cart-count` e e preenchido pela bridge.
-- Categorias principais.
-- WhatsApp consultivo.
-- Menu mobile off-canvas.
+- Contador de carrinho por `data-msn-cart-count`, preenchido pela bridge.
+- Categorias principais, WhatsApp e menu mobile.
 
 ## Footer
 
-Arquivos:
+Sections:
 
-- `components/footer/msn-footer.html`
-- `components/footer/msn-footer.css`
-- `components/footer/msn-footer.js`
-
-Onde aplicar:
-
-- Elementor Theme Builder > Footer.
+- `components/footer/sections/00-footer-layout.css`
+- `components/footer/sections/00-footer-accordion.js`
+- `components/footer/sections/01-brand`
+- `components/footer/sections/02-categories`
+- `components/footer/sections/03-service`
+- `components/footer/sections/04-policies`
+- `components/footer/sections/05-bottom`
 
 Funcoes:
 
-- Atendimento.
-- Categorias.
-- Politicas.
-- CNPJ e endereco.
-- Sanfonas mobile.
+- Atendimento, categorias, politicas, CNPJ, endereco e sanfonas mobile.
 
 ## Home
 
-Arquivos:
+Sections:
 
-- `components/home/msn-home.html`
-- `components/home/msn-home.css`
-- `components/home/msn-home.js`
-
-Containers:
-
-- Versao combinada: `components/home/msn-home.html`
-- Versao por partes: `components/home/sections/01-hero` ate `05-help`
+- `components/home/sections/01-hero`
+- `components/home/sections/02-benefits`
+- `components/home/sections/03-categories`
+- `components/home/sections/04-featured-products`
+- `components/home/sections/05-help`
+- `components/home/sections/00-smooth-scroll.js`
 
 Dados WooCommerce:
 
-- Produtos em destaque: preferir bridge `data-msn-products` com query `{"per_page":8,"orderby":"date","order":"DESC"}`.
+- Produtos em destaque: bridge `data-msn-products` com query `{"per_page":8,"orderby":"date","order":"DESC"}`.
 - Fallback: widget Products ou shortcode `[products limit="8" columns="4" orderby="date" order="DESC"]`.
 
 ## Loja, categorias e busca
 
-Arquivos:
+Sections:
 
-- `components/shop/msn-shop.html`
-- `components/shop/msn-shop.css`
-- `components/shop/msn-shop.js`
+- `components/shop/sections/01-hero-search`
+- `components/shop/sections/02-products-layout`
 
 Slots WooCommerce:
 
-- Recomendado: Loop Grid com template do tipo `Products` e Source = `Current Query` em loja/categorias/busca.
-- Alternativa: widget Products/Archive Products ou Shortcode com `[products limit="12" columns="3" paginate="true" visibility="visible"]`.
-- Filtros: usar widget Woofilters do WBW ou shortcode copiado do plugin. Nao usar formularios manuais.
+- Produtos: Loop Grid tipo `Products`, Products/Archive Products ou shortcode `[products]`.
+- Filtros: widget Woofilters do WBW ou shortcode copiado do plugin.
 
 ## Card de produto
 
 Arquivos:
 
 - `components/product-card/msn-product-card.css`
+- `components/product-card/msn-product-card-loop-item.css`
 - `components/product-card/README.md`
 
 Onde aplicar:
 
-- CSS adicional da pagina/template.
 - Classe `msn-product-card-model` no wrapper do Loop Grid, Products widget ou shortcode.
-
-Funcoes:
-
-- Aproxima o card do modelo visual aprovado: imagem grande, titulo azul, preco destacado e botao arredondado azul.
-- Nao cria produto dinamico sozinho; apenas estiliza markup gerado pelo WooCommerce/Elementor.
 
 ## Produto
 
-Arquivos:
+Sections:
 
-- `components/product/msn-product.html`
-- `components/product/msn-product.css`
-- `components/product/msn-product.js`
+- `components/product/sections/01-summary`
+- `components/product/sections/02-details`
+- `components/product/sections/03-mobile-bar`
+- `components/product/sections/04-related`
 
 Slots WooCommerce:
 
-- Product Images.
-- Product Title.
-- Product Price.
-- Stock ou Product Meta.
-- Add To Cart.
-- Product Data Tabs.
-- Product Content.
-- Related Products/Upsells.
+- Product Images, Product Title, Product Price, Stock/Product Meta, Add To Cart, Product Data Tabs, Product Content e Related Products/Upsells.
 
 ## Carrinho
 
-Arquivos:
+Sections:
 
-- `components/cart/msn-cart.html`
-- `components/cart/msn-cart.css`
-- `components/cart/msn-cart.js`
+- `components/cart/sections/01-hero`
+- `components/cart/sections/02-cart-slot`
+- `components/cart/sections/03-empty-state`
 
 Slot WooCommerce:
 
@@ -139,11 +112,11 @@ Slot WooCommerce:
 
 ## Minha Conta
 
-Arquivos:
+Sections:
 
-- `components/account/msn-account.html`
-- `components/account/msn-account.css`
-- `components/account/msn-account.js`
+- `components/account/sections/01-hero`
+- `components/account/sections/02-account-slot`
+- `components/account/sections/03-help`
 
 Slot WooCommerce:
 
@@ -151,14 +124,11 @@ Slot WooCommerce:
 
 ## Contato
 
-Arquivos:
+Sections:
 
-- `components/contact/msn-contact.html`
-- `components/contact/msn-contact.css`
-- `components/contact/msn-contact.js`
+- `components/contact/sections/01-hero`
+- `components/contact/sections/02-contact-form`
 
 Funcoes:
 
-- Canais oficiais.
-- Formulario com honeypot simples.
-- Abertura de WhatsApp com mensagem organizada.
+- Canais oficiais, formulario com honeypot simples e abertura de WhatsApp com mensagem organizada.

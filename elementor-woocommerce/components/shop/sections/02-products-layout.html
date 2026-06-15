@@ -1,0 +1,35 @@
+<section class="msn-shop-layout msn-section" data-msn-shop>
+  <div class="msn-container msn-shop-layout__grid">
+    <aside class="msn-shop-filter" aria-label="Filtros de produtos">
+      <div class="msn-shop-filter__head">
+        <h2>Filtros</h2>
+        <button class="msn-shop-filter__close" type="button" data-msn-filter-close>Fechar</button>
+      </div>
+
+      <div class="msn-shop-filter__plugin-slot">
+        <!-- Elementor: inserir o widget Woofilters do Product Filter by WBW aqui. -->
+        <!-- Alternativa: inserir widget Shortcode e colar o shortcode copiado dentro do plugin WBW. -->
+      </div>
+    </aside>
+
+    <div class="msn-shop-products">
+      <div class="msn-shop-toolbar">
+        <button class="msn-button msn-button--secondary" type="button" data-msn-filter-open>Filtrar</button>
+        <p>Use os controles nativos do WooCommerce para ordenar e paginar produtos.</p>
+      </div>
+
+      <div class="msn-shop__woo-slot msn-product-card-model">
+        <!-- Recomendado: Elementor Pro Loop Grid com template do tipo Products e Source = Current Query. -->
+        <!-- Alternativa: widget Shortcode com [products limit="12" columns="3" paginate="true" visibility="visible"] -->
+      </div>
+
+      <section class="msn-shop-empty msn-card" aria-label="Busca sem resultado">
+        <h2>Nao encontrou o produto?</h2>
+        <p>Encaminhe modelo da impressora, marca ou foto da etiqueta. O atendimento pode orientar a compatibilidade antes da compra.</p>
+        <a class="msn-button msn-button--whatsapp" href="https://wa.me/551134393836?text=Ola!%20Nao%20encontrei%20um%20produto%20na%20loja.%20Pode%20me%20ajudar%3F" rel="noopener noreferrer" target="_blank">Pedir ajuda no WhatsApp</a>
+      </section>
+    </div>
+  </div>
+
+  <div class="msn-shop-filter-backdrop" data-msn-filter-backdrop></div>
+</section>
