@@ -22,16 +22,25 @@
 	color: var(--msn-success) !important;
 }
 
+.msn-header__quickbar-label--short {
+	display: none;
+}
+
 .msn-header__model-link {
 	display: none;
 }
 
 @media (max-width: 768px) {
 	.msn-header__quickbar {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
+		justify-content: flex-start;
 		gap: 8px;
+		overflow-x: auto;
 		padding: 8px 12px;
+		scrollbar-width: none;
+	}
+
+	.msn-header__quickbar::-webkit-scrollbar {
+		display: none;
 	}
 
 	.msn-header__quickbar a:not(.msn-header__quickbar-whatsapp):not(.msn-header__model-link) {
@@ -43,11 +52,14 @@
 		min-height: 38px;
 		align-items: center;
 		justify-content: center;
+		flex: 0 0 auto;
 		border: 1px solid var(--msn-border);
 		border-radius: 999px;
 		color: var(--msn-primary);
 		font-size: 0.84rem;
 		font-weight: 900;
+		padding: 0 14px;
+		white-space: nowrap;
 	}
 
 	.msn-header__quickbar-whatsapp {
@@ -55,9 +67,33 @@
 		min-height: 38px;
 		align-items: center;
 		justify-content: center;
+		flex: 0 0 auto;
 		border: 1px solid rgba(16, 185, 129, 0.35);
 		border-radius: 999px;
 		background: rgba(16, 185, 129, 0.08);
 		font-size: 0.84rem;
+		padding: 0 14px;
+		white-space: nowrap;
+	}
+}
+
+@media (max-width: 360px) {
+	.msn-header__quickbar {
+		padding-inline: 10px;
+	}
+
+	.msn-header__model-link,
+	.msn-header__quickbar-whatsapp {
+		min-height: 36px;
+		padding-inline: 12px;
+		font-size: 0.8rem;
+	}
+
+	.msn-header__quickbar-label {
+		display: none;
+	}
+
+	.msn-header__quickbar-label--short {
+		display: inline;
 	}
 }

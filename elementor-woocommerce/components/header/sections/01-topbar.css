@@ -8,6 +8,7 @@
 	padding: 8px 16px;
 	font-size: 0.82rem;
 	font-weight: 700;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .msn-header__topbar a {
@@ -19,14 +20,37 @@
 	.msn-header__topbar {
 		justify-content: flex-start;
 		overflow-x: auto;
+		scrollbar-width: none;
 		white-space: nowrap;
+	}
+
+	.msn-header__topbar::-webkit-scrollbar {
+		display: none;
+	}
+
+	.msn-header__topbar span,
+	.msn-header__topbar a {
+		flex: 0 0 auto;
 	}
 }
 
 @media (max-width: 768px) {
 	.msn-header__topbar {
 		gap: 12px;
-		padding-block: 7px;
+		justify-content: center;
+		overflow: hidden;
+		padding: 7px 12px;
 		font-size: 0.75rem;
+	}
+
+	.msn-header__topbar span:nth-of-type(n + 3),
+	.msn-header__topbar a {
+		display: none;
+	}
+}
+
+@media (max-width: 360px) {
+	.msn-header__topbar span:nth-of-type(n + 2) {
+		display: none;
 	}
 }

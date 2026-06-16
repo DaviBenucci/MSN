@@ -46,7 +46,6 @@ body.msn-lock-scroll {
 }
 
 .msn-container {
-	width: min(100% - 32px, 1180px);
 	margin-inline: auto;
 }
 
