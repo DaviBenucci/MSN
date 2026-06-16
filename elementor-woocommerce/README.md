@@ -26,15 +26,20 @@ Paginas e templates devem ser montados por `sections`. Nao mantenha arquivos com
 7. Carregue apenas os `.js` das sections presentes na pagina.
 8. Para areas WooCommerce, use widgets nativos do WooCommerce/Elementor ou widget Shortcode nos slots marcados.
 
+Importante: um widget WooCommerce ou Shortcode nao entra dentro de um widget HTML ja colado. Quando um arquivo `.html` mostrar um comentario de slot, recrie esse wrapper como Container do Elementor, aplique a classe do slot nele e coloque o widget WooCommerce/Shortcode como filho real desse Container.
+
 ## Regras criticas
 
 - Nao substituir checkout, carrinho, login, preco, estoque, frete, pagamento ou variacoes por HTML manual.
+- Nao colar `[woocommerce_cart]`, `[woocommerce_my_account]` ou `[products]` dentro de widget HTML; use widget Shortcode ou widget WooCommerce em um Container.
 - Nao usar JavaScript customizado para recalcular valores.
 - Manter classes customizadas com prefixo `.msn-`.
 - Manter o seletor de tema com `data-msn-theme-toggle` e `data-msn-theme-choice`.
 - Testar primeiro em staging.
 - Validar mobile antes de aprovar desktop.
 - Produtos, preco, imagem, estoque e CTA devem vir da bridge `data-msn-products` ou de Loop Grid tipo `Products`, widget Products/Archive Products ou shortcode WooCommerce.
+- Checkout deve usar widget Checkout ou `[woocommerce_checkout]` em Container proprio, nunca HTML manual.
+- Politica de privacidade e trocas/devolucoes devem ser revisadas pelo responsavel juridico/administrativo antes da publicacao.
 
 ## Documentos principais
 

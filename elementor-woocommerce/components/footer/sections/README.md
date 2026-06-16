@@ -20,3 +20,10 @@ Depois do grid, cole:
 5. `05-bottom.html`
 
 Use `00-footer-layout.css` para o layout geral e `00-footer-accordion.js` para as sanfonas mobile.
+
+O bloco `04-policies.html` aponta para as paginas:
+
+- `/politica-de-privacidade/`
+- `/politica-de-devolucao/`
+- `/finalizar-compra/`
+- `/avalie-seu-pedido/`

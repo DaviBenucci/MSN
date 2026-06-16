@@ -20,6 +20,19 @@ Funcoes:
 - Seletor de tema por `data-msn-theme-toggle` e `data-msn-theme-choice`.
 - Preferencia persistida em `msn-theme-preference`.
 
+## Regra para slots WooCommerce no Elementor
+
+Os slots WooCommerce nao devem ser entendidos como widgets dentro de widget HTML. O comentario dentro dos arquivos `.html` marca apenas a posicao visual.
+
+Monte esses trechos com Containers do Elementor:
+
+- Container wrapper com a classe da section.
+- Container interno com `msn-container`.
+- Container do slot com a classe indicada.
+- Widget WooCommerce, Loop Grid, Products/Archive Products ou widget Shortcode como filho real do slot.
+
+Use essa regra em Loja, Produto, Carrinho, Finalizacao de Compra e Minha Conta.
+
 ## Header
 
 Sections:
@@ -119,6 +132,19 @@ Sections:
 Slot WooCommerce:
 
 - Shortcode `[woocommerce_cart]` ou widget Cart.
+- Montagem: Container `msn-cart-woo-slot` contendo o widget Cart/Shortcode. Nao cole esse shortcode dentro do widget HTML.
+
+## Finalizacao de Compra
+
+Sections:
+
+- `components/checkout/sections/01-hero`
+- `components/checkout/sections/02-checkout-slot`
+
+Slot WooCommerce:
+
+- Shortcode `[woocommerce_checkout]` ou widget Checkout.
+- Montagem: Container `msn-checkout-woo-slot` contendo o widget Checkout/Shortcode. Nao cole esse shortcode dentro do widget HTML.
 
 ## Minha Conta
 
@@ -131,6 +157,7 @@ Sections:
 Slot WooCommerce:
 
 - Shortcode `[woocommerce_my_account]` ou widget My Account.
+- Montagem: Container `msn-account-woo-slot` contendo o widget My Account/Shortcode. Nao cole esse shortcode dentro do widget HTML.
 
 ## Contato
 
@@ -142,3 +169,40 @@ Sections:
 Funcoes:
 
 - Canais oficiais, formulario com honeypot simples e abertura de WhatsApp com mensagem organizada.
+
+## Politica de Devolucao
+
+Sections:
+
+- `components/returns/sections/01-hero`
+- `components/returns/sections/02-policy-content`
+
+Funcoes:
+
+- Conteudo institucional de trocas, devolucoes, arrependimento, conferencia e atendimento.
+- Revisar texto final com responsavel juridico/administrativo antes de publicar.
+
+## Politica de Privacidade
+
+Sections:
+
+- `components/privacy/sections/01-hero`
+- `components/privacy/sections/02-privacy-content`
+
+Funcoes:
+
+- Conteudo institucional sobre dados pessoais, pedidos, cookies, WooCommerce e canais de contato.
+- Revisar texto final com responsavel juridico/administrativo antes de publicar.
+
+## Avalie seu Pedido
+
+Sections:
+
+- `components/order-review/sections/01-hero`
+- `components/order-review/sections/02-review-form`
+- `components/order-review/sections/03-guidelines`
+
+Funcoes:
+
+- Formulario com honeypot simples e abertura de WhatsApp com mensagem organizada.
+- Nao consulta pedidos no WooCommerce e nao grava dados no banco.

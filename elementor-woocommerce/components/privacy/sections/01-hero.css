@@ -1,0 +1,22 @@
+.msn-privacy-hero__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 340px;
+	align-items: start;
+	gap: 28px;
+}
+
+.msn-privacy-hero .msn-card h2 {
+	margin: 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+}
+
+.msn-privacy-hero .msn-chip {
+	margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+	.msn-privacy-hero__grid {
+		grid-template-columns: 1fr;
+	}
+}

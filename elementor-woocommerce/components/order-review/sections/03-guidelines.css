@@ -1,0 +1,12 @@
+.msn-review-guidelines .msn-home-section-head {
+	margin-bottom: 24px;
+}
+
+.msn-review-guidelines .msn-home-section-head h2 {
+	max-width: 720px;
+	margin: 10px 0 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+	font-size: clamp(1.7rem, 3vw, 2.35rem);
+	line-height: 1.12;
+}

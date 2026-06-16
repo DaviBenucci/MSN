@@ -231,6 +231,20 @@ body.msn-lock-scroll {
 	color: var(--msn-primary) !important;
 }
 
+.msn-button--ghost:hover,
+.msn-chip:hover {
+	background: var(--msn-primary-soft);
+	border-color: var(--msn-accent);
+	color: var(--msn-primary) !important;
+}
+
+:root[data-theme="dark"] .msn-button--ghost:hover,
+:root[data-theme="dark"] .msn-chip:hover {
+	background: rgba(56, 189, 248, 0.16);
+	border-color: var(--msn-accent);
+	color: var(--msn-primary) !important;
+}
+
 .msn-grid {
 	display: grid;
 	gap: 18px;
@@ -578,6 +592,91 @@ body.msn-lock-scroll {
 
 .woocommerce-checkout #payment div.payment_box::before {
 	border-bottom-color: var(--msn-surface-alt);
+}
+
+:root[data-theme="dark"] .woocommerce,
+:root[data-theme="dark"] .woocommerce-page {
+	color: var(--msn-text);
+}
+
+:root[data-theme="dark"] .woocommerce .woocommerce-info,
+:root[data-theme="dark"] .woocommerce .woocommerce-message,
+:root[data-theme="dark"] .woocommerce .woocommerce-error,
+:root[data-theme="dark"] .woocommerce .woocommerce-MyAccount-content,
+:root[data-theme="dark"] .woocommerce .woocommerce-Address,
+:root[data-theme="dark"] .woocommerce .woocommerce-column,
+:root[data-theme="dark"] .woocommerce .cart_totals,
+:root[data-theme="dark"] .woocommerce-checkout-review-order,
+:root[data-theme="dark"] .woocommerce-checkout #payment,
+:root[data-theme="dark"] .woocommerce form.checkout_coupon,
+:root[data-theme="dark"] .woocommerce form.login,
+:root[data-theme="dark"] .woocommerce form.register,
+:root[data-theme="dark"] .woocommerce form.edit-account,
+:root[data-theme="dark"] .woocommerce form.woocommerce-address-fields,
+:root[data-theme="dark"] .woocommerce table.shop_table,
+:root[data-theme="dark"] .woocommerce ul.products li.product {
+	border-color: var(--msn-border) !important;
+	background: var(--msn-surface) !important;
+	color: var(--msn-text) !important;
+}
+
+:root[data-theme="dark"] .woocommerce table.shop_table th,
+:root[data-theme="dark"] .woocommerce table.shop_table td,
+:root[data-theme="dark"] .woocommerce table.shop_table tbody th,
+:root[data-theme="dark"] .woocommerce table.shop_table tbody td,
+:root[data-theme="dark"] .woocommerce .woocommerce-Address address,
+:root[data-theme="dark"] .woocommerce .woocommerce-customer-details address,
+:root[data-theme="dark"] .woocommerce .woocommerce-MyAccount-content p,
+:root[data-theme="dark"] .woocommerce .woocommerce-MyAccount-content span,
+:root[data-theme="dark"] .woocommerce .woocommerce-MyAccount-content div,
+:root[data-theme="dark"] .woocommerce label,
+:root[data-theme="dark"] .woocommerce legend {
+	color: var(--msn-text) !important;
+}
+
+:root[data-theme="dark"] .woocommerce h1,
+:root[data-theme="dark"] .woocommerce h2,
+:root[data-theme="dark"] .woocommerce h3,
+:root[data-theme="dark"] .woocommerce h4,
+:root[data-theme="dark"] .woocommerce table.shop_table th,
+:root[data-theme="dark"] .woocommerce .woocommerce-loop-product__title {
+	color: var(--msn-primary) !important;
+}
+
+:root[data-theme="dark"] .woocommerce a:not(.button),
+:root[data-theme="dark"] .woocommerce .woocommerce-MyAccount-content a:not(.button) {
+	color: var(--msn-primary) !important;
+}
+
+:root[data-theme="dark"] .woocommerce a:not(.button):hover,
+:root[data-theme="dark"] .woocommerce .woocommerce-MyAccount-content a:not(.button):hover {
+	color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .woocommerce mark,
+:root[data-theme="dark"] .woocommerce ins,
+:root[data-theme="dark"] .woocommerce table.shop_table tbody tr:nth-child(2n) td,
+:root[data-theme="dark"] .woocommerce-checkout #payment div.payment_box {
+	background: var(--msn-surface-alt) !important;
+	color: var(--msn-text) !important;
+}
+
+:root[data-theme="dark"] .woocommerce input.input-text,
+:root[data-theme="dark"] .woocommerce textarea,
+:root[data-theme="dark"] .woocommerce select,
+:root[data-theme="dark"] .woocommerce form .form-row input.input-text,
+:root[data-theme="dark"] .woocommerce form .form-row textarea,
+:root[data-theme="dark"] .woocommerce form .form-row select {
+	border-color: var(--msn-border) !important;
+	background: var(--msn-surface-alt) !important;
+	color: var(--msn-text) !important;
+}
+
+:root[data-theme="dark"] .woocommerce input.input-text:focus,
+:root[data-theme="dark"] .woocommerce textarea:focus,
+:root[data-theme="dark"] .woocommerce select:focus {
+	border-color: var(--msn-accent) !important;
+	box-shadow: var(--msn-ring) !important;
 }
 
 @media (max-width: 1024px) {

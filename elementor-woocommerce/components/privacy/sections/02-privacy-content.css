@@ -1,0 +1,53 @@
+.msn-privacy-content__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 340px;
+	align-items: start;
+	gap: 28px;
+}
+
+.msn-privacy-content__main h2,
+.msn-privacy-content__side h2 {
+	margin: 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+}
+
+.msn-privacy-content__list {
+	display: grid;
+	gap: 14px;
+	margin-top: 22px;
+}
+
+.msn-privacy-content__list section {
+	border: 1px solid var(--msn-border);
+	border-radius: var(--msn-radius);
+	background: var(--msn-surface-alt);
+	padding: 16px;
+}
+
+.msn-privacy-content__list strong {
+	display: block;
+	color: var(--msn-primary);
+	font-weight: 900;
+}
+
+.msn-privacy-content__list p {
+	margin: 6px 0 0;
+}
+
+.msn-privacy-content__side {
+	position: sticky;
+	top: 118px;
+	display: grid;
+	gap: 16px;
+}
+
+@media (max-width: 900px) {
+	.msn-privacy-content__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.msn-privacy-content__side {
+		position: static;
+	}
+}

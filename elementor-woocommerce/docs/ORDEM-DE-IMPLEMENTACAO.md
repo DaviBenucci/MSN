@@ -11,7 +11,7 @@
 - Publicar header.
 - Publicar footer.
 - Testar menu mobile e sanfonas do footer.
-- Confirmar links de conta, pedidos, carrinho, politicas e WhatsApp.
+- Confirmar links de conta, pedidos, carrinho, finalizacao de compra, avalie seu pedido, politicas e WhatsApp.
 
 ## Fase 3 - Paginas comerciais
 
@@ -24,16 +24,24 @@
 ## Fase 4 - Fluxo de compra
 
 - Publicar carrinho.
-- Revisar checkout existente sem substituir a logica nativa.
+- Publicar finalizacao de compra com widget Checkout ou `[woocommerce_checkout]`.
+- Revisar checkout sem substituir a logica nativa.
 - Testar cupom, frete, quantidade e finalizacao.
 
 ## Fase 5 - Area do cliente e contato
 
 - Publicar Minha Conta.
 - Publicar Contato.
+- Publicar Avalie seu pedido.
 - Testar login, recuperacao de senha e formulario WhatsApp.
 
-## Fase 6 - Catalogo
+## Fase 6 - Paginas legais
+
+- Publicar Politica de Privacidade.
+- Publicar Trocas e Devolucoes.
+- Validar textos legais com responsavel juridico/administrativo.
+
+## Fase 7 - Catalogo
 
 - Corrigir categorias.
 - Preencher SKU.

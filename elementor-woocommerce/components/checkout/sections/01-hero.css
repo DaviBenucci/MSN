@@ -1,0 +1,22 @@
+.msn-checkout-hero__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 360px;
+	align-items: start;
+	gap: 28px;
+}
+
+.msn-checkout-hero__card h2 {
+	margin: 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+}
+
+.msn-checkout-hero__card .msn-chip {
+	margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+	.msn-checkout-hero__grid {
+		grid-template-columns: 1fr;
+	}
+}

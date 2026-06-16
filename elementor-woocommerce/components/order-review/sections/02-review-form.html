@@ -1,0 +1,73 @@
+<section class="msn-review-content msn-section" id="msn-avaliar-pedido">
+  <div class="msn-container msn-review-content__grid">
+    <form class="msn-form msn-review-form msn-card" data-msn-order-review-form>
+      <h2>Enviar avaliacao</h2>
+      <p>O formulario abre uma conversa no WhatsApp com as informacoes organizadas.</p>
+
+      <label>
+        Nome
+        <input type="text" name="nome" autocomplete="name" required>
+      </label>
+
+      <label>
+        Numero do pedido
+        <input type="text" name="pedido" inputmode="numeric" autocomplete="off" placeholder="Ex.: 1234" required>
+      </label>
+
+      <label>
+        Telefone ou e-mail
+        <input type="text" name="contato" autocomplete="email" required>
+      </label>
+
+      <label>
+        Nota geral
+        <select name="nota" required>
+          <option value="">Selecione</option>
+          <option value="5 - Excelente">5 - Excelente</option>
+          <option value="4 - Muito bom">4 - Muito bom</option>
+          <option value="3 - Regular">3 - Regular</option>
+          <option value="2 - Precisa melhorar">2 - Precisa melhorar</option>
+          <option value="1 - Ruim">1 - Ruim</option>
+        </select>
+      </label>
+
+      <label>
+        Principal ponto avaliado
+        <select name="tema" required>
+          <option value="">Selecione</option>
+          <option value="Atendimento">Atendimento</option>
+          <option value="Compatibilidade do produto">Compatibilidade do produto</option>
+          <option value="Entrega">Entrega</option>
+          <option value="Embalagem">Embalagem</option>
+          <option value="Compra no site">Compra no site</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </label>
+
+      <label>
+        Comentario
+        <textarea name="mensagem" required placeholder="Conte rapidamente o que funcionou bem e o que pode melhorar."></textarea>
+      </label>
+
+      <label class="msn-honeypot">
+        Nao preencha este campo
+        <input type="text" name="empresa" tabindex="-1" autocomplete="off">
+      </label>
+
+      <p class="msn-review-form__status" data-msn-order-review-status aria-live="polite"></p>
+      <button class="msn-button msn-button--whatsapp" type="submit">Enviar avaliacao pelo WhatsApp</button>
+    </form>
+
+    <aside class="msn-review-side">
+      <article class="msn-card">
+        <h2>Privacidade</h2>
+        <p>Envie apenas informacoes necessarias para identificar o pedido e entender sua experiencia.</p>
+      </article>
+      <article class="msn-card">
+        <h2>Precisa de suporte?</h2>
+        <p>Se a avaliacao envolver troca, devolucao ou divergencia no produto, fale com atendimento para abrir a solicitacao correta.</p>
+        <a class="msn-chip" href="/politica-de-devolucao/">Trocas e devolucoes</a>
+      </article>
+    </aside>
+  </div>
+</section>

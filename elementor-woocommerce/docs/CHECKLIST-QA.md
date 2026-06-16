@@ -23,9 +23,12 @@
 - [ ] Aplicar cupom, se houver.
 - [ ] Calcular frete, se houver.
 - [ ] Ir para checkout.
+- [ ] Checkout mostra campos, frete, pagamento, totais e mensagens nativas do WooCommerce.
 - [ ] Login e cadastro em Minha Conta.
 - [ ] Recuperar senha.
 - [ ] Formulario de contato abre WhatsApp com mensagem organizada.
+- [ ] Formulario Avalie seu pedido abre WhatsApp com mensagem organizada.
+- [ ] Links de Privacidade, Trocas e Devolucoes, Finalizacao de Compra e Avalie seu pedido funcionam.
 
 ## Seguranca funcional
 

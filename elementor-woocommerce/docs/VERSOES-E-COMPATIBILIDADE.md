@@ -59,7 +59,7 @@ Pontos relevantes:
 Impacto pratico:
 
 - Nao montar produto por variaveis manuais no HTML.
-- Usar widgets/shortcodes nativos: `[products]`, `[woocommerce_cart]`, `[woocommerce_my_account]`.
+- Usar widgets/shortcodes nativos: `[products]`, `[woocommerce_cart]`, `[woocommerce_checkout]`, `[woocommerce_my_account]`.
 - Preco, estoque, imagem, botao de compra e variacoes devem vir do WooCommerce.
 
 ## WooCommerce shortcodes
@@ -72,6 +72,7 @@ Shortcodes uteis para este projeto:
 [products limit="12" columns="3" paginate="true" visibility="visible"]
 [products category="toner" limit="12" columns="3" paginate="true"]
 [woocommerce_cart]
+[woocommerce_checkout]
 [woocommerce_my_account]
 ```
 
@@ -104,4 +105,3 @@ Impacto pratico:
 4. Limpar cache do navegador.
 5. Testar em aba anonima.
 6. Se produtos nao aparecem, desativar temporariamente filtro/cache e testar apenas `[products limit="12" columns="3"]`.
-

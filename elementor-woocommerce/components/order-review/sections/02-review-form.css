@@ -1,0 +1,45 @@
+.msn-review-content__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 340px;
+	align-items: start;
+	gap: 28px;
+}
+
+.msn-review-form h2,
+.msn-review-side h2 {
+	margin: 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+}
+
+.msn-review-form > p {
+	margin: 6px 0 8px;
+}
+
+.msn-review-form__status {
+	min-height: 22px;
+	margin: 0;
+	color: var(--msn-danger);
+	font-weight: 850;
+}
+
+.msn-review-side {
+	position: sticky;
+	top: 118px;
+	display: grid;
+	gap: 16px;
+}
+
+.msn-review-side .msn-chip {
+	margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+	.msn-review-content__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.msn-review-side {
+		position: static;
+	}
+}
