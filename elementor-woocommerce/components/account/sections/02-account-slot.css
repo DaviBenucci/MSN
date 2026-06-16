@@ -182,6 +182,22 @@
 	line-height: 1.7;
 }
 
+.msn-account-woo-slot .woocommerce-MyAccount-content > p,
+.woocommerce-account .msn-account-woo-slot .woocommerce-MyAccount-content > p {
+	margin: 0 0 14px;
+	border: 1px solid var(--msn-border, #dbe7f0);
+	border-radius: var(--msn-radius-lg, 12px);
+	background: var(--msn-surface-alt, #f8fafc);
+	color: var(--msn-text, #111827);
+	padding: clamp(16px, 2.5vw, 22px);
+	box-shadow: none;
+}
+
+.msn-account-woo-slot .woocommerce-MyAccount-content > p:last-child,
+.woocommerce-account .msn-account-woo-slot .woocommerce-MyAccount-content > p:last-child {
+	margin-bottom: 0;
+}
+
 .msn-account-woo-slot .woocommerce-MyAccount-content a:not(.button),
 .woocommerce-account .msn-account-woo-slot .woocommerce-MyAccount-content a:not(.button) {
 	color: var(--msn-primary, #0f3d5e);
@@ -204,6 +220,10 @@
 	align-items: stretch;
 	gap: 18px;
 	margin-top: 18px;
+	border: 0 !important;
+	background: transparent !important;
+	padding: 0 !important;
+	box-shadow: none !important;
 }
 
 .msn-account-woo-slot .woocommerce-Addresses::before,
@@ -368,6 +388,8 @@
 :root[data-theme="dark"] .msn-account-woo-slot .woocommerce-MyAccount-navigation li a,
 :root[data-theme="dark"] .woocommerce-account .msn-account-woo-slot .woocommerce-MyAccount-navigation li a,
 :root[data-theme="dark"] .msn-account-woo-slot fieldset,
+:root[data-theme="dark"] .msn-account-woo-slot .woocommerce-MyAccount-content > p,
+:root[data-theme="dark"] .woocommerce-account .msn-account-woo-slot .woocommerce-MyAccount-content > p,
 :root[data-theme="dark"] .msn-account-woo-slot .woocommerce-info,
 :root[data-theme="dark"] .msn-account-woo-slot .woocommerce-message,
 :root[data-theme="dark"] .msn-account-woo-slot .woocommerce-error {
