@@ -23,6 +23,10 @@
 	margin-top: 20px;
 }
 
+.msn-home-help__card {
+	background: linear-gradient(180deg, var(--msn-surface) 0%, var(--msn-surface-alt) 100%);
+}
+
 @media (max-width: 900px) {
 	.msn-home-help__grid {
 		grid-template-columns: 1fr;

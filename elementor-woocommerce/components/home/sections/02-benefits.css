@@ -1,5 +1,5 @@
 .msn-home-benefits {
 	border-block: 1px solid var(--msn-border);
-	background: #ffffff;
+	background: var(--msn-surface);
 	padding-block: 24px;
 }

@@ -24,6 +24,10 @@
 	min-height: 80px;
 }
 
+.msn-home-products {
+	background: var(--msn-bg);
+}
+
 @media (max-width: 900px) {
 	.msn-home-section-head--inline {
 		align-items: start;

@@ -29,14 +29,17 @@
 	min-width: 180px;
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
+	background: var(--msn-surface);
+	color: var(--msn-text);
 	padding: 12px;
 }
 
 .woocommerce-cart .cart_totals {
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
-	background: #ffffff;
+	background: var(--msn-surface);
 	padding: 18px;
+	box-shadow: var(--msn-shadow-soft);
 }
 
 .woocommerce-cart .cart_totals h2 {

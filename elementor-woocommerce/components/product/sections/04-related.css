@@ -1,0 +1,21 @@
+.msn-product-related {
+	background: var(--msn-bg);
+}
+
+.msn-product-related .msn-home-section-head {
+	max-width: 720px;
+	margin-bottom: 30px;
+}
+
+.msn-product-related .msn-home-section-head h2 {
+	margin: 14px 0 0;
+	color: var(--msn-primary);
+	font-family: var(--msn-font-display);
+	font-size: clamp(1.55rem, 3vw, 2.35rem);
+	line-height: 1.15;
+	letter-spacing: 0;
+}
+
+.msn-product-related-slot {
+	min-height: 80px;
+}

@@ -5,7 +5,8 @@ Este pacote implementa a reforma planejada para o e-commerce da MSN Distribuidor
 ## Estrutura
 
 - `shared/msn-global.css`: base visual, tokens, botoes, cards, formularios e ajustes seguros para WooCommerce.
-- `shared/msn-global.js`: comportamentos reutilizaveis, sem alterar preco, frete, estoque, carrinho ou pagamento.
+- `shared/msn-theme-init.js`: inicializacao do tema claro/escuro no Head, antes do CSS renderizar.
+- `shared/msn-global.js`: tema, utilidades e comportamentos reutilizaveis, sem alterar preco, frete, estoque, carrinho ou pagamento.
 - `components/*/sections`: blocos oficiais de cada pagina/template.
 - `components/product-card`: modelo visual reutilizavel para Loop Grid, Products widget ou shortcode WooCommerce.
 - `docs`: instalacao, mapa de componentes, QA, compatibilidade e limpeza do workspace.
@@ -16,19 +17,21 @@ Paginas e templates devem ser montados por `sections`. Nao mantenha arquivos com
 
 ## Como usar
 
-1. Cadastre `shared/msn-global.css` no CSS global do Elementor ou em Aparencia > Personalizar > CSS adicional.
-2. Cadastre `shared/msn-global.js` no footer pelo Elementor Pro Custom Code.
-3. Para cada pagina, abra `components/<pagina>/sections/README.md`.
-4. Cole os blocos `.html` na ordem indicada.
-5. Cole os `.css` das sections usadas no template/pagina ou junto do widget HTML com `<style>`.
-6. Carregue apenas os `.js` das sections presentes na pagina.
-7. Para areas WooCommerce, use widgets nativos do WooCommerce/Elementor ou widget Shortcode nos slots marcados.
+1. Cadastre `shared/msn-theme-init.js` no Head pelo Elementor Pro Custom Code.
+2. Cadastre `shared/msn-global.css` no CSS global do Elementor ou em Aparencia > Personalizar > CSS adicional.
+3. Cadastre `shared/msn-global.js` no footer pelo Elementor Pro Custom Code.
+4. Para cada pagina, abra `components/<pagina>/sections/README.md`.
+5. Cole os blocos `.html` na ordem indicada.
+6. Cole os `.css` das sections usadas no template/pagina ou junto do widget HTML com `<style>`.
+7. Carregue apenas os `.js` das sections presentes na pagina.
+8. Para areas WooCommerce, use widgets nativos do WooCommerce/Elementor ou widget Shortcode nos slots marcados.
 
 ## Regras criticas
 
 - Nao substituir checkout, carrinho, login, preco, estoque, frete, pagamento ou variacoes por HTML manual.
 - Nao usar JavaScript customizado para recalcular valores.
 - Manter classes customizadas com prefixo `.msn-`.
+- Manter o seletor de tema com `data-msn-theme-toggle` e `data-msn-theme-choice`.
 - Testar primeiro em staging.
 - Validar mobile antes de aprovar desktop.
 - Produtos, preco, imagem, estoque e CTA devem vir da bridge `data-msn-products` ou de Loop Grid tipo `Products`, widget Products/Archive Products ou shortcode WooCommerce.

@@ -5,12 +5,20 @@
 Arquivos:
 
 - `shared/msn-global.css`
+- `shared/msn-theme-init.js`
 - `shared/msn-global.js`
 
 Onde aplicar:
 
+- `msn-theme-init.js` no Head pelo Elementor Pro Custom Code.
 - CSS global do Elementor ou CSS adicional do tema.
 - JS global no footer pelo Elementor Pro Custom Code.
+
+Funcoes:
+
+- Tokens premium claro/escuro por `:root[data-theme]`.
+- Seletor de tema por `data-msn-theme-toggle` e `data-msn-theme-choice`.
+- Preferencia persistida em `msn-theme-preference`.
 
 ## Header
 
@@ -27,6 +35,7 @@ Funcoes:
 - Busca nativa WooCommerce.
 - Conta, pedidos e carrinho.
 - Contador de carrinho por `data-msn-cart-count`, preenchido pela bridge.
+- Seletor de tema desktop e no menu mobile.
 - Categorias principais, WhatsApp e menu mobile.
 
 ## Footer
@@ -93,6 +102,7 @@ Sections:
 - `components/product/sections/02-details`
 - `components/product/sections/03-mobile-bar`
 - `components/product/sections/04-related`
+- `components/product/sections/04-related.css`
 
 Slots WooCommerce:
 

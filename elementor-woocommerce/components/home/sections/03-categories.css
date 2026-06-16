@@ -16,6 +16,13 @@
 	min-height: 170px;
 	color: var(--msn-primary);
 	text-decoration: none;
+	transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.msn-home-category:hover {
+	border-color: var(--msn-border-strong);
+	box-shadow: var(--msn-shadow);
+	transform: translateY(-2px);
 }
 
 .msn-home-category span {

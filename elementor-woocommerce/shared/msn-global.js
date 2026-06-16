@@ -8,6 +8,12 @@
     '[tabindex]:not([tabindex="-1"])'
   ].join(",");
 
+  var themeStorageKey = "msn-theme-preference";
+  var themePreferences = ["system", "light", "dark"];
+  var media = window.matchMedia
+    ? window.matchMedia("(prefers-color-scheme: dark)")
+    : { matches: false, addEventListener: null, addListener: null };
+
   function lockScroll(locked) {
     document.body.classList.toggle("msn-lock-scroll", locked);
   }
@@ -30,20 +36,105 @@
     }
   }
 
+  function readThemePreference() {
+    try {
+      var stored = window.localStorage.getItem(themeStorageKey);
+      return themePreferences.indexOf(stored) !== -1 ? stored : "system";
+    } catch (error) {
+      return "system";
+    }
+  }
+
+  function writeThemePreference(preference) {
+    try {
+      window.localStorage.setItem(themeStorageKey, preference);
+    } catch (error) {
+      // Storage can be unavailable in privacy-restricted contexts.
+    }
+  }
+
+  function resolveTheme(preference) {
+    if (preference === "light" || preference === "dark") return preference;
+    return media.matches ? "dark" : "light";
+  }
+
+  function updateThemeColor(theme) {
+    var themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute("content", theme === "dark" ? "#07111f" : "#0f3d5e");
+  }
+
+  function syncThemeControls(preference) {
+    var activeIndex = Math.max(themePreferences.indexOf(preference), 0);
+
+    Array.prototype.forEach.call(document.querySelectorAll("[data-msn-theme-toggle]"), function (toggle) {
+      toggle.style.setProperty("--msn-theme-index", String(activeIndex));
+
+      Array.prototype.forEach.call(toggle.querySelectorAll("[data-msn-theme-choice]"), function (button) {
+        button.setAttribute("aria-pressed", String(button.getAttribute("data-msn-theme-choice") === preference));
+      });
+    });
+  }
+
+  function applyThemePreference(preference, shouldPersist) {
+    if (themePreferences.indexOf(preference) === -1) preference = "system";
+
+    if (shouldPersist) writeThemePreference(preference);
+
+    var theme = resolveTheme(preference);
+    var root = document.documentElement;
+    root.dataset.theme = theme;
+    root.dataset.themePreference = preference;
+    root.style.colorScheme = theme;
+    updateThemeColor(theme);
+    syncThemeControls(preference);
+
+    return theme;
+  }
+
+  function bindThemeControls() {
+    if (window.__msnThemeToggleReady) {
+      syncThemeControls(readThemePreference());
+      return;
+    }
+
+    window.__msnThemeToggleReady = true;
+
+    document.addEventListener("click", function (event) {
+      var target = event.target instanceof Element ? event.target.closest("[data-msn-theme-choice]") : null;
+      if (!(target instanceof HTMLElement)) return;
+
+      var preference = target.getAttribute("data-msn-theme-choice");
+      applyThemePreference(preference, true);
+    });
+
+    var handleSystemChange = function () {
+      var preference = readThemePreference();
+      if (preference === "system") applyThemePreference(preference, false);
+    };
+
+    if (media.addEventListener) media.addEventListener("change", handleSystemChange);
+    else if (media.addListener) media.addListener(handleSystemChange);
+
+    applyThemePreference(readThemePreference(), false);
+  }
+
+  function init() {
+    bindThemeControls();
+  }
+
   window.MSNStorefront = {
     focusableSelector: focusableSelector,
     lockScroll: lockScroll,
-    trapFocus: trapFocus
+    trapFocus: trapFocus,
+    readThemePreference: readThemePreference,
+    applyThemePreference: function (preference) {
+      return applyThemePreference(preference, true);
+    }
   };
 
-  Array.prototype.forEach.call(document.querySelectorAll("[data-msn-accordion]"), function (group) {
-    Array.prototype.forEach.call(group.querySelectorAll("[data-msn-accordion-trigger]"), function (trigger) {
-      trigger.addEventListener("click", function () {
-        var panel = document.getElementById(trigger.getAttribute("aria-controls"));
-        var isOpen = trigger.getAttribute("aria-expanded") === "true";
-        trigger.setAttribute("aria-expanded", String(!isOpen));
-        if (panel) panel.hidden = isOpen;
-      });
-    });
-  });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();

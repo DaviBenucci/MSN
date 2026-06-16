@@ -4,6 +4,7 @@
 	justify-content: center;
 	gap: 16px;
 	border-top: 1px solid var(--msn-border);
+	background: color-mix(in srgb, var(--msn-surface) 78%, transparent);
 	padding: 10px 16px;
 }
 
@@ -55,6 +56,7 @@
 		flex: 0 0 auto;
 		border: 1px solid var(--msn-border);
 		border-radius: 999px;
+		background: var(--msn-surface);
 		color: var(--msn-primary);
 		font-size: 0.84rem;
 		font-weight: 900;
@@ -70,7 +72,7 @@
 		flex: 0 0 auto;
 		border: 1px solid rgba(16, 185, 129, 0.35);
 		border-radius: 999px;
-		background: rgba(16, 185, 129, 0.08);
+		background: color-mix(in srgb, var(--msn-success) 10%, var(--msn-surface));
 		font-size: 0.84rem;
 		padding: 0 14px;
 		white-space: nowrap;

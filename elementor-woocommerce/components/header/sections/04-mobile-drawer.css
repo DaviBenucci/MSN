@@ -15,6 +15,10 @@
 		transition: opacity 180ms ease;
 	}
 
+	:root[data-theme="dark"] .msn-header__backdrop {
+		background: rgba(0, 0, 0, 0.66);
+	}
+
 	.msn-header__backdrop.is-open {
 		opacity: 1;
 		pointer-events: auto;
@@ -27,15 +31,28 @@
 		display: flex;
 		width: min(88vw, 390px);
 		height: 100dvh;
-		transform: translateX(100%);
+		transform: none;
 		flex-direction: column;
-		background: #ffffff;
+		background: var(--msn-surface);
+		color: var(--msn-text);
+		clip-path: inset(0 0 0 100%);
+		opacity: 0;
+		pointer-events: none;
+		visibility: hidden;
 		box-shadow: -18px 0 45px rgba(15, 23, 42, 0.18);
-		transition: transform 220ms ease;
+		transition: clip-path 220ms ease, opacity 180ms ease, visibility 0s linear 220ms;
+	}
+
+	:root[data-theme="dark"] .msn-header__drawer {
+		box-shadow: -18px 0 45px rgba(0, 0, 0, 0.42);
 	}
 
 	.msn-header__drawer.is-open {
-		transform: translateX(0);
+		clip-path: inset(0);
+		opacity: 1;
+		pointer-events: auto;
+		visibility: visible;
+		transition: clip-path 220ms ease, opacity 180ms ease;
 	}
 
 	.msn-header__drawer-head {
@@ -55,10 +72,25 @@
 	.msn-header__drawer-head button {
 		border: 1px solid var(--msn-border);
 		border-radius: var(--msn-radius);
-		background: #ffffff;
+		background: var(--msn-surface);
 		color: var(--msn-primary);
 		padding: 9px 12px;
-		font-weight: 800;
+		font-weight: 850;
+	}
+
+	.msn-header__drawer-theme {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		border-bottom: 1px solid var(--msn-border);
+		padding: 14px 16px;
+	}
+
+	.msn-header__drawer-theme > span:first-child {
+		color: var(--msn-muted);
+		font-size: 0.84rem;
+		font-weight: 850;
 	}
 
 	.msn-header__drawer-search {
@@ -76,6 +108,8 @@
 	.msn-header__drawer-search input {
 		border: 1px solid var(--msn-border);
 		border-radius: var(--msn-radius);
+		background: var(--msn-surface-alt);
+		color: var(--msn-text);
 		padding: 12px;
 	}
 
@@ -90,7 +124,7 @@
 		border-radius: var(--msn-radius);
 		color: var(--msn-text);
 		padding: 12px;
-		font-weight: 800;
+		font-weight: 850;
 		text-decoration: none;
 	}
 

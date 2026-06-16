@@ -10,11 +10,14 @@
 
 ## 2. Globais
 
-1. Copie `shared/msn-global.css` para o CSS global do Elementor ou CSS adicional do tema.
-2. Copie `shared/msn-global.js` para Custom Code no footer.
-3. Ative o plugin `msn-woocommerce-layout-bridge` quando for usar vitrines com `data-msn-products`.
+1. Copie `shared/msn-theme-init.js` para Custom Code no Head. Ele evita piscar entre tema claro/escuro.
+2. Copie `shared/msn-global.css` para o CSS global do Elementor ou CSS adicional do tema.
+3. Copie `shared/msn-global.js` para Custom Code no footer.
+4. Ative o plugin `msn-woocommerce-layout-bridge` quando for usar vitrines com `data-msn-products`.
 
 Nao cole `msn-woo-layout.css` ou `msn-woo-layout.js` manualmente no Elementor; o plugin carrega esses arquivos.
+
+O seletor de tema usa `localStorage` na chave `msn-theme-preference` e aceita `system`, `light` e `dark`.
 
 ## 3. Templates por sections
 

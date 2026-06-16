@@ -19,10 +19,10 @@
 	display: block;
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
-	background: #ffffff;
+	background: var(--msn-surface);
 	color: var(--msn-primary);
 	padding: 12px 14px;
-	font-weight: 800;
+	font-weight: 850;
 	text-decoration: none;
 }
 
@@ -36,8 +36,9 @@
 	width: calc(100% - 300px);
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
-	background: #ffffff;
+	background: var(--msn-surface);
 	padding: 22px;
+	box-shadow: var(--msn-shadow-soft);
 }
 
 .woocommerce-account form.login,
@@ -45,7 +46,7 @@
 .woocommerce-account form.lost_reset_password {
 	border-color: var(--msn-border);
 	border-radius: var(--msn-radius);
-	background: #ffffff;
+	background: var(--msn-surface);
 }
 
 @media (max-width: 900px) {

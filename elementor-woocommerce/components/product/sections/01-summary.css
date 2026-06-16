@@ -9,9 +9,9 @@
 .msn-product-summary {
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
-	background: #ffffff;
+	background: var(--msn-surface);
 	padding: 18px;
-	box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+	box-shadow: var(--msn-shadow-soft);
 }
 
 .msn-product-summary {
@@ -47,6 +47,8 @@
 	min-height: 44px;
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
+	background: var(--msn-surface-alt);
+	color: var(--msn-text);
 }
 
 .msn-product-confidence {

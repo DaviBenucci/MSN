@@ -10,7 +10,7 @@
 	gap: 10px;
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
-	background: #ffffff;
+	background: var(--msn-surface);
 	padding: 18px;
 	box-shadow: var(--msn-shadow);
 }
@@ -30,6 +30,8 @@
 	flex: 1;
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
+	background: var(--msn-surface-alt);
+	color: var(--msn-text);
 	padding: 12px 14px;
 }
 
