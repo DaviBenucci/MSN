@@ -4,7 +4,7 @@ Use estes blocos na ordem:
 
 1. `01-hero.html` + `01-hero.css`
 2. `02-account-slot.html` + `02-account-slot.css` + `02-account-slot.js`
-3. `03-help.html`
+3. `03-help.html` + `03-help.css`
 
 ## Como montar o slot WooCommerce no Elementor
 

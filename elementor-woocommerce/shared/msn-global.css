@@ -22,6 +22,8 @@
 	--msn-ring: 0 0 0 4px rgba(14, 165, 233, 0.14);
 	--msn-radius: 8px;
 	--msn-radius-lg: 12px;
+	--msn-section-y: clamp(34px, 5vw, 58px);
+	--msn-section-y-tight: clamp(20px, 3vw, 32px);
 	--msn-font-sans: Inter, Roboto, Arial, sans-serif;
 	--msn-font-display: Poppins, Montserrat, Inter, Roboto, Arial, sans-serif;
 	--msn-theme-switcher-bg: rgba(255, 255, 255, 0.92);
@@ -101,7 +103,11 @@ body.msn-lock-scroll {
 }
 
 .msn-section {
-	padding-block: clamp(52px, 7vw, 92px);
+	padding-block: var(--msn-section-y);
+}
+
+.msn-section + .msn-section {
+	padding-top: var(--msn-section-y-tight);
 }
 
 .msn-section--soft {

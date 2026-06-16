@@ -1,0 +1,7 @@
+.msn-account-help {
+	padding-top: clamp(20px, 3vw, 32px);
+}
+
+.msn-account-help .msn-grid {
+	gap: 20px;
+}

@@ -3,6 +3,11 @@
 	box-sizing: border-box;
 }
 
+.msn-account-content {
+	padding-top: clamp(20px, 3vw, 32px);
+	padding-bottom: clamp(28px, 4vw, 42px);
+}
+
 .msn-account-woo-slot .woocommerce {
 	display: grid;
 	grid-template-columns: minmax(240px, 290px) minmax(0, 1fr);
@@ -460,7 +465,9 @@
 
 	.msn-account-woo-slot .woocommerce-MyAccount-navigation ul,
 	.woocommerce-account .msn-account-woo-slot .woocommerce-MyAccount-navigation ul,
-	.msn-account-woo-slot .woocommerce-Addresses {
+	.msn-account-woo-slot .woocommerce-Addresses,
+	.msn-account-woo-slot .u-columns.woocommerce-Addresses,
+	.msn-account-woo-slot .col2-set.addresses {
 		grid-template-columns: 1fr;
 	}
 
