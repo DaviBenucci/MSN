@@ -140,11 +140,13 @@ Sections:
 
 - `components/checkout/sections/01-hero`
 - `components/checkout/sections/02-checkout-slot`
+- `components/checkout/sections/03-checkout-woocommerce`
 
 Slot WooCommerce:
 
 - Shortcode `[woocommerce_checkout]` ou widget Checkout.
 - Montagem: Container `msn-checkout-woo-slot` contendo o widget Checkout/Shortcode. Nao cole esse shortcode dentro do widget HTML.
+- Manutencao: `02-checkout-slot.css` cuida da moldura Elementor; `03-checkout-woocommerce.css` cuida dos elementos internos gerados pelo WooCommerce/checkout em etapas.
 
 ## Minha Conta
 

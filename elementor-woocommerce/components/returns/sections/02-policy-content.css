@@ -18,6 +18,13 @@
 	margin-top: 22px;
 }
 
+.msn-returns-policy__lead {
+	margin: 12px 0 0;
+	color: var(--msn-text);
+	font-size: 1.02rem;
+	line-height: 1.75;
+}
+
 .msn-returns-policy__steps section {
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
@@ -35,11 +42,27 @@
 	margin: 6px 0 0;
 }
 
+.msn-returns-policy__signature {
+	margin: 22px 0 0;
+	border-left: 3px solid var(--msn-accent);
+	color: var(--msn-text);
+	padding-left: 14px;
+	line-height: 1.65;
+}
+
+.msn-returns-policy__signature strong {
+	color: var(--msn-primary);
+}
+
 .msn-returns-policy__side {
 	position: sticky;
 	top: 118px;
 	display: grid;
 	gap: 16px;
+}
+
+.msn-returns-policy__side .msn-chip {
+	margin-top: 14px;
 }
 
 @media (max-width: 900px) {

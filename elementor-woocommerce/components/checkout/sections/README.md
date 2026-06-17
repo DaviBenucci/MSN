@@ -4,6 +4,16 @@ Use estes blocos na ordem:
 
 1. `01-hero.html` + `01-hero.css`
 2. `02-checkout-slot.html` + `02-checkout-slot.css`
+3. `03-checkout-woocommerce.css`
+
+## Separacao dos CSS
+
+Para facilitar manutencao, o checkout esta separado em duas camadas:
+
+- `02-checkout-slot.css`: cuida somente da estrutura HTML criada no Elementor, como container principal, slot do WooCommerce e cards laterais.
+- `03-checkout-woocommerce.css`: cuida somente dos elementos que o WooCommerce, WooCommerce Blocks ou plugin de checkout em etapas geram dentro de `msn-checkout-woo-slot`.
+
+Cole `03-checkout-woocommerce.css` depois de `02-checkout-slot.css`, porque ele precisa sobrescrever estilos nativos do WooCommerce e do plugin de checkout.
 
 ## Como montar o slot WooCommerce no Elementor
 

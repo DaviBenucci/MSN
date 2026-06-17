@@ -11,6 +11,18 @@ Esta pagina e institucional e nao depende de widget WooCommerce. Ela deve ser cr
 /politica-de-privacidade/
 ```
 
+## Texto do WordPress
+
+O WordPress pode gerar uma pagina com trechos marcados como "Texto sugerido". Esse conteudo e apenas um modelo generico. Para a MSN, use o texto final aprovado pela empresa em `02-privacy-content.html` e nao publique os trechos sugeridos sem revisao.
+
+Depois de publicar a pagina, va em:
+
+```text
+WordPress > Configuracoes > Privacidade
+```
+
+Selecione esta pagina como a Politica de Privacidade oficial do site. Assim os links nativos do WordPress/WooCommerce apontam para a politica correta.
+
 Antes de publicar, valide o texto final com o responsavel juridico/administrativo da loja, especialmente dados tratados, cookies, gateways de pagamento, transportadoras, ferramentas de analytics e canais de atendimento.
 
 Referencias oficiais para revisao:

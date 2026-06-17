@@ -109,6 +109,16 @@ Container: msn-checkout-content msn-section
     Container/HTML: msn-checkout-side
 ```
 
+CSS da Finalizacao de Compra:
+
+```text
+01-hero.css
+02-checkout-slot.css
+03-checkout-woocommerce.css
+```
+
+O `02-checkout-slot.css` estiliza a estrutura HTML/Elementor. O `03-checkout-woocommerce.css` deve vir depois e estiliza somente o que o WooCommerce ou o plugin de checkout em etapas renderiza dentro de `msn-checkout-woo-slot`.
+
 ## Produtos dinamicos
 
 Para listar produtos:
