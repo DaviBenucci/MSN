@@ -2,7 +2,7 @@
 /**
  * Plugin Name: MSN WooCommerce Layout Bridge
  * Description: Camada segura de dados entre WooCommerce, Elementor e componentes HTML/CSS/JS da MSN Distribuidora.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: MSN Distribuidora / Davi Benucci
  * Requires at least: 6.0
  * Requires PHP: 7.4
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 
 final class MSN_WooCommerce_Layout_Bridge
 {
-    private const VERSION = '1.1.0';
+    private const VERSION = '1.1.1';
     private const REST_NAMESPACE = 'msn/v1';
 
     public static function init(): void
@@ -771,16 +771,17 @@ final class MSN_WooCommerce_Layout_Bridge
 
     public static function shortcode_product_search(): string
     {
-        ob_start();
-        ?>
-        <form class="msn-product-search" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
-            <label class="screen-reader-text" for="msn-product-search-input">Buscar produto</label>
-            <input id="msn-product-search-input" class="msn-product-search__input" type="search" name="s" value="<?php echo esc_attr(get_search_query()); ?>" placeholder="Buscar por toner, impressora, cartucho, código ou modelo">
-            <input type="hidden" name="post_type" value="product">
-            <button class="msn-product-search__button" type="submit">Buscar</button>
-        </form>
-        <?php
-        return ob_get_clean();
+        if (!self::is_woo_active() || !function_exists('get_product_search_form')) {
+            return '';
+        }
+
+        $form = get_product_search_form(false);
+
+        if (!is_string($form) || trim($form) === '') {
+            return '';
+        }
+
+        return '<div class="msn-product-search-slot">' . $form . '</div>';
     }
 
     public static function shortcode_cart_link(): string

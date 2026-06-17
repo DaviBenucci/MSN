@@ -1,4 +1,5 @@
 .msn-product-search,
+.msn-product-search-slot,
 .msn-cart-link,
 .msn-account-link,
 .msn-product-whatsapp,
@@ -7,13 +8,21 @@
   box-sizing: border-box;
 }
 
-.msn-product-search {
-  display: flex;
-  gap: 8px;
+.msn-product-search-slot {
   width: 100%;
 }
 
-.msn-product-search__input {
+.msn-product-search,
+.msn-product-search-slot .woocommerce-product-search {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.msn-product-search__input,
+.msn-product-search-slot input[type="search"],
+.msn-product-search-slot .search-field {
   min-height: 44px;
   min-width: 0;
   flex: 1;
@@ -24,7 +33,20 @@
   padding: 0 14px;
 }
 
+.msn-product-search-slot .screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .msn-product-search__button,
+.msn-product-search-slot button,
+.msn-product-search-slot input[type="submit"],
 .msn-product-whatsapp {
   display: inline-flex;
   min-height: 44px;
@@ -37,9 +59,12 @@
   padding: 10px 16px;
   font-weight: 850;
   text-decoration: none;
+  cursor: pointer;
 }
 
 :root[data-theme="dark"] .msn-product-search__button,
+:root[data-theme="dark"] .msn-product-search-slot button,
+:root[data-theme="dark"] .msn-product-search-slot input[type="submit"],
 :root[data-theme="dark"] .msn-product-whatsapp {
   color: #07111f !important;
 }
@@ -256,7 +281,8 @@
 }
 
 @media (max-width: 640px) {
-  .msn-product-search {
+  .msn-product-search,
+  .msn-product-search-slot .woocommerce-product-search {
     flex-direction: column;
   }
 

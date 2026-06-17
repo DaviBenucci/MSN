@@ -18,4 +18,24 @@ Depois insira os blocos nesta ordem:
 
 O contador do carrinho depende do plugin `msn-woocommerce-layout-bridge` ativo.
 
+## Busca de produtos WooCommerce
+
+A busca do header nao deve ser recriada manualmente no widget HTML. Ela deve usar a busca nativa do WooCommerce por meio do shortcode da ponte:
+
+```txt
+[msn_product_search]
+```
+
+No desktop, use o `02-main.html` como estrutura e coloque um widget **Shortcode** dentro do espaco com a classe `msn-header__search-slot`.
+
+No mobile, coloque outro widget **Shortcode** dentro do espaco com a classe `msn-header__drawer-search`, logo abaixo do seletor de tema.
+
+O shortcode renderiza `get_product_search_form()` do WooCommerce, mantendo `post_type=product` e a compatibilidade com traducoes, tema e plugins. Os arquivos `02-main.css` e `04-mobile-drawer.css` apenas estilizam o formulario gerado pelo WooCommerce.
+
+Se estiver montando tudo com containers do Elementor, a ordem ideal no header principal e:
+
+1. Logo
+2. Container `msn-header__search-slot` com o shortcode `[msn_product_search]`
+3. Links de conta, pedidos, carrinho e tema
+
 O drawer mobile inclui links para carrinho, finalizacao de compra, minha conta, avalie seu pedido, trocas/devolucoes e privacidade. Crie essas paginas antes de publicar o menu definitivo.

@@ -47,6 +47,8 @@ O JavaScript carrega `/wp-json/msn/v1/products` e renderiza cards com imagem, no
 [msn_product_whatsapp phone="5511999999999"]
 ```
 
+`[msn_product_search]` renderiza o formulario nativo de busca de produtos do WooCommerce (`get_product_search_form()`), mantendo a consulta limitada a produtos. Use esse shortcode dentro de um widget Shortcode do Elementor e estilize o resultado pelos slots do layout, como `msn-header__search-slot` e `msn-header__drawer-search`.
+
 `[msn_product_card]` e um fallback. Para venda real em loja/categoria, prefira o renderer `data-msn-products`, Loop Grid tipo Products, widget Products/Archive Products ou shortcodes nativos.
 
 ## Objeto JavaScript global
