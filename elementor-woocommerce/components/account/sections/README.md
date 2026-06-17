@@ -54,7 +54,7 @@ Cole `02-account-slot.css` no CSS da pagina/template, no CSS global do Elementor
 
 Evite colar este CSS dentro do painel **Editar Shortcode > CSS personalizado**. Esse painel pertence ao widget Shortcode e pode limitar o escopo do CSS, alem de exibir avisos em variaveis como `var(--msn-border)`. Esses avisos do editor nao significam, sozinhos, que o CSS esta invalido, mas a forma mais estavel e carregar:
 
-1. `shared/msn-global.css` primeiro.
+1. `shared/msn-global-css.html` primeiro.
 2. `01-hero.css`, `02-account-slot.css` e os CSS das sections usadas depois.
 3. O shortcode `[woocommerce_my_account]` dentro de um Container com a classe `msn-account-woo-slot`.
 

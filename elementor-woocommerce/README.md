@@ -4,9 +4,9 @@ Este pacote implementa a reforma planejada para o e-commerce da MSN Distribuidor
 
 ## Estrutura
 
-- `shared/msn-global.css`: base visual, tokens, botoes, cards, formularios e ajustes seguros para WooCommerce.
-- `shared/msn-theme-init.js`: inicializacao do tema claro/escuro no Head, antes do CSS renderizar.
-- `shared/msn-global.js`: tema, utilidades e comportamentos reutilizaveis, sem alterar preco, frete, estoque, carrinho ou pagamento.
+- `shared/msn-global-css.html`: base visual, tokens, botoes, cards, formularios e ajustes seguros para WooCommerce, pronto para colar como CSS global/Custom Code.
+- `shared/msn-theme-init-js.html`: inicializacao minima do tema claro/escuro no Head, antes do CSS renderizar.
+- `shared/msn-global-js.html`: tema, utilidades e comportamentos reutilizaveis, sem alterar preco, frete, estoque, carrinho ou pagamento.
 - `components/*/sections`: blocos oficiais de cada pagina/template.
 - `components/product-card`: modelo visual reutilizavel para Loop Grid, Products widget ou shortcode WooCommerce.
 - `docs`: instalacao, mapa de componentes, QA, compatibilidade e limpeza do workspace.
@@ -17,9 +17,9 @@ Paginas e templates devem ser montados por `sections`. Nao mantenha arquivos com
 
 ## Como usar
 
-1. Cadastre `shared/msn-theme-init.js` no Head pelo Elementor Pro Custom Code.
-2. Cadastre `shared/msn-global.css` no CSS global do Elementor ou em Aparencia > Personalizar > CSS adicional.
-3. Cadastre `shared/msn-global.js` no footer pelo Elementor Pro Custom Code.
+1. Cadastre `shared/msn-theme-init-js.html` no Head pelo Elementor Pro Custom Code, sem atraso por cache.
+2. Cadastre `shared/msn-global-css.html` no CSS global do Elementor, Custom Code no Head ou em Aparencia > Personalizar > CSS adicional.
+3. Cadastre `shared/msn-global-js.html` no footer pelo Elementor Pro Custom Code.
 4. Para cada pagina, abra `components/<pagina>/sections/README.md`.
 5. Cole os blocos `.html` na ordem indicada.
 6. Cole os `.css` das sections usadas no template/pagina ou junto do widget HTML com `<style>`.

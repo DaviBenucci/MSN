@@ -148,6 +148,11 @@
 	gap: 14px;
 }
 
+.msn-header__theme-toggle {
+	align-self: center;
+	margin-left: 2px;
+}
+
 .msn-header__actions a {
 	color: var(--msn-text);
 	font-size: 0.9rem;

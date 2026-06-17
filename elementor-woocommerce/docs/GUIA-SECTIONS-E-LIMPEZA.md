@@ -20,8 +20,9 @@ Use `.js` apenas quando a section tiver comportamento proprio. CSS e JS globais 
 
 ## O que fica fora de sections
 
-- `shared/msn-global.css`: tokens, base visual e ajustes WooCommerce globais.
-- `shared/msn-global.js`: utilitarios globais pequenos.
+- `shared/msn-theme-init-js.html`: tema inicial no Head.
+- `shared/msn-global-css.html`: tokens, base visual e ajustes WooCommerce globais.
+- `shared/msn-global-js.html`: utilitarios globais pequenos no Footer.
 - `components/product-card/*`: estilo reutilizavel para cards/Loop Grid.
 - `msn-woocommerce-layout-bridge/*`: plugin da ponte WooCommerce.
 

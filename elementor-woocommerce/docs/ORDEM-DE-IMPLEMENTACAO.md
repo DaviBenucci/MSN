@@ -2,8 +2,9 @@
 
 ## Fase 1 - Base global
 
-- Instalar `msn-global.css`.
-- Instalar `msn-global.js`.
+- Instalar `shared/msn-theme-init-js.html` no Head.
+- Instalar `shared/msn-global-css.html`.
+- Instalar `shared/msn-global-js.html` no Footer.
 - Conferir fonte, cores, botoes e estilos WooCommerce basicos.
 
 ## Fase 2 - Estrutura global

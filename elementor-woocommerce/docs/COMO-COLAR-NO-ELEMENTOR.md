@@ -36,7 +36,7 @@ Nao precisa usar `<style>` quando estiver em campo exclusivo de CSS.
 
 Evite colar CSS de uma section inteira dentro do painel de CSS personalizado de um unico widget, como **Editar Shortcode > Avancado > CSS personalizado**. Esse campo pertence ao widget atual e pode confundir o escopo do estilo. Para slots WooCommerce, coloque o CSS da section no nivel da pagina/template ou no CSS global.
 
-Alguns editores do Elementor exibem avisos em funcoes modernas como `var(...)`, `clamp(...)` ou `color-mix(...)`. Quando o site esta com `shared/msn-global.css` carregado, esses avisos normalmente sao apenas do validador visual do editor. Se a formatacao nao aplicar, confira primeiro se o CSS global foi carregado antes da section e se o Container tem a classe esperada.
+Alguns editores do Elementor exibem avisos em funcoes modernas como `var(...)`, `clamp(...)` ou `color-mix(...)`. Quando o site esta com `shared/msn-global-css.html` carregado, esses avisos normalmente sao apenas do validador visual do editor. Se a formatacao nao aplicar, confira primeiro se o CSS global foi carregado antes da section e se o Container tem a classe esperada.
 
 ## JavaScript
 

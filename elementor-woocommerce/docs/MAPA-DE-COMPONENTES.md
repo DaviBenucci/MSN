@@ -4,13 +4,13 @@
 
 Arquivos:
 
-- `shared/msn-global.css`
-- `shared/msn-theme-init.js`
-- `shared/msn-global.js`
+- `shared/msn-global-css.html`
+- `shared/msn-theme-init-js.html`
+- `shared/msn-global-js.html`
 
 Onde aplicar:
 
-- `msn-theme-init.js` no Head pelo Elementor Pro Custom Code.
+- `msn-theme-init-js.html` no Head pelo Elementor Pro Custom Code.
 - CSS global do Elementor ou CSS adicional do tema.
 - JS global no footer pelo Elementor Pro Custom Code.
 

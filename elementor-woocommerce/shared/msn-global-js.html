@@ -1,4 +1,5 @@
-(function () {
+<script>
+  (function () {
   var focusableSelector = [
     "a[href]",
     "button:not([disabled])",
@@ -68,6 +69,7 @@
 
     Array.prototype.forEach.call(document.querySelectorAll("[data-msn-theme-toggle]"), function (toggle) {
       toggle.style.setProperty("--msn-theme-index", String(activeIndex));
+      toggle.style.setProperty("--msn-theme-offset", String(activeIndex * 34) + "px");
 
       Array.prototype.forEach.call(toggle.querySelectorAll("[data-msn-theme-choice]"), function (button) {
         button.setAttribute("aria-pressed", String(button.getAttribute("data-msn-theme-choice") === preference));
@@ -138,3 +140,5 @@
     init();
   }
 })();
+
+</script>
