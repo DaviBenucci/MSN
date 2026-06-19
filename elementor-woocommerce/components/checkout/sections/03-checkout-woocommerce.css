@@ -1052,8 +1052,8 @@
 :root[data-theme="dark"] .msn-checkout-woo-slot #payment div.payment_box .mp-wallet-button-container,
 :root[data-theme="dark"] .msn-checkout-woo-slot #payment div.payment_box .mp-card-form,
 :root[data-theme="dark"] .msn-checkout-woo-slot #payment div.payment_box .mp-form-row {
-	background: #ffffff !important;
-	color: #111827 !important;
+	background: var(--msn-surface-alt) !important;
+	color: var(--msn-text) !important;
 }
 
 :root[data-theme="dark"] .msn-checkout-woo-slot #payment div.payment_box .mp-checkout-container p,
@@ -1072,7 +1072,230 @@
 :root[data-theme="dark"] .msn-checkout-woo-slot #payment div.payment_box .mp-card-form span,
 :root[data-theme="dark"] .msn-checkout-woo-slot #payment div.payment_box .mp-card-form div,
 :root[data-theme="dark"] .msn-checkout-woo-slot #payment div.payment_box .mp-card-form label {
-	color: #111827 !important;
+	color: var(--msn-text) !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep {
+	align-items: start !important;
+	justify-items: stretch !important;
+	text-align: left !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-title-container {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) auto !important;
+	grid-column: 1 / -1 !important;
+	width: 100% !important;
+	max-width: none !important;
+	align-items: start !important;
+	justify-items: start !important;
+	gap: 12px !important;
+	margin: 0 0 16px !important;
+	padding: 0 !important;
+	text-align: left !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-title,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-title-container .fc-step__substep-title {
+	display: block !important;
+	grid-column: 1 !important;
+	width: 100% !important;
+	max-width: none !important;
+	float: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	color: var(--msn-primary) !important;
+	font-family: var(--msn-font-display);
+	font-size: clamp(1rem, 1.8vw, 1.18rem) !important;
+	font-weight: 900 !important;
+	line-height: 1.2 !important;
+	text-align: left !important;
+	text-transform: none !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-title-container .fc-step__substep-edit,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-title-container a {
+	grid-column: 2 !important;
+	justify-self: end !important;
+	align-self: start !important;
+	margin: 0 !important;
+	text-align: right !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-fields,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-fields-inner,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-billing-fields,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-shipping-fields,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-additional-fields {
+	grid-column: 1 / -1 !important;
+	width: 100% !important;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	text-align: left !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-billing-fields__field-wrapper,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-shipping-fields__field-wrapper,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-additional-fields__field-wrapper,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-address-fields__field-wrapper,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-field-group,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-fields {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	gap: 16px !important;
+	width: 100% !important;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	align-items: start !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .form-row,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper p.form-row {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) !important;
+	gap: 6px !important;
+	width: 100% !important;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	float: none !important;
+	clear: none !important;
+	text-align: left !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .form-row-wide,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .form-row.notes,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-text {
+	grid-column: 1 / -1 !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .form-row label,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-form__label,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .checkbox {
+	display: inline-flex !important;
+	width: fit-content !important;
+	max-width: 100% !important;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	gap: 8px !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	color: var(--msn-text) !important;
+	font-weight: 750 !important;
+	line-height: 1.25 !important;
+	text-align: left !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot .woocommerce-input-wrapper,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper input,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper select,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper textarea,
+body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .select2-container {
+	width: 100% !important;
+	max-width: none !important;
+	text-align: left !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [class*="mp-"],
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [class*="mercado"],
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [class*="Mercado"],
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [id*="mp-"],
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [id*="mercado"] {
+	box-sizing: border-box;
+	max-width: 100% !important;
+	color: inherit !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box input,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box select,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box textarea,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box .select2-selection,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [role="combobox"] {
+	width: 100% !important;
+	max-width: none !important;
+	border: 1px solid var(--msn-border) !important;
+	border-radius: var(--msn-radius, 8px) !important;
+	background: var(--msn-surface) !important;
+	background-color: var(--msn-surface) !important;
+	color: var(--msn-text) !important;
+	-webkit-text-fill-color: var(--msn-text) !important;
+	box-shadow: none !important;
+}
+
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .form-row label,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-form__label,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .checkbox,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-text,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-data,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .fc-step__substep-value {
+	color: var(--msn-text) !important;
+}
+
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot input,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot select,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot textarea,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot .select2-selection,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot .wc-block-components-text-input input,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot .wc-block-components-combobox .wc-block-components-combobox-control input {
+	color-scheme: dark;
+	border-color: var(--msn-border) !important;
+	background: var(--msn-surface-alt) !important;
+	background-color: var(--msn-surface-alt) !important;
+	color: var(--msn-text) !important;
+	-webkit-text-fill-color: var(--msn-text) !important;
+	caret-color: var(--msn-text) !important;
+}
+
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot input::placeholder,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot textarea::placeholder {
+	color: var(--msn-muted) !important;
+	-webkit-text-fill-color: var(--msn-muted) !important;
+	opacity: 1 !important;
+}
+
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box > *,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [class*="mp-"],
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [class*="mercado"],
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [class*="Mercado"],
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [id*="mp-"],
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [id*="mercado"] {
+	border-color: var(--msn-border) !important;
+	background: var(--msn-surface-alt) !important;
+	background-color: var(--msn-surface-alt) !important;
+	color: var(--msn-text) !important;
+}
+
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box p,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box span,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box div,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box label,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box strong,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box small {
+	color: var(--msn-text) !important;
+}
+
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box a {
+	color: var(--msn-primary) !important;
+}
+
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box input,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box select,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box textarea,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box .select2-selection,
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [role="combobox"] {
+	border-color: var(--msn-border) !important;
+	background: var(--msn-surface) !important;
+	background-color: var(--msn-surface) !important;
+	color: var(--msn-text) !important;
+	-webkit-text-fill-color: var(--msn-text) !important;
+}
+
+html[data-theme="dark"] body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box iframe {
+	border-radius: var(--msn-radius, 8px);
+	background: #ffffff !important;
 }
 
 @media (max-width: 1100px) {
