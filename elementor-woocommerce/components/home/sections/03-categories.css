@@ -16,6 +16,7 @@
 	min-height: 170px;
 	color: var(--msn-primary);
 	text-decoration: none;
+	box-shadow: var(--msn-shadow-card);
 	transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 

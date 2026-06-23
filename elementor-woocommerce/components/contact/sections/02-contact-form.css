@@ -2,7 +2,7 @@
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) 360px;
 	align-items: start;
-	gap: 30px;
+	gap: clamp(20px, 3vw, 30px);
 }
 
 .msn-contact-form h2,
@@ -28,6 +28,11 @@
 	top: 118px;
 	display: grid;
 	gap: 16px;
+}
+
+.msn-contact-form,
+.msn-contact-side .msn-card {
+	box-shadow: var(--msn-shadow-card);
 }
 
 .msn-contact-side .msn-chip {

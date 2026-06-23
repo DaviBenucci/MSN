@@ -1,5 +1,5 @@
 <div class="msn-header__main msn-container">
-  <button class="msn-header__menu-button" type="button" aria-label="Abrir menu" aria-controls="msn-mobile-menu" aria-expanded="false" data-msn-menu-open>
+  <button class="msn-header__menu-button" type="button" aria-label="Abrir menu de navegacao" aria-controls="msn-mobile-menu" aria-expanded="false" data-msn-menu-open>
     <span aria-hidden="true"></span>
     <span aria-hidden="true"></span>
     <span aria-hidden="true"></span>
@@ -14,13 +14,20 @@
   </a>
 
   <div class="msn-header__search-slot" aria-label="Busca de produtos WooCommerce">
+    <span class="msn-header__search-kicker">Buscar produto</span>
     <!-- Elementor: insira aqui um widget Shortcode com [msn_product_search]. -->
   </div>
 
   <nav class="msn-header__actions" aria-label="Acoes do cliente">
-    <a href="/minha-conta/">Conta</a>
-    <a href="/minha-conta/orders/">Pedidos</a>
-    <a class="msn-header__cart" href="/carrinho/" aria-label="Abrir carrinho">
+    <a class="msn-header__action-link" href="/minha-conta/">
+      <span class="msn-header__action-icon" aria-hidden="true">C</span>
+      <span>Conta</span>
+    </a>
+    <a class="msn-header__action-link" href="/minha-conta/orders/">
+      <span class="msn-header__action-icon" aria-hidden="true">P</span>
+      <span>Pedidos</span>
+    </a>
+    <a class="msn-header__cart msn-header__action-link" href="/carrinho/" aria-label="Abrir carrinho">
       <svg class="msn-header__cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <circle cx="8" cy="21" r="1"></circle>
         <circle cx="19" cy="21" r="1"></circle>

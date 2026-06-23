@@ -95,7 +95,7 @@
 	background: var(--msn-surface-alt) !important;
 	color: var(--msn-text) !important;
 	padding: clamp(14px, 2vw, 20px) !important;
-	box-shadow: none !important;
+	box-shadow: var(--msn-shadow-card, 0 16px 38px rgba(15, 61, 94, 0.13)) !important;
 }
 
 .msn-checkout-woo-slot .fc-step__substep,
@@ -260,7 +260,7 @@
 	-webkit-text-fill-color: var(--msn-text) !important;
 	caret-color: var(--msn-text);
 	padding: 10px 13px;
-	box-shadow: none !important;
+	box-shadow: var(--msn-shadow-field, inset 0 1px 2px rgba(15, 23, 42, 0.04)) !important;
 	font: inherit;
 	transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
 }
@@ -429,6 +429,7 @@
 	background: var(--msn-surface-alt) !important;
 	color: var(--msn-text) !important;
 	padding: 10px 14px !important;
+	box-shadow: var(--msn-shadow-soft, 0 14px 34px rgba(15, 23, 42, 0.1)) !important;
 }
 
 .msn-checkout-woo-slot .fc-progress-bar__inner,
@@ -704,7 +705,7 @@
 	background: var(--msn-surface) !important;
 	color: var(--msn-text) !important;
 	padding: 14px !important;
-	box-shadow: none !important;
+	box-shadow: var(--msn-shadow-card, 0 16px 38px rgba(15, 61, 94, 0.13)) !important;
 }
 
 .msn-checkout-woo-slot #payment ul.payment_methods::before,
@@ -1044,7 +1045,76 @@ body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box [role=
 	background-color: var(--msn-surface) !important;
 	color: var(--msn-text) !important;
 	-webkit-text-fill-color: var(--msn-text) !important;
-	box-shadow: none !important;
+	box-shadow: var(--msn-shadow-field, inset 0 1px 2px rgba(15, 23, 42, 0.04)) !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment li.wc_payment_method,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment li[class*="payment_method_"] {
+	border-color: var(--msn-border) !important;
+	background: var(--msn-surface) !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment li[class*="payment_method_woo-mercado-pago"] .payment_box,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment li[class*="payment_method_woo_mercado_pago"] .payment_box,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box:has([class*="mp-"]),
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box:has([id*="mp-"]),
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box:has([class*="mercado"]) {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) !important;
+	gap: 14px !important;
+	background: linear-gradient(180deg, var(--msn-surface) 0%, var(--msn-surface-alt) 100%) !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment li[class*="payment_method_woo-mercado-pago"] .payment_box :where(.form-row, .mp-form-row, .mp-row, [class*="field"], [class*="input-container"], [class*="select-container"]),
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box :where([class*="mp-"], [class*="mercado"], [id*="mp-"]) :where(.form-row, .mp-form-row, .mp-row, [class*="field"], [class*="input-container"], [class*="select-container"]) {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) !important;
+	gap: 7px !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+	margin: 0 !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment li[class*="payment_method_woo-mercado-pago"] .payment_box :where(label, .mp-label, [class*="label"]),
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box :where([class*="mp-"], [class*="mercado"], [id*="mp-"]) :where(label, .mp-label, [class*="label"]) {
+	color: var(--msn-text) !important;
+	font-size: 0.92rem !important;
+	font-weight: 850 !important;
+	line-height: 1.25 !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment li[class*="payment_method_woo-mercado-pago"] .payment_box :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea, iframe, .select2-selection, [role="combobox"]),
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box :where([class*="mp-"], [class*="mercado"], [id*="mp-"]) :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea, iframe, .select2-selection, [role="combobox"]) {
+	display: block !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+	min-height: 48px !important;
+	border: 1px solid color-mix(in srgb, var(--msn-border) 72%, #9db4c9) !important;
+	border-radius: var(--msn-radius, 8px) !important;
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: var(--msn-text) !important;
+	-webkit-text-fill-color: var(--msn-text) !important;
+	padding: 12px 14px !important;
+	box-shadow: var(--msn-shadow-field, inset 0 1px 2px rgba(15, 23, 42, 0.04)) !important;
+	caret-color: var(--msn-text) !important;
+	opacity: 1 !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment li[class*="payment_method_woo-mercado-pago"] .payment_box :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea):focus,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box :where([class*="mp-"], [class*="mercado"], [id*="mp-"]) :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea):focus {
+	border-color: var(--msn-accent) !important;
+	box-shadow: var(--msn-ring), var(--msn-shadow-field, inset 0 1px 2px rgba(15, 23, 42, 0.04)) !important;
+	outline: 0 !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field select {
+	cursor: default;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field option:not(:checked) {
+	display: none;
 }
 
 @media (max-width: 1100px) {

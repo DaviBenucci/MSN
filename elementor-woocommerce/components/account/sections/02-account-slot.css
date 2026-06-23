@@ -71,7 +71,7 @@
 	border-radius: var(--msn-radius-lg, 12px);
 	background: var(--msn-surface, #ffffff);
 	padding: 10px;
-	box-shadow: var(--msn-shadow-soft, 0 12px 30px rgba(15, 23, 42, 0.07));
+	box-shadow: var(--msn-shadow-card, 0 16px 38px rgba(15, 61, 94, 0.13));
 }
 
 .msn-account-woo-slot .woocommerce-MyAccount-navigation ul,
@@ -185,7 +185,7 @@
 	background: var(--msn-surface, #ffffff);
 	color: var(--msn-text, #111827);
 	padding: clamp(18px, 3vw, 28px);
-	box-shadow: var(--msn-shadow-soft, 0 12px 30px rgba(15, 23, 42, 0.07));
+	box-shadow: var(--msn-shadow-card, 0 16px 38px rgba(15, 61, 94, 0.13));
 }
 
 .msn-account-woo-slot .woocommerce-MyAccount-content > *:first-child {

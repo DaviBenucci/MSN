@@ -1,9 +1,14 @@
 <div class="msn-header__backdrop" data-msn-menu-backdrop></div>
 
-<aside class="msn-header__drawer" id="msn-mobile-menu" aria-hidden="true" aria-label="Menu mobile" data-msn-menu-panel>
+<aside class="msn-header__drawer" id="msn-mobile-menu" aria-hidden="true" aria-label="Menu mobile" tabindex="-1" data-msn-menu-panel>
   <div class="msn-header__drawer-head">
-    <strong>Menu</strong>
-    <button type="button" aria-label="Fechar menu" data-msn-menu-close>Fechar</button>
+    <div class="msn-header__drawer-brand">
+      <strong>MSN Distribuidora</strong>
+      <span>Menu da loja</span>
+    </div>
+    <button class="msn-header__drawer-close" type="button" aria-label="Fechar menu" data-msn-menu-close>
+      <span aria-hidden="true">x</span>
+    </button>
   </div>
 
   <div class="msn-header__drawer-search" aria-label="Busca de produtos WooCommerce">

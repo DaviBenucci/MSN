@@ -31,10 +31,133 @@
       }
     }
 
+    function normalizeText(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+    }
+
+    function escapeSelector(value) {
+      if (window.CSS && typeof window.CSS.escape === "function") {
+        return window.CSS.escape(value);
+      }
+
+      return String(value || "").replace(/["\\]/g, "\\$&");
+    }
+
+    function closestMercadoPagoField(element) {
+      return element.closest(
+        ".form-row, .mp-form-row, .mp-row, .mp-field, [class*='field'], [class*='input-container'], [class*='select-container']"
+      ) || element.parentElement;
+    }
+
+    function selectLooksLikeDocument(select) {
+      var options = Array.prototype.slice.call(select.options || []);
+      var hasCpf = options.some(function (option) {
+        return normalizeText(option.textContent || option.value).indexOf("cpf") !== -1;
+      });
+
+      if (!hasCpf) return false;
+
+      var label = "";
+      if (select.id) {
+        var labelNode = document.querySelector('label[for="' + escapeSelector(select.id) + '"]');
+        if (labelNode) label += " " + labelNode.textContent;
+      }
+
+      label += " " + [
+        select.id,
+        select.name,
+        select.getAttribute("aria-label"),
+        select.getAttribute("data-checkout"),
+        select.getAttribute("data-cy"),
+        closestMercadoPagoField(select) && closestMercadoPagoField(select).textContent
+      ].join(" ");
+
+      label = normalizeText(label);
+      return /doc|document|identification|identificacao|titular|cpf|cnpj/.test(label);
+    }
+
+    function enforceMercadoPagoCpfOnly(scope) {
+      var root = scope && scope.querySelectorAll ? scope : document;
+      var selectors = [
+        "#payment li[class*='payment_method_woo-mercado-pago'] .payment_box select",
+        "#payment li[class*='payment_method_woo_mercado_pago'] .payment_box select",
+        "#payment div.payment_box [class*='mp-'] select",
+        "#payment div.payment_box [id*='mp-'] select",
+        "#payment div.payment_box [class*='mercado'] select"
+      ].join(",");
+
+      Array.prototype.slice.call(root.querySelectorAll(selectors)).forEach(function (select) {
+        if (!selectLooksLikeDocument(select)) return;
+
+        var cpfOption = Array.prototype.slice.call(select.options || []).find(function (option) {
+          return normalizeText(option.textContent || option.value).indexOf("cpf") !== -1;
+        });
+
+        if (!cpfOption) return;
+
+        Array.prototype.slice.call(select.options || []).forEach(function (option) {
+          var isCpf = option === cpfOption;
+          option.hidden = !isCpf;
+          option.disabled = !isCpf;
+        });
+
+        if (select.value !== cpfOption.value) {
+          select.value = cpfOption.value;
+          select.dispatchEvent(new Event("input", { bubbles: true }));
+          select.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+
+        select.dataset.msnCpfOnly = "true";
+        var field = closestMercadoPagoField(select);
+        if (field) field.classList.add("msn-mp-cpf-only-field");
+      });
+    }
+
+    function scheduleMercadoPagoCpfOnly(scope) {
+      enforceMercadoPagoCpfOnly(scope);
+      window.setTimeout(function () {
+        enforceMercadoPagoCpfOnly(scope);
+      }, 250);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () {
+        scheduleMercadoPagoCpfOnly(document);
+      });
+    } else {
+      scheduleMercadoPagoCpfOnly(document);
+    }
+
+    document.addEventListener("change", function (event) {
+      if (event.target && event.target.closest && event.target.closest("#payment")) {
+        scheduleMercadoPagoCpfOnly(document);
+      }
+    });
+
+    if (window.jQuery) {
+      window.jQuery(document.body).on(
+        "updated_checkout payment_method_selected checkout_error",
+        function () {
+          scheduleMercadoPagoCpfOnly(document);
+        }
+      );
+    }
+
+    var paymentRoot = document.getElementById("payment");
+    if (paymentRoot && window.MutationObserver) {
+      new MutationObserver(function () {
+        scheduleMercadoPagoCpfOnly(paymentRoot);
+      }).observe(paymentRoot, { childList: true, subtree: true });
+    }
+
     window.MSNStorefront = {
       focusableSelector: focusableSelector,
       lockScroll: lockScroll,
-      trapFocus: trapFocus
+      trapFocus: trapFocus,
+      enforceMercadoPagoCpfOnly: enforceMercadoPagoCpfOnly
     };
   })();
 

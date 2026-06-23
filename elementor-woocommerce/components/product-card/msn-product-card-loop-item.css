@@ -11,7 +11,7 @@ selector {
 	border: 1px solid var(--msn-border);
 	border-radius: 8px;
 	background: var(--msn-surface);
-	box-shadow: var(--msn-shadow-soft);
+	box-shadow: var(--msn-shadow-card);
 	padding: 12px;
 	text-align: left;
 	transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;

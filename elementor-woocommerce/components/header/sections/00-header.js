@@ -1,48 +1,93 @@
 (function () {
-  var header = document.querySelector("[data-msn-header]");
-  var openButton = document.querySelector("[data-msn-menu-open]");
-  var closeButton = document.querySelector("[data-msn-menu-close]");
-  var panel = document.querySelector("[data-msn-menu-panel]");
-  var backdrop = document.querySelector("[data-msn-menu-backdrop]");
   var lastFocused = null;
 
+  function getParts() {
+    return {
+      header: document.querySelector("[data-msn-header], .msn-header"),
+      openButton: document.querySelector("[data-msn-menu-open]"),
+      closeButton: document.querySelector("[data-msn-menu-close]"),
+      panel: document.querySelector("[data-msn-menu-panel]"),
+      backdrop: document.querySelector("[data-msn-menu-backdrop]")
+    };
+  }
+
   function setCompact() {
+    var header = getParts().header;
     if (!header) return;
-    header.classList.toggle("is-compact", 12 < window.scrollY);
+    header.classList.toggle("is-compact", window.scrollY > 12);
   }
 
   function setOpen(isOpen) {
-    if (!openButton || !panel || !backdrop) return;
-    openButton.setAttribute("aria-expanded", String(isOpen));
-    panel.setAttribute("aria-hidden", String(!isOpen));
-    panel.classList.toggle("is-open", isOpen);
-    backdrop.classList.toggle("is-open", isOpen);
+    var parts = getParts();
+    if (!parts.openButton || !parts.panel || !parts.backdrop) return;
+
+    parts.openButton.setAttribute("aria-expanded", String(isOpen));
+    parts.panel.setAttribute("aria-hidden", String(!isOpen));
+    parts.panel.classList.toggle("is-open", isOpen);
+    parts.backdrop.classList.toggle("is-open", isOpen);
+    document.documentElement.classList.toggle("msn-menu-open", isOpen);
+
     if (window.MSNStorefront) window.MSNStorefront.lockScroll(isOpen);
 
     if (isOpen) {
       lastFocused = document.activeElement;
-      if (closeButton) closeButton.focus();
+      if (parts.closeButton) parts.closeButton.focus();
     } else if (lastFocused instanceof HTMLElement) {
       lastFocused.focus();
     }
   }
 
-  if (openButton) openButton.addEventListener("click", function () { setOpen(true); });
-  if (closeButton) closeButton.addEventListener("click", function () { setOpen(false); });
-  if (backdrop) backdrop.addEventListener("click", function () { setOpen(false); });
+  function bindHeader() {
+    var parts = getParts();
+    if (!parts.openButton || !parts.panel || !parts.backdrop) return false;
 
-  if (panel) {
-    Array.prototype.forEach.call(panel.querySelectorAll("a"), function (link) {
+    if (!parts.openButton.dataset.msnHeaderBound) {
+      parts.openButton.addEventListener("click", function () { setOpen(true); });
+      parts.openButton.dataset.msnHeaderBound = "true";
+    }
+
+    if (parts.closeButton && !parts.closeButton.dataset.msnHeaderBound) {
+      parts.closeButton.addEventListener("click", function () { setOpen(false); });
+      parts.closeButton.dataset.msnHeaderBound = "true";
+    }
+
+    if (!parts.backdrop.dataset.msnHeaderBound) {
+      parts.backdrop.addEventListener("click", function () { setOpen(false); });
+      parts.backdrop.dataset.msnHeaderBound = "true";
+    }
+
+    Array.prototype.forEach.call(parts.panel.querySelectorAll("a"), function (link) {
+      if (link.dataset.msnHeaderBound) return;
       link.addEventListener("click", function () { setOpen(false); });
+      link.dataset.msnHeaderBound = "true";
     });
+
+    setCompact();
+    return true;
+  }
+
+  function init() {
+    bindHeader();
   }
 
   document.addEventListener("keydown", function (event) {
+    var panel = getParts().panel;
     if (!panel || panel.getAttribute("aria-hidden") === "true") return;
     if (event.key === "Escape") setOpen(false);
     if (window.MSNStorefront) window.MSNStorefront.trapFocus(panel, event);
   });
 
-  setCompact();
   window.addEventListener("scroll", setCompact, { passive: true });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  if (window.MutationObserver) {
+    new MutationObserver(function () {
+      bindHeader();
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
 })();

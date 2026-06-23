@@ -14,7 +14,9 @@ Depois insira os blocos nesta ordem:
 2. `02-main.html` + `02-main.css`
 3. `03-quickbar.html` + `03-quickbar.css`
 4. `04-mobile-drawer.html` + `04-mobile-drawer.css`
-5. `00-header.js` no footer ou Custom Code do template
+5. `00-header.js` no Head, footer ou Custom Code do template
+
+O script do header aguarda o DOM e tambem observa reinjecoes do Elementor. Assim, o menu mobile continua abrindo mesmo quando o Custom Code e carregado antes do HTML do header.
 
 O contador do carrinho depende do plugin `msn-woocommerce-layout-bridge` ativo.
 

@@ -2,7 +2,15 @@
 	display: grid;
 	grid-template-columns: minmax(0, 0.9fr) minmax(300px, 0.6fr);
 	align-items: start;
-	gap: 34px;
+	gap: clamp(20px, 3vw, 34px);
+}
+
+.msn-home-help__grid > div:first-child {
+	border: 1px solid var(--msn-border);
+	border-radius: var(--msn-radius);
+	background: var(--msn-surface);
+	padding: clamp(18px, 3vw, 28px);
+	box-shadow: var(--msn-shadow-card);
 }
 
 .msn-home-help h2 {
@@ -25,6 +33,7 @@
 
 .msn-home-help__card {
 	background: linear-gradient(180deg, var(--msn-surface) 0%, var(--msn-surface-alt) 100%);
+	box-shadow: var(--msn-shadow-card);
 }
 
 @media (max-width: 900px) {
