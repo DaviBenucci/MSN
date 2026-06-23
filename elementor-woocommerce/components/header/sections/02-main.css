@@ -285,13 +285,13 @@
 
 @media (max-width: 1024px) {
 	.msn-header__main {
-		grid-template-columns: 44px minmax(0, 1fr) 44px;
-		gap: 10px;
+		grid-template-columns: minmax(0, 1fr) 44px;
+		gap: 10px 12px;
 		padding-block: 9px;
 	}
 
 	.msn-header__menu-button {
-		display: grid !important;
+		display: none !important;
 		width: 44px;
 		height: 44px;
 		gap: 4px;
@@ -313,27 +313,24 @@
 	}
 
 	.msn-header__logo {
-		justify-self: center;
-		gap: 0;
+		justify-self: start;
+		gap: 10px;
 	}
 
 	.msn-header__logo img {
 		width: 62px;
 	}
 
-	.msn-header__logo span {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-		border: 0;
+	.msn-header__logo strong {
+		font-size: 0.92rem;
+	}
+
+	.msn-header__logo small {
+		font-size: 0.72rem;
 	}
 
 	.msn-header__actions {
-		grid-column: 3;
+		grid-column: 2;
 		justify-self: end;
 		width: 44px;
 		gap: 0;
@@ -411,7 +408,7 @@
 
 @media (max-width: 360px) {
 	.msn-header__main {
-		grid-template-columns: 42px minmax(0, 1fr) 42px;
+		grid-template-columns: minmax(0, 1fr) 42px;
 		gap: 8px;
 	}
 
@@ -427,6 +424,17 @@
 
 	.msn-header__logo img {
 		width: 58px;
+	}
+
+	.msn-header__logo span {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.msn-header__search button,

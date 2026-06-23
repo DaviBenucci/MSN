@@ -13,10 +13,11 @@ Depois insira os blocos nesta ordem:
 1. `01-topbar.html` + `01-topbar.css`
 2. `02-main.html` + `02-main.css`
 3. `03-quickbar.html` + `03-quickbar.css`
-4. `04-mobile-drawer.html` + `04-mobile-drawer.css`
-5. `00-header.js` no Head, footer ou Custom Code do template
+4. `00-header.js` no Head, footer ou Custom Code do template
 
-O script do header aguarda o DOM e tambem observa reinjecoes do Elementor. Assim, o menu mobile continua abrindo mesmo quando o Custom Code e carregado antes do HTML do header.
+O arquivo `04-mobile-drawer.html` foi desativado de proposito. A navegacao mobile usa a mesma quickbar do desktop para evitar links duplicados e facilitar manutencao.
+
+O script do header aguarda o DOM e tambem observa reinjecoes do Elementor. Ele apenas controla o estado compacto do header no scroll.
 
 O contador do carrinho depende do plugin `msn-woocommerce-layout-bridge` ativo.
 
@@ -28,11 +29,9 @@ A busca do header nao deve ser recriada manualmente no widget HTML. Ela deve usa
 [msn_product_search]
 ```
 
-No desktop, use o `02-main.html` como estrutura e coloque um widget **Shortcode** dentro do espaco com a classe `msn-header__search-slot`.
+Use o `02-main.html` como estrutura e coloque um unico widget **Shortcode** dentro do espaco com a classe `msn-header__search-slot`.
 
-No mobile, coloque outro widget **Shortcode** dentro do espaco com a classe `msn-header__drawer-search`, logo abaixo do cabecalho do drawer.
-
-O shortcode renderiza `get_product_search_form()` do WooCommerce, mantendo `post_type=product` e a compatibilidade com traducoes, tema e plugins. Os arquivos `02-main.css` e `04-mobile-drawer.css` apenas estilizam o formulario gerado pelo WooCommerce.
+O shortcode renderiza `get_product_search_form()` do WooCommerce, mantendo `post_type=product` e a compatibilidade com traducoes, tema e plugins. O arquivo `02-main.css` estiliza o formulario gerado pelo WooCommerce para desktop e mobile.
 
 Se estiver montando tudo com containers do Elementor, a ordem ideal no header principal e:
 
@@ -40,4 +39,4 @@ Se estiver montando tudo com containers do Elementor, a ordem ideal no header pr
 2. Container `msn-header__search-slot` com o shortcode `[msn_product_search]`
 3. Links de conta, pedidos e carrinho
 
-O drawer mobile inclui links para carrinho, finalizacao de compra, minha conta, avalie seu pedido, trocas/devolucoes e privacidade. Crie essas paginas antes de publicar o menu definitivo.
+A quickbar (`03-quickbar.html`) e a navegacao principal em desktop e mobile. Para alterar categorias, WhatsApp ou atalhos, edite somente esse arquivo.
