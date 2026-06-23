@@ -1,5 +1,5 @@
 .msn-header__quickbar {
-	display: flex;
+	display: flex !important;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
@@ -46,7 +46,7 @@
 	color: var(--msn-primary) !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
 	.msn-header__quickbar {
 		justify-content: flex-start;
 		gap: 8px;
