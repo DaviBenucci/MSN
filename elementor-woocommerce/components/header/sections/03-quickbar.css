@@ -43,6 +43,10 @@
 	display: none;
 }
 
+.msn-header__quickbar-mobile-only {
+	display: none !important;
+}
+
 .msn-header__model-link {
 	border-color: var(--msn-border-strong) !important;
 	background: var(--msn-surface) !important;
@@ -81,6 +85,24 @@
 	.msn-header__quickbar-whatsapp .msn-header__quickbar-label {
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+}
+
+@media (max-width: 640px) {
+	.msn-header__quickbar-mobile-hide {
+		display: none !important;
+	}
+
+	.msn-header__quickbar-mobile-only {
+		display: inline-flex !important;
+	}
+
+	.msn-header__quickbar-label {
+		display: none;
+	}
+
+	.msn-header__quickbar-label--short {
+		display: inline;
 	}
 }
 
@@ -140,6 +162,24 @@
 	.msn-header__quickbar-whatsapp .msn-header__quickbar-label {
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+}
+
+@container msn-header (max-width: 640px) {
+	.msn-header__quickbar-mobile-hide {
+		display: none !important;
+	}
+
+	.msn-header__quickbar-mobile-only {
+		display: inline-flex !important;
+	}
+
+	.msn-header__quickbar-label {
+		display: none;
+	}
+
+	.msn-header__quickbar-label--short {
+		display: inline;
 	}
 }
 

@@ -21,8 +21,8 @@
 - [ ] Elementos tocaveis tem area minima aproximada de 44px.
 - [ ] Nao ha texto cortado, botao com label quebrado de forma ruim ou conteudo sobreposto.
 - [ ] Formulario mobile esta em uma coluna com labels visiveis.
-- [ ] Header, hamburger, quickbar, busca, carrinho e WhatsApp continuam acessiveis em 360px.
-- [ ] Menu hamburger abre, fecha, navega para Loja/Minha Conta/Contato e fecha com Escape.
+- [ ] Header, quickbar, busca, carrinho e WhatsApp continuam acessiveis em 360px.
+- [ ] Quickbar mobile mostra Especialista, Mais Vendidos, Novidades, Minha Conta, Contato e Visite nosso outro site.
 - [ ] Filtros, menus horizontais e quickbars rolam sem criar overflow no body.
 - [ ] Banners, barras fixas e consentimento nao cobrem CTA, campos ou botoes de pagamento.
 - [ ] Apos salvar, o CSS do Elementor foi regenerado e o cache foi limpo antes do teste final.
@@ -66,9 +66,9 @@
 
 ## Acessibilidade
 
-- [ ] Menu mobile abre e fecha por teclado.
-- [ ] Tecla Esc fecha menu e modal.
-- [ ] Foco fica preso dentro de menu/modal aberto.
+- [ ] Quickbar mobile pode ser navegada por toque e teclado.
+- [ ] Tecla Esc fecha modal, filtro ou painel aberto.
+- [ ] Foco fica preso dentro de modal, filtro ou painel aberto.
 - [ ] Labels visiveis nos formularios.
 - [ ] Contraste suficiente.
 - [ ] Imagens com alt.

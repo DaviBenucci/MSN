@@ -43,7 +43,6 @@ Sections:
 - `components/header/sections/01-topbar`
 - `components/header/sections/02-main`
 - `components/header/sections/03-quickbar`
-- `components/header/sections/04-mobile-drawer`
 - `components/header/sections/00-header.js`
 
 Funcoes:
@@ -51,8 +50,8 @@ Funcoes:
 - Busca nativa WooCommerce.
 - Conta, pedidos e carrinho.
 - Contador de carrinho por `data-msn-cart-count`, preenchido pela bridge.
-- Categorias principais e WhatsApp pela quickbar.
-- Menu hamburger mobile para Inicio, Loja, Minha Conta, Pedidos, Carrinho, Finalizacao de Compra e Contato.
+- Categorias principais e WhatsApp pela quickbar no desktop.
+- Quickbar mobile simplificada: Especialista, Mais Vendidos, Novidades, Minha Conta, Contato e Visite nosso outro site.
 
 ## Footer
 

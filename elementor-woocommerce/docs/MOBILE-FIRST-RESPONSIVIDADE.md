@@ -18,9 +18,9 @@ Este projeto deve ser tratado como mobile-first. Como a maior parte dos usuarios
 - Botoes principais devem aparecer cedo, especialmente em produto, carrinho e checkout.
 - Formularios devem ser de uma coluna no mobile, com labels visiveis e campos largos.
 - Cards de produto devem manter imagem, titulo, preco e CTA legiveis sem depender de hover.
-- Header, busca, hamburger, carrinho, WhatsApp e navegacao principal precisam continuar acessiveis em 360px.
+- Header, busca, carrinho, WhatsApp e navegacao principal precisam continuar acessiveis em 360px.
 - Quickbars, menus de categorias e filtros podem rolar horizontalmente, mas devem esconder a barra visual de scroll e manter o primeiro item totalmente visivel.
-- Modais, drawers, filtros e banners de consentimento nao podem cobrir CTA de compra, campos de checkout, login/cadastro ou botoes de pagamento.
+- Modais, filtros e banners de consentimento nao podem cobrir CTA de compra, campos de checkout, login/cadastro ou botoes de pagamento.
 - Componentes sticky ou fixos devem respeitar `env(safe-area-inset-*)` quando estiverem proximos das bordas da tela.
 
 ## Regras obrigatorias de CSS
@@ -51,7 +51,8 @@ Este projeto deve ser tratado como mobile-first. Como a maior parte dos usuarios
 
 - Em mobile, logo, carrinho e busca precisam caber sem corte.
 - A busca pode ocupar linha propria, mas nao deve ultrapassar a tela.
-- A navegacao de paginas principais em mobile fica no hamburger. A quickbar permanece para categorias e atalhos comerciais.
+- A navegacao principal em mobile fica na quickbar simplificada.
+- A quickbar mobile deve mostrar somente: Especialista, Mais Vendidos, Novidades, Minha Conta, Contato e Visite nosso outro site.
 - Topbar deve mostrar apenas beneficios essenciais em telas pequenas.
 
 ### Loja e categorias

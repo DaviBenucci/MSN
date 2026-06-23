@@ -11,7 +11,7 @@
 
 - Publicar header.
 - Publicar footer.
-- Testar menu mobile e sanfonas do footer.
+- Testar quickbar mobile e sanfonas do footer.
 - Confirmar links de conta, pedidos, carrinho, finalizacao de compra, avalie seu pedido, politicas e WhatsApp.
 
 ## Fase 3 - Paginas comerciais
