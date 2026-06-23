@@ -224,14 +224,30 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	gap: 12px 18px;
+	gap: 10px 0;
 }
 
 .msn-footer__bottom-links a {
+	display: inline-flex;
+	align-items: center;
 	color: rgba(255, 255, 255, 0.68);
 	font-size: 0.85rem;
 	font-weight: 800;
 	text-decoration: none;
+}
+
+.msn-footer__bottom-links a::before {
+	content: "|";
+	margin-inline: 12px;
+	color: rgba(255, 255, 255, 0.38);
+	font-weight: 500;
+}
+
+.msn-footer__bottom-links a:last-child::after {
+	content: "|";
+	margin-inline: 12px;
+	color: rgba(255, 255, 255, 0.38);
+	font-weight: 500;
 }
 
 .msn-footer__bottom-links a:hover {
