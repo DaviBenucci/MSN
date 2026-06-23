@@ -2,7 +2,6 @@
 
 ## Fase 1 - Base global
 
-- Instalar `shared/msn-theme-init-js.html` no Head.
 - Instalar `shared/msn-global-css.html`.
 - Instalar `shared/msn-global-js.html` no Footer.
 - Conferir fonte, cores, botoes e estilos WooCommerce basicos.
@@ -27,7 +26,10 @@
 - Publicar carrinho.
 - Publicar finalizacao de compra com widget Checkout ou `[woocommerce_checkout]`.
 - Revisar checkout sem substituir a logica nativa.
+- Adicionar campos brasileiros reais no checkout: telefone obrigatorio, CPF para pessoa fisica e CNPJ para pessoa juridica.
+- Configurar Mercado Pago primeiro em modo teste e validar pagamento com os campos preenchidos.
 - Testar cupom, frete, quantidade e finalizacao.
+- Usar `AUDITORIA-LAYOUT-E-CHECKOUT-MERCADO-PAGO.md` como roteiro de homologacao.
 
 ## Fase 5 - Area do cliente e contato
 

@@ -1,8 +1,12 @@
+.msn-cart-content {
+	padding-top: clamp(12px, 2vw, 22px);
+}
+
 .msn-cart-content__grid {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) 320px;
 	align-items: start;
-	gap: 28px;
+	gap: clamp(18px, 3vw, 26px);
 }
 
 .msn-cart-woo-slot {
@@ -27,7 +31,7 @@
 
 .msn-cart-woo-slot .woocommerce {
 	display: grid;
-	gap: 24px;
+	gap: 18px;
 }
 
 .msn-cart-woo-slot .woocommerce::before,
@@ -223,23 +227,6 @@
 	color: #07111f !important;
 }
 
-:root[data-theme="dark"] .msn-cart-woo-slot table.cart .product-name a,
-:root[data-theme="dark"] .msn-cart-woo-slot .cross-sells > h2,
-:root[data-theme="dark"] .msn-cart-woo-slot .cart_totals h2 {
-	color: var(--msn-primary) !important;
-}
-
-:root[data-theme="dark"] .msn-cart-woo-slot table.cart input.qty {
-	border-color: var(--msn-border);
-	background: var(--msn-surface-alt);
-	color: var(--msn-text);
-}
-
-:root[data-theme="dark"] .msn-cart-woo-slot .wc-proceed-to-checkout a.checkout-button {
-	background: linear-gradient(135deg, var(--msn-accent), #8bd7ff) !important;
-	color: #07111f !important;
-}
-
 @media (max-width: 900px) {
 	.msn-cart-content__grid {
 		grid-template-columns: 1fr;
@@ -255,6 +242,10 @@
 }
 
 @media (max-width: 640px) {
+	.msn-cart-content {
+		padding-top: 8px;
+	}
+
 	.msn-cart-woo-slot table.shop_table.cart {
 		display: block;
 		overflow-x: auto;

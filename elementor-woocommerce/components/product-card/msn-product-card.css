@@ -3,8 +3,8 @@
 
 .msn-product-card-model ul.products {
 	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 24px;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: clamp(16px, 2vw, 22px);
 	margin: 0;
 	padding: 0;
 }
@@ -22,7 +22,7 @@
 	border-radius: var(--msn-radius);
 	background: var(--msn-surface);
 	box-shadow: var(--msn-shadow-soft);
-	padding: 14px;
+	padding: 12px;
 	text-align: left;
 	transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
@@ -65,7 +65,7 @@
 	border-radius: var(--msn-radius);
 	background: linear-gradient(180deg, var(--msn-surface-alt) 0%, var(--msn-bg-soft) 100%);
 	object-fit: contain;
-	padding: 22px;
+	padding: clamp(14px, 2vw, 20px);
 	transition: transform 180ms ease;
 }
 
@@ -89,8 +89,8 @@
 #msn-card-nome,
 #msn-card-nome .elementor-heading-title {
 	display: -webkit-box;
-	min-height: 48px;
-	margin: 18px 0 0;
+	min-height: 44px;
+	margin: 14px 0 0;
 	overflow: hidden;
 	color: var(--msn-primary);
 	font-family: var(--msn-font-display);
@@ -117,10 +117,10 @@
 #msn-card-preco .price,
 #msn-card-preco .woocommerce-Price-amount {
 	display: block;
-	margin: 16px 0 0;
+	margin: 12px 0 0;
 	border-top: 1px solid var(--msn-border);
 	color: var(--msn-primary) !important;
-	padding-top: 14px;
+	padding-top: 12px;
 	font-size: 1.16rem;
 	font-weight: 950;
 	text-align: left;
@@ -156,7 +156,7 @@
 #msn-card-botao a {
 	display: inline-flex;
 	width: 100%;
-	min-height: 48px;
+	min-height: 46px;
 	align-items: center;
 	justify-content: center;
 	gap: 10px;
@@ -165,27 +165,12 @@
 	border-radius: var(--msn-radius);
 	background: var(--msn-primary);
 	color: #ffffff !important;
-	padding: 12px 14px;
+	padding: 11px 14px;
 	font-size: 0.98rem;
 	font-weight: 900;
 	line-height: 1.1;
 	text-decoration: none;
 	box-shadow: 0 10px 22px rgba(15, 61, 94, 0.16);
-}
-
-:root[data-theme="dark"] .msn-product-card-model a.button,
-:root[data-theme="dark"] .msn-product-card-model button.button,
-:root[data-theme="dark"] .msn-product-card-model .add_to_cart_button,
-:root[data-theme="dark"] .msn-product-card-model .msn-product-card__button,
-:root[data-theme="dark"] .msn-product-card__button,
-:root[data-theme="dark"] .msn-product-card__button .elementor-button,
-:root[data-theme="dark"] .msn-product-card__button .button,
-:root[data-theme="dark"] .msn-product-card__button a,
-:root[data-theme="dark"] #msn-card-botao,
-:root[data-theme="dark"] #msn-card-botao .elementor-button,
-:root[data-theme="dark"] #msn-card-botao .button,
-:root[data-theme="dark"] #msn-card-botao a {
-	color: #07111f !important;
 }
 
 .msn-product-card-model a.button::before,
@@ -233,11 +218,34 @@
 
 @media (max-width: 1024px) {
 	.msn-product-card-model ul.products {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 }
 
 @media (max-width: 640px) {
+	.msn-product-card-model ul.products {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 14px;
+	}
+
+	.msn-product-card-model ul.products li.product,
+	.msn-product-card-model .e-loop-item,
+	.msn-product-card,
+	#msn-card-produto {
+		padding: 10px;
+	}
+
+	.msn-product-card-model .woocommerce-loop-product__title,
+	.msn-product-card-model .msn-product-card__title,
+	.msn-product-card__title,
+	.msn-product-card__title .elementor-heading-title,
+	#msn-card-nome,
+	#msn-card-nome .elementor-heading-title {
+		font-size: 0.94rem;
+	}
+}
+
+@media (max-width: 420px) {
 	.msn-product-card-model ul.products {
 		grid-template-columns: 1fr;
 	}

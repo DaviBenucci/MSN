@@ -10,14 +10,13 @@
 
 ## 2. Globais
 
-1. Copie `shared/msn-theme-init-js.html` para Custom Code no **Head**, sem `defer`, sem `async` e sem atraso por plugin de cache. Ele e pequeno e evita piscar/quebrar o tema na primeira carga.
-2. Copie `shared/msn-global-css.html` para o CSS global do Elementor, CSS adicional do tema ou Custom Code no **Head**.
-3. Copie `shared/msn-global-js.html` para Custom Code no **Footer**. Nao coloque esse arquivo no Head.
-4. Ative o plugin `msn-woocommerce-layout-bridge` quando for usar vitrines com `data-msn-products`.
+1. Copie `shared/msn-global-css.html` para o CSS global do Elementor, CSS adicional do tema ou Custom Code no **Head**.
+2. Copie `shared/msn-global-js.html` para Custom Code no **Footer**. Nao coloque esse arquivo no Head.
+3. Ative o plugin `msn-woocommerce-layout-bridge` quando for usar vitrines com `data-msn-products`.
 
 Nao cole `msn-woo-layout.css` ou `msn-woo-layout.js` manualmente no Elementor; o plugin carrega esses arquivos.
 
-O seletor de tema usa `localStorage` na chave `msn-theme-preference` e aceita `system`, `light` e `dark`.
+O site usa visual claro fixo. Nao instale script de alternancia visual no Head.
 
 ## 2.1 Performance e primeira carga
 
@@ -25,12 +24,11 @@ Nao mova todos os scripts globais para o Head. Isso bloqueia a renderizacao inic
 
 Use esta ordem:
 
-1. Head imediato: apenas `msn-theme-init-js.html`.
-2. Head/CSS global: `msn-global-css.html`.
-3. Footer: `msn-global-js.html`.
-4. Footer ou widget da pagina: somente os JS das sections presentes naquela pagina.
+1. Head/CSS global: `msn-global-css.html`.
+2. Footer: `msn-global-js.html`.
+3. Footer ou widget da pagina: somente os JS das sections presentes naquela pagina.
 
-Em plugins como WP Rocket, nao atrase o `msn-theme-init-js.html`. Se usar atraso de JavaScript, teste com cuidado `msn-global-js.html`, `00-header.js`, carrinho, checkout e minha conta, porque esses scripts afetam interacao visivel.
+Em plugins como WP Rocket, se usar atraso de JavaScript, teste com cuidado `msn-global-js.html`, `00-header.js`, carrinho, checkout e minha conta, porque esses scripts afetam interacao visivel.
 
 Para paginas publicas com alto trafego, mantenha cache de pagina ativo. Exclua do cache completo carrinho, finalizacao de compra, minha conta e endpoints dinamicos do WooCommerce.
 
@@ -82,6 +80,8 @@ Exemplos de slots que exigem essa logica:
 - Minha conta: `msn-account-woo-slot` com `[woocommerce_my_account]` ou widget My Account.
 - Loja: `msn-shop-filter__plugin-slot` para filtros e `msn-shop__woo-slot msn-product-card-model` para produtos.
 - Produto unico: `msn-product-media-slot`, `msn-product-price-slot`, `msn-product-add-to-cart-slot`, `msn-product-description-slot` e relacionados.
+
+Para Mercado Pago no Brasil, telefone, CPF e CNPJ devem ser campos reais do WooCommerce. Configure isso por plugin de campos brasileiros ou snippet PHP controlado antes de homologar pagamento. Roteiro: `AUDITORIA-LAYOUT-E-CHECKOUT-MERCADO-PAGO.md`.
 
 ## 5. Publicacao
 

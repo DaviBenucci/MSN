@@ -62,13 +62,6 @@
   cursor: pointer;
 }
 
-:root[data-theme="dark"] .msn-product-search__button,
-:root[data-theme="dark"] .msn-product-search-slot button,
-:root[data-theme="dark"] .msn-product-search-slot input[type="submit"],
-:root[data-theme="dark"] .msn-product-whatsapp {
-  color: #07111f !important;
-}
-
 .msn-cart-link,
 .msn-account-link {
   display: inline-flex;
@@ -99,7 +92,7 @@
 .msn-bridge-products__grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
+  gap: clamp(14px, 2vw, 20px);
 }
 
 .msn-bridge-products__status {
@@ -155,7 +148,7 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: contain;
-  padding: 18px;
+  padding: clamp(12px, 2vw, 18px);
   transition: transform 180ms ease;
 }
 
@@ -168,7 +161,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 16px;
+  padding: 14px;
 }
 
 .msn-bridge-product-card__sku,
@@ -198,10 +191,10 @@
 
 .msn-bridge-product-card__price,
 .msn-bridge-product-card .msn-product-card__price {
-  margin: 14px 0 0;
+  margin: 12px 0 0;
   border-top: 1px solid var(--msn-border, #e2e8f0);
   color: var(--msn-primary, #082f49);
-  padding-top: 14px;
+  padding-top: 12px;
   font-size: 1.12rem;
   font-weight: 900;
 }
@@ -221,7 +214,7 @@
 
 .msn-bridge-product-card__stock,
 .msn-bridge-product-card .msn-product-card__stock {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .msn-stock-instock {
@@ -240,7 +233,7 @@
 .msn-bridge-product-card .msn-product-card__button {
   display: inline-flex;
   width: 100%;
-  min-height: 46px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   margin-top: auto;
@@ -252,11 +245,6 @@
   font-weight: 900;
   line-height: 1.1;
   text-decoration: none;
-}
-
-:root[data-theme="dark"] .msn-bridge-product-card__button,
-:root[data-theme="dark"] .msn-bridge-product-card .msn-product-card__button {
-  color: #07111f !important;
 }
 
 .msn-bridge-product-card__button:hover,
@@ -276,7 +264,7 @@
 
 @media (max-width: 1024px) {
   .msn-bridge-products__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -286,6 +274,16 @@
     flex-direction: column;
   }
 
+  .msn-bridge-products__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .msn-bridge-product-card__body {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 420px) {
   .msn-bridge-products__grid {
     grid-template-columns: 1fr;
   }

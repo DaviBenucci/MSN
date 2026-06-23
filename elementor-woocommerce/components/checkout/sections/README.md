@@ -52,3 +52,16 @@ msn-checkout-side
 ```
 
 Regra: dados do cliente, endereco, frete, pagamento, cupons, totais e validacoes devem continuar vindo do WooCommerce e dos gateways instalados. O HTML/CSS deste kit apenas cria a moldura visual.
+
+## Campos brasileiros e Mercado Pago
+
+CPF, CNPJ e telefone precisam ser campos reais do WooCommerce. Nao crie esses campos como HTML manual no Elementor, pois isso nao garante validacao, salvamento no pedido nem envio ao gateway.
+
+Para resolver o fluxo de pagamento no Brasil:
+
+- Mantenha o checkout nativo em `msn-checkout-woo-slot`.
+- Use plugin de campos brasileiros ou snippet PHP controlado para adicionar `billing_persontype`, `billing_cpf`, `billing_cnpj` e tornar `billing_phone` obrigatorio.
+- Depois de configurar a conta Mercado Pago, teste em modo teste com Pessoa fisica e Pessoa juridica.
+- Se o JS do Mercado Pago aparecer em paginas sem checkout, trate como carregamento indevido de script, sem desativar o gateway no checkout.
+
+Plano detalhado: `../../../docs/AUDITORIA-LAYOUT-E-CHECKOUT-MERCADO-PAGO.md`.

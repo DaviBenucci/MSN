@@ -24,6 +24,12 @@
 - [ ] Calcular frete, se houver.
 - [ ] Ir para checkout.
 - [ ] Checkout mostra campos, frete, pagamento, totais e mensagens nativas do WooCommerce.
+- [ ] Checkout exige telefone no campo real do WooCommerce.
+- [ ] Checkout exige CPF para pessoa fisica e CNPJ para pessoa juridica.
+- [ ] CPF, CNPJ e telefone aparecem no admin do pedido depois de um pedido teste.
+- [ ] Mercado Pago em modo teste permite chegar ao pagamento com CPF/CNPJ/telefone preenchidos.
+- [ ] Console nao mostra script do Mercado Pago tentando configurar checkout em paginas sem checkout.
+- [ ] Banner de consentimento nao cobre botao de compra, checkout, login/cadastro ou CTAs principais.
 - [ ] Login e cadastro em Minha Conta.
 - [ ] Recuperar senha.
 - [ ] Formulario de contato abre WhatsApp com mensagem organizada.

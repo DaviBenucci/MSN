@@ -5,20 +5,18 @@
 Arquivos:
 
 - `shared/msn-global-css.html`
-- `shared/msn-theme-init-js.html`
 - `shared/msn-global-js.html`
 
 Onde aplicar:
 
-- `msn-theme-init-js.html` no Head pelo Elementor Pro Custom Code.
 - CSS global do Elementor ou CSS adicional do tema.
 - JS global no footer pelo Elementor Pro Custom Code.
 
 Funcoes:
 
-- Tokens premium claro/escuro por `:root[data-theme]`.
-- Seletor de tema por `data-msn-theme-toggle` e `data-msn-theme-choice`.
-- Preferencia persistida em `msn-theme-preference`.
+- Tokens visuais claros em `:root`.
+- Utilitarios globais de foco e bloqueio de rolagem.
+- Ajustes seguros para componentes WooCommerce.
 
 ## Regra para slots WooCommerce no Elementor
 
@@ -48,7 +46,6 @@ Funcoes:
 - Busca nativa WooCommerce.
 - Conta, pedidos e carrinho.
 - Contador de carrinho por `data-msn-cart-count`, preenchido pela bridge.
-- Seletor de tema desktop e no menu mobile.
 - Categorias principais, WhatsApp e menu mobile.
 
 ## Footer
@@ -147,6 +144,7 @@ Slot WooCommerce:
 - Shortcode `[woocommerce_checkout]` ou widget Checkout.
 - Montagem: Container `msn-checkout-woo-slot` contendo o widget Checkout/Shortcode. Nao cole esse shortcode dentro do widget HTML.
 - Manutencao: `02-checkout-slot.css` cuida da moldura Elementor; `03-checkout-woocommerce.css` cuida dos elementos internos gerados pelo WooCommerce/checkout em etapas.
+- Campos de CPF, CNPJ e telefone devem ser adicionados por WooCommerce/plugin/snippet controlado, nao por HTML manual. Plano de correcao: `AUDITORIA-LAYOUT-E-CHECKOUT-MERCADO-PAGO.md`.
 
 ## Minha Conta
 

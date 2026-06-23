@@ -1,8 +1,25 @@
+.msn-shop-hero {
+	padding-top: clamp(18px, 3vw, 32px);
+	padding-bottom: clamp(14px, 2vw, 24px);
+}
+
 .msn-shop-hero__grid {
 	display: grid;
 	grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.72fr);
 	align-items: end;
-	gap: 34px;
+	gap: clamp(18px, 3vw, 28px);
+}
+
+.msn-shop-hero .msn-title {
+	max-width: 820px;
+	font-size: clamp(2rem, 4.2vw, 3rem);
+}
+
+.msn-shop-hero .msn-subtitle {
+	max-width: 680px;
+	margin-top: 12px;
+	font-size: clamp(0.98rem, 1.6vw, 1.06rem);
+	line-height: 1.58;
 }
 
 .msn-shop-search {
@@ -11,7 +28,7 @@
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
 	background: var(--msn-surface);
-	padding: 18px;
+	padding: clamp(14px, 2vw, 18px);
 	box-shadow: var(--msn-shadow);
 }
 
@@ -42,9 +59,18 @@
 }
 
 @media (max-width: 640px) {
+	.msn-shop-hero {
+		padding-top: 16px;
+		padding-bottom: 12px;
+	}
+
 	.msn-shop-search div {
 		align-items: stretch;
 		flex-direction: column;
+	}
+
+	.msn-shop-hero .msn-title {
+		font-size: clamp(1.72rem, 9vw, 2.2rem);
 	}
 }
 /** NÃO FOI UTILIZADO NO CORTE FINAL DO SITE */

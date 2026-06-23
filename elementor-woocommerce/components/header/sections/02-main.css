@@ -135,22 +135,10 @@
 	appearance: none;
 }
 
-:root[data-theme="dark"] .msn-header__search button,
-:root[data-theme="dark"] .msn-header__search-slot button,
-:root[data-theme="dark"] .msn-header__search-slot input[type="submit"],
-:root[data-theme="dark"] .msn-header__search-slot .wp-block-search__button {
-	color: #07111f;
-}
-
 .msn-header__actions {
 	display: flex;
 	align-items: center;
 	gap: 14px;
-}
-
-.msn-header__theme-toggle {
-	align-self: center;
-	margin-left: 2px;
 }
 
 .msn-header__actions a {
@@ -216,8 +204,7 @@
 		justify-self: end;
 	}
 
-	.msn-header__actions a:not(.msn-header__cart),
-	.msn-header__theme-toggle {
+	.msn-header__actions a:not(.msn-header__cart) {
 		display: none;
 	}
 }
@@ -226,7 +213,7 @@
 	.msn-header__main {
 		grid-template-columns: 44px minmax(0, 1fr) 44px;
 		gap: 10px;
-		padding-block: 10px;
+		padding-block: 8px;
 	}
 
 	.msn-header__menu-button {
@@ -315,10 +302,20 @@
 		max-width: 100%;
 	}
 
+	.msn-header__search,
+	.msn-header__search-slot form.woocommerce-product-search,
+	.msn-header__search-slot .woocommerce-product-search,
+	.msn-header__search-slot .wp-block-search__inside-wrapper {
+		min-height: 42px;
+		max-height: 42px;
+		align-items: stretch;
+	}
+
 	.msn-header__search input,
 	.msn-header__search-slot input[type="search"],
 	.msn-header__search-slot .search-field,
 	.msn-header__search-slot .wp-block-search__input {
+		min-height: 42px;
 		padding-inline: 14px;
 	}
 
@@ -327,6 +324,7 @@
 	.msn-header__search-slot input[type="submit"],
 	.msn-header__search-slot .wp-block-search__button {
 		flex: 0 0 auto;
+		min-height: 42px;
 		min-width: 74px;
 		padding-inline: 14px;
 		font-size: 0;

@@ -1,8 +1,25 @@
+.msn-privacy-hero {
+	padding-top: clamp(18px, 3vw, 32px);
+	padding-bottom: clamp(14px, 2vw, 24px);
+}
+
 .msn-privacy-hero__grid {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) 340px;
+	grid-template-columns: minmax(0, 1fr) minmax(280px, 330px);
 	align-items: start;
-	gap: 28px;
+	gap: clamp(18px, 3vw, 28px);
+}
+
+.msn-privacy-hero .msn-title {
+	max-width: 820px;
+	font-size: clamp(2rem, 4.2vw, 3rem);
+}
+
+.msn-privacy-hero .msn-subtitle {
+	max-width: 680px;
+	margin-top: 12px;
+	font-size: clamp(0.98rem, 1.6vw, 1.06rem);
+	line-height: 1.58;
 }
 
 .msn-privacy-hero .msn-card h2 {
@@ -12,11 +29,22 @@
 }
 
 .msn-privacy-hero .msn-chip {
-	margin-top: 16px;
+	margin-top: 12px;
 }
 
 @media (max-width: 900px) {
 	.msn-privacy-hero__grid {
 		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 640px) {
+	.msn-privacy-hero {
+		padding-top: 16px;
+		padding-bottom: 12px;
+	}
+
+	.msn-privacy-hero .msn-title {
+		font-size: clamp(1.72rem, 9vw, 2.2rem);
 	}
 }

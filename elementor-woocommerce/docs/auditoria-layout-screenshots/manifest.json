@@ -1,0 +1,81 @@
+{
+  "capturedAt": "2026-06-23T14:10:09.700Z",
+  "source": "https://msndistribuidora.com.br/?woo-share=3xcDTZDRImj3WwYuMAeOt0q0ndNLVaxP",
+  "screenshots": [
+    {
+      "file": "desktop-checkout-com-banner.png",
+      "note": "Checkout com produto no carrinho antes de aceitar consentimento; mostra como o banner pode encobrir area critica.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "desktop-checkout.png",
+      "note": "Checkout com produto no carrinho e consentimento aceito; base para ajustar dobra inicial e campos.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "desktop-home.png",
+      "note": "Home em desktop com consentimento aceito.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "desktop-loja.png",
+      "note": "Grid de produtos em desktop.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "desktop-produto.png",
+      "note": "Produto individual em desktop, com preco, estoque e CTA.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "desktop-carrinho.png",
+      "note": "Carrinho com produto em desktop.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "desktop-contato.png",
+      "note": "Contato em desktop.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "desktop-minha-conta.png",
+      "note": "Minha Conta em desktop.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "desktop-privacidade.png",
+      "note": "Politica de privacidade em desktop.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "desktop-devolucao.png",
+      "note": "Politica de reembolso e devolucoes em desktop.",
+      "viewport": "1366x900"
+    },
+    {
+      "file": "mobile-home.png",
+      "note": "Home em mobile.",
+      "viewport": "390x844"
+    },
+    {
+      "file": "mobile-loja.png",
+      "note": "Loja em mobile.",
+      "viewport": "390x844"
+    },
+    {
+      "file": "mobile-produto.png",
+      "note": "Produto individual em mobile.",
+      "viewport": "390x844"
+    },
+    {
+      "file": "mobile-checkout.png",
+      "note": "Checkout com produto no carrinho em mobile.",
+      "viewport": "390x844"
+    },
+    {
+      "file": "mobile-minha-conta.png",
+      "note": "Minha Conta em mobile.",
+      "viewport": "390x844"
+    }
+  ]
+}

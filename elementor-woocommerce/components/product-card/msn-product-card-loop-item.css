@@ -3,7 +3,7 @@ selector {
 	position: relative;
 	isolation: isolate;
 	display: flex;
-	width: min(100%, 430px);
+	width: min(100%, 380px);
 	min-height: 100%;
 	flex-direction: column;
 	overflow: hidden;
@@ -12,7 +12,7 @@ selector {
 	border-radius: 8px;
 	background: var(--msn-surface);
 	box-shadow: var(--msn-shadow-soft);
-	padding: 14px;
+	padding: 12px;
 	text-align: left;
 	transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
@@ -48,7 +48,7 @@ selector img {
 	border-radius: 6px;
 	background: linear-gradient(180deg, var(--msn-surface-alt) 0%, var(--msn-bg-soft) 100%);
 	object-fit: contain;
-	padding: 24px;
+	padding: clamp(14px, 2vw, 20px);
 	transition: transform 180ms ease;
 }
 
@@ -59,7 +59,7 @@ selector:hover img {
 selector .elementor-widget-heading,
 selector .elementor-widget-theme-post-title,
 selector .elementor-widget-woocommerce-product-title {
-	margin: 16px 0 0;
+	margin: 14px 0 0;
 }
 
 selector .elementor-heading-title,
@@ -89,9 +89,9 @@ selector .elementor-widget-theme-post-title a:hover {
 selector .elementor-widget-woocommerce-product-price,
 selector .price {
 	position: relative;
-	margin: 16px 0 0;
+	margin: 12px 0 0;
 	border-top: 1px solid var(--msn-border);
-	padding-top: 14px;
+	padding-top: 12px;
 	color: var(--msn-primary) !important;
 	font-family: var(--msn-font-sans);
 	font-size: 1.24rem;
@@ -134,7 +134,7 @@ selector del {
 selector .elementor-widget-woocommerce-product-add-to-cart,
 selector .elementor-widget-button {
 	margin-top: auto;
-	padding-top: 18px;
+	padding-top: 14px;
 }
 
 selector .elementor-button,
@@ -143,7 +143,7 @@ selector .add_to_cart_button {
 	position: relative;
 	display: inline-flex;
 	width: 100%;
-	min-height: 48px;
+	min-height: 46px;
 	align-items: center;
 	justify-content: center;
 	gap: 10px;
@@ -175,12 +175,6 @@ selector .add_to_cart_button::before {
 	line-height: 1;
 }
 
-:root[data-theme="dark"] selector .elementor-button,
-:root[data-theme="dark"] selector .button,
-:root[data-theme="dark"] selector .add_to_cart_button {
-	color: #07111f !important;
-}
-
 selector .elementor-button:hover,
 selector .button:hover,
 selector .add_to_cart_button:hover {
@@ -207,11 +201,11 @@ selector .added_to_cart:hover {
 @media (max-width: 640px) {
 	selector {
 		width: 100%;
-		padding: 12px;
+		padding: 10px;
 	}
 
 	selector img {
-		padding: 20px;
+		padding: 14px;
 	}
 
 	selector .elementor-heading-title,
