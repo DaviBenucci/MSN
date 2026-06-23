@@ -44,9 +44,14 @@ O arquivo `02-account-slot.js` melhora o menu da area Minha Conta sem alterar as
 
 - `aria-current="page"` no endpoint ativo.
 - Numeracao visual nos links.
+- Labels curtos para chips horizontais no mobile.
+- Resumo compacto da secao atual no mobile.
+- Ocultacao do endpoint `Downloads`, que nao e usado neste site.
 - Subtitulos curtos como "Historico e status", "Entrega e cobranca" e "Senha e dados pessoais".
 
 Carregue este JS apenas na pagina Minha Conta, depois do shortcode ou no footer do template.
+
+No mobile, `02-account-slot.css` prioriza o fluxo: resumo compacto da secao atual, chips horizontais de navegacao e conteudo do endpoint ativo. A navegacao do WooCommerce deixa de aparecer como lista grande.
 
 ## Onde colar o CSS
 
