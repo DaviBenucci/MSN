@@ -254,6 +254,24 @@
 	color: #ffffff;
 }
 
+@media (min-width: 901px) {
+	.msn-footer__bottom-links {
+		gap: 0;
+	}
+
+	.msn-footer__bottom-links a {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.msn-footer__bottom-links a + a::before {
+		content: "|";
+		margin-inline: 16px;
+		color: rgba(255, 255, 255, 0.42);
+		font-weight: 700;
+	}
+}
+
 .msn-footer__checkout-note {
 	text-align: right;
 }

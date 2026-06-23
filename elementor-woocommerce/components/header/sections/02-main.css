@@ -239,6 +239,7 @@
 
 	.msn-header__logo {
 		justify-self: center;
+		min-width: 0;
 	}
 
 	.msn-header__logo img {
@@ -251,6 +252,8 @@
 
 	.msn-header__actions {
 		grid-column: 3;
+		justify-self: end;
+		justify-content: flex-end;
 		width: 44px;
 		min-width: 0;
 		gap: 0;
@@ -366,28 +369,4 @@
 		width: 64px;
 	}
 
-	.msn-header__search input,
-	.msn-header__search-slot input[type="search"],
-	.msn-header__search-slot .search-field,
-	.msn-header__search-slot .wp-block-search__input {
-		padding-inline: 12px;
-	}
-
-	.msn-header__search button,
-	.msn-header__search-slot button,
-	.msn-header__search-slot input[type="submit"],
-	.msn-header__search-slot .wp-block-search__button {
-		min-width: 66px;
-		padding-inline: 10px;
-	}
-
-	.msn-header__search-slot input[type="submit"] {
-		font-size: 0.84rem;
-	}
-
-	.msn-header__search button::before,
-	.msn-header__search-slot button::before,
-	.msn-header__search-slot .wp-block-search__button::before {
-		font-size: 0.84rem;
-	}
 }
