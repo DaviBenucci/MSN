@@ -2,11 +2,30 @@
 
 ## Responsividade
 
+- [ ] `MOBILE-FIRST-RESPONSIVIDADE.md` foi lido antes da aprovacao visual.
 - [ ] 320px sem rolagem horizontal.
-- [ ] 375px com busca, carrinho e WhatsApp visiveis.
+- [ ] 360px sem corte em header, busca, botoes, cards e formularios.
+- [ ] 375px com busca, carrinho, WhatsApp e CTA principal visiveis.
+- [ ] 390px com conteudo principal legivel acima da primeira dobra quando aplicavel.
+- [ ] 412px sem sobreposicao de textos, botoes ou imagens.
+- [ ] 430px sem espacos laterais excessivos ou elementos espremidos.
 - [ ] 768px com layout de tablet organizado.
-- [ ] 1024px sem quebra de header.
+- [ ] 820px com tablet intermediario organizado.
+- [ ] 1024px sem quebra de header, grid, filtro ou checkout.
 - [ ] 1440px com conteudo centralizado e sem espacos vazios excessivos.
+
+## Mobile-first rigoroso
+
+- [ ] Toda mudanca visual foi avaliada primeiro no modo mobile do Elementor.
+- [ ] A pagina nao depende de hover para mostrar informacao ou acao essencial.
+- [ ] Elementos tocaveis tem area minima aproximada de 44px.
+- [ ] Nao ha texto cortado, botao com label quebrado de forma ruim ou conteudo sobreposto.
+- [ ] Formulario mobile esta em uma coluna com labels visiveis.
+- [ ] Header, hamburger, quickbar, busca, carrinho e WhatsApp continuam acessiveis em 360px.
+- [ ] Menu hamburger abre, fecha, navega para Loja/Minha Conta/Contato e fecha com Escape.
+- [ ] Filtros, menus horizontais e quickbars rolam sem criar overflow no body.
+- [ ] Banners, barras fixas e consentimento nao cobrem CTA, campos ou botoes de pagamento.
+- [ ] Apos salvar, o CSS do Elementor foi regenerado e o cache foi limpo antes do teste final.
 
 ## Fluxos
 

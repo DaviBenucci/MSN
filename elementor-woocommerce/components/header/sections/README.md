@@ -13,13 +13,25 @@ Depois insira os blocos nesta ordem:
 1. `01-topbar.html` + `01-topbar.css`
 2. `02-main.html` + `02-main.css`
 3. `03-quickbar.html` + `03-quickbar.css`
-4. `00-header.js` no Head, footer ou Custom Code do template
+4. `04-mobile-drawer.html` + `04-mobile-drawer.css`
+5. `00-header.js` no Head, footer ou Custom Code do template
 
-O arquivo `04-mobile-drawer.html` foi desativado de proposito. A navegacao mobile usa a mesma quickbar do desktop para evitar links duplicados e facilitar manutencao.
+O `04-mobile-drawer.html` e o menu hamburger mobile para paginas principais, como Loja, Minha Conta, Carrinho e Contato. A quickbar continua ativa para categorias e atalhos comerciais.
 
-O script do header aguarda o DOM e tambem observa reinjecoes do Elementor. Ele apenas controla o estado compacto do header no scroll.
+O script do header aguarda o DOM e tambem observa reinjecoes do Elementor. Ele controla o estado compacto no scroll e o abre/fecha do menu mobile.
 
 O contador do carrinho depende do plugin `msn-woocommerce-layout-bridge` ativo.
+
+## Responsividade mobile obrigatoria
+
+O header e area critica de mobile. Antes de aprovar qualquer alteracao, siga `../../../docs/MOBILE-FIRST-RESPONSIVIDADE.md` e valide:
+
+- 320px sem rolagem horizontal.
+- 360px com logo, carrinho, busca e quickbar sem corte.
+- 375px, 390px, 412px e 430px com busca funcional, hamburger, carrinho e botoes tocaveis.
+- 768px, 820px e 1024px sem quebra de layout intermediario.
+- Menu hamburger abre/fecha por clique, Escape e botao Fechar.
+- Quickbar com rolagem horizontal suave e primeiro item visivel.
 
 ## Busca de produtos WooCommerce
 
@@ -37,6 +49,6 @@ Se estiver montando tudo com containers do Elementor, a ordem ideal no header pr
 
 1. Logo
 2. Container `msn-header__search-slot` com o shortcode `[msn_product_search]`
-3. Links de conta, pedidos e carrinho
+3. Botao hamburger mobile, links de conta, pedidos e carrinho
 
-A quickbar (`03-quickbar.html`) e a navegacao principal em desktop e mobile. Para alterar categorias, WhatsApp ou atalhos, edite somente esse arquivo.
+A quickbar (`03-quickbar.html`) organiza categorias, WhatsApp e atalhos comerciais. O drawer (`04-mobile-drawer.html`) organiza as paginas principais no mobile.

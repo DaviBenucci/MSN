@@ -18,7 +18,16 @@ Nao cole `msn-woo-layout.css` ou `msn-woo-layout.js` manualmente no Elementor; o
 
 O site usa visual claro fixo. Nao instale script de alternancia visual no Head.
 
-## 2.1 Performance e primeira carga
+## 2.1 Regra mobile-first
+
+Antes de publicar qualquer template, leia `MOBILE-FIRST-RESPONSIVIDADE.md`.
+
+- Monte e revise primeiro no modo Mobile do Elementor.
+- Valide 320px, 360px, 375px, 390px, 412px, 430px, 768px, 820px e 1024px.
+- Nao aprove template com rolagem horizontal, botao cortado, formulario espremido, texto sobreposto ou CTA escondido no celular.
+- Produto, carrinho, checkout, minha conta, loja, header e filtros exigem teste em celular real quando forem alterados.
+
+## 2.2 Performance e primeira carga
 
 Nao mova todos os scripts globais para o Head. Isso bloqueia a renderizacao inicial e piora o tempo de carregamento, especialmente com muitos usuarios simultaneos.
 
@@ -100,6 +109,7 @@ Depois de criar ou trocar sections:
 1. Remova arquivos antigos substituidos.
 2. Confirme que nao existem arquivos combinados `components/<pagina>/msn-*.html/css/js`.
 3. Atualize `MAPA-DE-COMPONENTES.md`.
-4. Limpe cache do WP Rocket e regenere CSS do Elementor.
+4. Rode o checklist mobile de `MOBILE-FIRST-RESPONSIVIDADE.md`.
+5. Limpe cache do WP Rocket e regenere CSS do Elementor.
 
 Documento de referencia: `GUIA-SECTIONS-E-LIMPEZA.md`.

@@ -1,6 +1,8 @@
 .msn-header__quickbar {
 	display: flex !important;
 	width: 100%;
+	max-width: 100%;
+	min-width: 0;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
@@ -47,13 +49,14 @@
 	color: var(--msn-primary) !important;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
 	.msn-header__quickbar {
 		justify-content: flex-start;
 		gap: 8px;
 		overflow-x: auto;
 		overflow-y: hidden;
 		padding: 8px 12px;
+		scroll-padding-inline: 12px;
 		scroll-snap-type: x proximity;
 		scrollbar-width: none;
 		overscroll-behavior-x: contain;
@@ -81,9 +84,20 @@
 	}
 }
 
+@media (max-width: 520px) {
+	.msn-header__quickbar-label {
+		display: none;
+	}
+
+	.msn-header__quickbar-label--short {
+		display: inline;
+	}
+}
+
 @media (max-width: 360px) {
 	.msn-header__quickbar {
 		padding-inline: 10px;
+		scroll-padding-inline: 10px;
 	}
 
 	.msn-header__model-link,
@@ -92,12 +106,63 @@
 		padding-inline: 12px;
 		font-size: 0.8rem;
 	}
+}
 
+@container msn-header (max-width: 1200px) {
+	.msn-header__quickbar {
+		justify-content: flex-start;
+		gap: 8px;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding: 8px 12px;
+		scroll-padding-inline: 12px;
+		scroll-snap-type: x proximity;
+		scrollbar-width: none;
+		overscroll-behavior-x: contain;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.msn-header__quickbar::-webkit-scrollbar {
+		display: none;
+	}
+
+	.msn-header__quickbar a {
+		min-height: 36px;
+		flex: 0 0 auto;
+		border-color: var(--msn-border);
+		background: var(--msn-surface);
+		padding-inline: 13px;
+		font-size: 0.82rem;
+		scroll-snap-align: start;
+		box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+	}
+
+	.msn-header__quickbar-whatsapp .msn-header__quickbar-label {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+@container msn-header (max-width: 520px) {
 	.msn-header__quickbar-label {
 		display: none;
 	}
 
 	.msn-header__quickbar-label--short {
 		display: inline;
+	}
+}
+
+@container msn-header (max-width: 360px) {
+	.msn-header__quickbar {
+		padding-inline: 10px;
+		scroll-padding-inline: 10px;
+	}
+
+	.msn-header__model-link,
+	.msn-header__quickbar-whatsapp {
+		min-height: 36px;
+		padding-inline: 12px;
+		font-size: 0.8rem;
 	}
 }

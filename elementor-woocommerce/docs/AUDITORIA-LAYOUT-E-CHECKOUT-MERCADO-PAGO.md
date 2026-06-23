@@ -76,7 +76,8 @@ Prioridade 3: profissionalizar a leitura sem redesenhar o sistema.
 
 Criterios de aceite de layout:
 
-- 320px, 375px, 768px, 1024px e 1440px sem rolagem horizontal.
+- Seguir `MOBILE-FIRST-RESPONSIVIDADE.md` como criterio obrigatorio.
+- 320px, 360px, 375px, 390px, 412px, 430px, 768px, 820px, 1024px e 1440px sem rolagem horizontal.
 - Produto individual mostra imagem, preco, estoque e CTA sem elementos sobrepostos.
 - Checkout mostra primeiro campo util sem depender de rolagem longa desnecessaria.
 - Banner de consentimento nao cobre botao de compra, campos de checkout, login/cadastro ou CTA principal.
@@ -186,6 +187,7 @@ Erro de console fora do checkout:
 - [ ] CPF/CNPJ/telefone aparecem no admin do pedido.
 - [ ] Console sem erro Mercado Pago em paginas que nao sao checkout, ou erro classificado e aceito temporariamente.
 - [ ] Banner de consentimento nao cobre o botao de finalizar pedido.
+- [ ] Checklist de `MOBILE-FIRST-RESPONSIVIDADE.md` aprovado.
 - [ ] Teste realizado em desktop e celular real.
 
 ## Referencias tecnicas

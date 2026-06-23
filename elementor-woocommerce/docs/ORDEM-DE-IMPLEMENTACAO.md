@@ -5,6 +5,7 @@
 - Instalar `shared/msn-global-css.html`.
 - Instalar `shared/msn-global-js.html` no Footer.
 - Conferir fonte, cores, botoes e estilos WooCommerce basicos.
+- Ler `MOBILE-FIRST-RESPONSIVIDADE.md` e adotar mobile como primeiro criterio de aceite.
 
 ## Fase 2 - Estrutura global
 
@@ -57,5 +58,8 @@
 - Salvar template.
 - Regenerar CSS e Dados no Elementor.
 - Limpar cache do WP Rocket.
+- Testar primeiro em mobile: 320px, 360px, 375px, 390px, 412px e 430px.
+- Testar tablet: 768px, 820px e 1024px.
+- Testar desktop somente depois do mobile/tablet.
 - Testar em aba anonima.
 - Se produtos sumirem, testar shortcode minimo `[products limit="12" columns="3" visibility="visible"]` sem filtros.

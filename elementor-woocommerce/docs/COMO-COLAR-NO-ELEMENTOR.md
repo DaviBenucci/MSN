@@ -38,6 +38,8 @@ Evite colar CSS de uma section inteira dentro do painel de CSS personalizado de 
 
 Alguns editores do Elementor exibem avisos em funcoes modernas como `var(...)`, `clamp(...)` ou `color-mix(...)`. Quando o site esta com `shared/msn-global-css.html` carregado, esses avisos normalmente sao apenas do validador visual do editor. Se a formatacao nao aplicar, confira primeiro se o CSS global foi carregado antes da section e se o Container tem a classe esperada.
 
+Ao colar ou ajustar CSS, siga `MOBILE-FIRST-RESPONSIVIDADE.md`. A regra pratica e: revisar primeiro em Mobile no Elementor, evitar larguras fixas, impedir rolagem horizontal e so aprovar desktop depois de validar celular e tablet.
+
 ## JavaScript
 
 Se estiver em widget HTML, sempre use:

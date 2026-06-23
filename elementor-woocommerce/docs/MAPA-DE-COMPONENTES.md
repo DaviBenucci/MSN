@@ -18,6 +18,11 @@ Funcoes:
 - Utilitarios globais de foco e bloqueio de rolagem.
 - Ajustes seguros para componentes WooCommerce.
 
+Regra transversal:
+
+- Toda section deve seguir `MOBILE-FIRST-RESPONSIVIDADE.md`.
+- Mobile e o primeiro criterio de aceite; desktop so aprova depois de 320px, 360px, 375px, 390px, 412px, 430px, 768px, 820px e 1024px.
+
 ## Regra para slots WooCommerce no Elementor
 
 Os slots WooCommerce nao devem ser entendidos como widgets dentro de widget HTML. O comentario dentro dos arquivos `.html` marca apenas a posicao visual.
@@ -46,7 +51,8 @@ Funcoes:
 - Busca nativa WooCommerce.
 - Conta, pedidos e carrinho.
 - Contador de carrinho por `data-msn-cart-count`, preenchido pela bridge.
-- Categorias principais, WhatsApp e menu mobile.
+- Categorias principais e WhatsApp pela quickbar.
+- Menu hamburger mobile para Inicio, Loja, Minha Conta, Pedidos, Carrinho, Finalizacao de Compra e Contato.
 
 ## Footer
 

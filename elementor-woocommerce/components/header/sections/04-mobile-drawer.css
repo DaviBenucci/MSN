@@ -1,5 +1,0 @@
-/* Legacy: o menu mobile usa 03-quickbar.html. Mantem drawers antigos invisiveis. */
-.msn-header__backdrop,
-.msn-header__drawer {
-	display: none !important;
-}

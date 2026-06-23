@@ -28,13 +28,14 @@ Importante: um widget WooCommerce ou Shortcode nao entra dentro de um widget HTM
 
 ## Regras criticas
 
+- Mobile-first e obrigatorio. Siga `docs/MOBILE-FIRST-RESPONSIVIDADE.md` antes de aprovar qualquer mudanca visual.
 - Nao substituir checkout, carrinho, login, preco, estoque, frete, pagamento ou variacoes por HTML manual.
 - Nao colar `[woocommerce_cart]`, `[woocommerce_my_account]` ou `[products]` dentro de widget HTML; use widget Shortcode ou widget WooCommerce em um Container.
 - Nao usar JavaScript customizado para recalcular valores.
 - Manter classes customizadas com prefixo `.msn-`.
 - Manter o site com visual claro fixo, sem alternador visual no header.
 - Testar primeiro em staging.
-- Validar mobile antes de aprovar desktop.
+- Validar 320px, 360px, 375px, 390px, 412px, 430px, 768px e 1024px antes de aprovar desktop.
 - Produtos, preco, imagem, estoque e CTA devem vir da bridge `data-msn-products` ou de Loop Grid tipo `Products`, widget Products/Archive Products ou shortcode WooCommerce.
 - Checkout deve usar widget Checkout ou `[woocommerce_checkout]` em Container proprio, nunca HTML manual.
 - Politica de privacidade e trocas/devolucoes devem ser revisadas pelo responsavel juridico/administrativo antes da publicacao.
@@ -42,6 +43,7 @@ Importante: um widget WooCommerce ou Shortcode nao entra dentro de um widget HTM
 ## Documentos principais
 
 - `docs/GUIA-DE-INSTALACAO.md`
+- `docs/MOBILE-FIRST-RESPONSIVIDADE.md`
 - `docs/MAPA-DE-COMPONENTES.md`
 - `docs/GUIA-SECTIONS-E-LIMPEZA.md`
 - `docs/AUDITORIA-LAYOUT-E-CHECKOUT-MERCADO-PAGO.md`
