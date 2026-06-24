@@ -62,11 +62,15 @@
 		padding-top: 8px;
 	}
 
+	.msn-checkout-content .msn-container {
+		width: min(calc(100% - 12px), 1180px);
+	}
+
 	.msn-checkout-content__grid {
 		gap: 14px;
 	}
 
 	.msn-checkout-woo-slot {
-		padding: 12px;
+		padding: 8px;
 	}
 }

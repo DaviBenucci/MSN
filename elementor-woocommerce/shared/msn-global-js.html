@@ -123,17 +123,94 @@
       }, 250);
     }
 
+    var mobilePaymentPanelMedia = window.matchMedia ? window.matchMedia("(max-width: 640px)") : null;
+
+    function isMobilePaymentPanelLayout() {
+      return mobilePaymentPanelMedia ? mobilePaymentPanelMedia.matches : window.innerWidth <= 640;
+    }
+
+    function directPaymentRadio(method) {
+      var radios = Array.prototype.slice.call(method.querySelectorAll('input[type="radio"]'));
+      return radios.find(function (radio) {
+        return radio.parentElement === method;
+      }) || radios[0] || null;
+    }
+
+    function directPaymentBoxes(method) {
+      return Array.prototype.slice.call(method.children || []).filter(function (child) {
+        return child.classList && child.classList.contains("payment_box");
+      });
+    }
+
+    function syncCheckoutPaymentPanels(scope) {
+      var root = scope && scope.querySelectorAll ? scope : document;
+      var isMobile = isMobilePaymentPanelLayout();
+      var methods = Array.prototype.slice.call(
+        root.querySelectorAll("#payment li.wc_payment_method, #payment li[class*='payment_method_']")
+      );
+
+      methods.forEach(function (method) {
+        var radio = directPaymentRadio(method);
+        var boxes = directPaymentBoxes(method);
+        var isSelected = radio ? radio.checked : true;
+
+        if (!boxes.length) return;
+
+        method.classList.toggle("msn-payment-method--open", isMobile && isSelected);
+        method.classList.toggle("msn-payment-method--collapsed", isMobile && !isSelected);
+
+        if (radio) {
+          radio.setAttribute("aria-expanded", String(isMobile && isSelected));
+        }
+
+        boxes.forEach(function (box) {
+          if (!isMobile) {
+            if (box.dataset.msnMobilePaymentPanel === "true") {
+              box.hidden = false;
+              box.removeAttribute("aria-hidden");
+              box.style.removeProperty("display");
+              delete box.dataset.msnMobilePaymentPanel;
+            }
+            return;
+          }
+
+          box.dataset.msnMobilePaymentPanel = "true";
+          box.hidden = !isSelected;
+          box.setAttribute("aria-hidden", String(!isSelected));
+
+          if (isSelected) {
+            box.style.removeProperty("display");
+          } else {
+            box.style.setProperty("display", "none", "important");
+          }
+        });
+      });
+    }
+
+    function scheduleCheckoutPaymentPanels(scope) {
+      syncCheckoutPaymentPanels(scope);
+      window.setTimeout(function () {
+        syncCheckoutPaymentPanels(scope);
+      }, 120);
+      window.setTimeout(function () {
+        syncCheckoutPaymentPanels(scope);
+      }, 320);
+    }
+
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", function () {
         scheduleMercadoPagoCpfOnly(document);
+        scheduleCheckoutPaymentPanels(document);
       });
     } else {
       scheduleMercadoPagoCpfOnly(document);
+      scheduleCheckoutPaymentPanels(document);
     }
 
     document.addEventListener("change", function (event) {
       if (event.target && event.target.closest && event.target.closest("#payment")) {
         scheduleMercadoPagoCpfOnly(document);
+        scheduleCheckoutPaymentPanels(document);
       }
     });
 
@@ -142,14 +219,28 @@
         "updated_checkout payment_method_selected checkout_error",
         function () {
           scheduleMercadoPagoCpfOnly(document);
+          scheduleCheckoutPaymentPanels(document);
         }
       );
+    }
+
+    if (mobilePaymentPanelMedia) {
+      var handlePaymentPanelMediaChange = function () {
+        scheduleCheckoutPaymentPanels(document);
+      };
+
+      if (typeof mobilePaymentPanelMedia.addEventListener === "function") {
+        mobilePaymentPanelMedia.addEventListener("change", handlePaymentPanelMediaChange);
+      } else if (typeof mobilePaymentPanelMedia.addListener === "function") {
+        mobilePaymentPanelMedia.addListener(handlePaymentPanelMediaChange);
+      }
     }
 
     var paymentRoot = document.getElementById("payment");
     if (paymentRoot && window.MutationObserver) {
       new MutationObserver(function () {
         scheduleMercadoPagoCpfOnly(paymentRoot);
+        scheduleCheckoutPaymentPanels(paymentRoot);
       }).observe(paymentRoot, { childList: true, subtree: true });
     }
 
@@ -157,7 +248,8 @@
       focusableSelector: focusableSelector,
       lockScroll: lockScroll,
       trapFocus: trapFocus,
-      enforceMercadoPagoCpfOnly: enforceMercadoPagoCpfOnly
+      enforceMercadoPagoCpfOnly: enforceMercadoPagoCpfOnly,
+      syncCheckoutPaymentPanels: syncCheckoutPaymentPanels
     };
   })();
 

@@ -339,6 +339,32 @@ body:has(.cmplz-cookiebanner.cmplz-show).single-product {
 		font-size: 0.88rem !important;
 	}
 
+	body.woocommerce-checkout #cmplz-manage-consent .cmplz-manage-consent {
+		left: 8px !important;
+		right: auto !important;
+		bottom: max(8px, env(safe-area-inset-bottom)) !important;
+		width: 44px !important;
+		max-width: 44px !important;
+		min-height: 44px !important;
+		padding: 0 !important;
+		overflow: hidden !important;
+		border-radius: 999px !important;
+		font-size: 0 !important;
+		line-height: 1 !important;
+	}
+
+	body.woocommerce-checkout #cmplz-manage-consent .cmplz-manage-consent::before {
+		content: "i";
+		display: grid;
+		width: 100%;
+		height: 100%;
+		place-items: center;
+		color: #ffffff;
+		font-family: var(--msn-cmplz-font-display) !important;
+		font-size: 1rem !important;
+		font-weight: 900 !important;
+	}
+
 	body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-checkout,
 	body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-cart,
 	body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-account,
