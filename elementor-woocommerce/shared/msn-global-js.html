@@ -162,12 +162,31 @@
       input.value = formatter(input.value);
     }
 
+    function markCheckoutFieldRequired(input) {
+      if (!input) return;
+
+      input.required = true;
+      input.setAttribute("aria-required", "true");
+
+      var field = input.closest(".form-row, p, .wc-block-components-text-input");
+      if (!field) return;
+
+      field.classList.add("validate-required");
+      field.classList.remove("validate-optional");
+
+      Array.prototype.slice.call(field.querySelectorAll(".optional")).forEach(function (optional) {
+        optional.remove();
+      });
+    }
+
     function formatCheckoutIdentityFields(scope) {
       var root = scope && scope.querySelectorAll ? scope : document;
       Array.prototype.slice.call(root.querySelectorAll('input[name="billing_cpf"], #billing_cpf')).forEach(function (input) {
+        markCheckoutFieldRequired(input);
         bindCheckoutInputFormatter(input, formatCpf);
       });
       Array.prototype.slice.call(root.querySelectorAll('input[name="billing_phone"], #billing_phone')).forEach(function (input) {
+        markCheckoutFieldRequired(input);
         bindCheckoutInputFormatter(input, formatBrazilPhone);
       });
     }

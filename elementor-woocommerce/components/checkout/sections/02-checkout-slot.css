@@ -59,18 +59,27 @@
 
 @media (max-width: 768px) {
 	.msn-checkout-content {
-		padding-top: 8px;
+		padding-top: 6px;
 	}
 
 	.msn-checkout-content .msn-container {
-		width: min(calc(100% - 12px), 1180px);
+		width: min(calc(100% - 8px), 1180px);
 	}
 
 	.msn-checkout-content__grid {
-		gap: 14px;
+		gap: 10px;
 	}
 
 	.msn-checkout-woo-slot {
-		padding: 8px;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		padding: 0;
+		box-shadow: none;
+	}
+
+	.msn-checkout-side {
+		grid-template-columns: 1fr;
+		gap: 10px;
 	}
 }

@@ -214,6 +214,13 @@
 	text-decoration: none;
 }
 
+.msn-checkout-woo-slot #billing_phone_field .optional,
+.msn-checkout-woo-slot #billing_cpf_field .optional,
+.woocommerce-checkout #billing_phone_field .optional,
+.woocommerce-checkout #billing_cpf_field .optional {
+	display: none !important;
+}
+
 .msn-checkout-woo-slot a:not(.button),
 .msn-checkout-woo-slot .wc-block-components-totals-coupon-link,
 .msn-checkout-woo-slot .fc-login-button,
@@ -1188,20 +1195,66 @@ body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field
 }
 
 @media (max-width: 768px) {
+	body.woocommerce-checkout {
+		background: var(--msn-surface);
+	}
+
+	.msn-checkout-woo-slot {
+		border: 0 !important;
+		background: transparent !important;
+		padding: 0 !important;
+		box-shadow: none !important;
+	}
+
+	.msn-checkout-woo-slot form.checkout,
+	.msn-checkout-woo-slot .fc-wrapper,
+	.msn-checkout-woo-slot .fc-inside,
+	.msn-checkout-woo-slot .fc-checkout-step {
+		gap: 10px !important;
+	}
+
 	.msn-checkout-woo-slot .col2-set {
 		grid-template-columns: 1fr;
 	}
 
+	.msn-checkout-woo-slot .woocommerce-billing-fields,
+	.msn-checkout-woo-slot .woocommerce-shipping-fields,
+	.msn-checkout-woo-slot .woocommerce-additional-fields,
+	.msn-checkout-woo-slot #order_review,
+	.msn-checkout-woo-slot #payment,
+	.msn-checkout-woo-slot .woocommerce-checkout-review-order,
+	.msn-checkout-woo-slot .woocommerce-checkout #payment,
+	.msn-checkout-woo-slot .wc-block-components-checkout-step,
+	.msn-checkout-woo-slot .wc-block-components-checkout-step__container,
+	.msn-checkout-woo-slot .wc-block-components-sidebar,
+	.msn-checkout-woo-slot .wc-block-components-sidebar__content,
+	.msn-checkout-woo-slot .wc-block-components-order-summary,
+	.msn-checkout-woo-slot .wc-block-components-panel,
+	.msn-checkout-woo-slot .fc-checkout-step,
+	.msn-checkout-woo-slot .fc-checkout-order-review {
+		border-color: color-mix(in srgb, var(--msn-border) 72%, #ffffff) !important;
+		border-radius: var(--msn-radius, 8px) !important;
+		background: var(--msn-surface) !important;
+		padding: 12px !important;
+		box-shadow: none !important;
+	}
+
 	.msn-checkout-woo-slot .fc-step__substep {
 		grid-template-columns: minmax(0, 1fr) !important;
-		gap: 8px !important;
-		padding: 14px !important;
+		gap: 10px !important;
+		padding: 0 !important;
+	}
+
+	.msn-checkout-woo-slot .fc-step__substep + .fc-step__substep {
+		border-top: 1px solid var(--msn-border) !important;
+		padding-top: 12px !important;
 	}
 
 	.msn-checkout-woo-slot .fc-step__substep-title,
 	.msn-checkout-woo-slot .fc-step__substep-title-container {
 		grid-column: 1 / -1 !important;
-		font-size: 0.98rem !important;
+		font-size: 0.95rem !important;
+		margin-bottom: 2px !important;
 	}
 
 	.msn-checkout-woo-slot .fc-step__substep-edit,
@@ -1220,6 +1273,44 @@ body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field
 	.msn-checkout-woo-slot .fc-step__substep .fc-field-group,
 	.msn-checkout-woo-slot .fc-step__substep .fc-fields {
 		grid-template-columns: minmax(0, 1fr) !important;
+		gap: 10px !important;
+	}
+
+	body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .form-row,
+	body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper p.form-row,
+	.msn-checkout-woo-slot .fc-step__substep .form-row,
+	.msn-checkout-woo-slot .fc-step__substep p.form-row {
+		gap: 4px !important;
+		margin: 0 !important;
+	}
+
+	body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .form-row label,
+	body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .woocommerce-form__label,
+	body.woocommerce-checkout .msn-checkout-woo-slot .fc-wrapper .checkbox,
+	.msn-checkout-woo-slot .form-row label,
+	.msn-checkout-woo-slot .woocommerce-form__label {
+		font-size: 0.78rem !important;
+		line-height: 1.2 !important;
+	}
+
+	.msn-checkout-woo-slot input[type="text"],
+	.msn-checkout-woo-slot input[type="email"],
+	.msn-checkout-woo-slot input[type="tel"],
+	.msn-checkout-woo-slot input[type="number"],
+	.msn-checkout-woo-slot input[type="password"],
+	.msn-checkout-woo-slot input[type="search"],
+	.msn-checkout-woo-slot input.input-text,
+	.msn-checkout-woo-slot .input-text,
+	.msn-checkout-woo-slot .woocommerce-input-wrapper input,
+	.msn-checkout-woo-slot textarea,
+	.msn-checkout-woo-slot select,
+	.msn-checkout-woo-slot .select2-selection,
+	.msn-checkout-woo-slot .select2-container--default .select2-selection--single,
+	.msn-checkout-woo-slot .wc-block-components-text-input input,
+	.msn-checkout-woo-slot .wc-block-components-combobox .wc-block-components-combobox-control input {
+		min-height: 44px;
+		padding: 9px 11px;
+		font-size: 0.92rem;
 	}
 
 	.msn-checkout-woo-slot #payment ul.payment_methods li input.input-radio,
@@ -1236,7 +1327,7 @@ body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field
 
 	.msn-checkout-woo-slot #payment div.payment_box,
 	.msn-checkout-woo-slot .woocommerce-checkout #payment div.payment_box {
-		padding: 14px !important;
+		padding: 12px !important;
 	}
 
 	body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box :where([class*="mp-"], [class*="mercado"], [class*="Mercado"], [id*="mp-"], [id*="mercado"]) {
@@ -1268,15 +1359,29 @@ body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field
 	.msn-checkout-woo-slot .wc-block-components-button,
 	.msn-checkout-woo-slot .wc-block-components-checkout-place-order-button {
 		width: 100%;
+		min-height: 48px;
+	}
+
+	.msn-checkout-woo-slot .fc-step__actions,
+	.msn-checkout-woo-slot #payment .place-order,
+	.msn-checkout-woo-slot .wc-block-components-checkout-place-order-button__container {
+		position: sticky;
+		bottom: 0;
+		z-index: 8;
+		margin: 12px -12px -12px !important;
+		border-top: 1px solid var(--msn-border) !important;
+		background: rgba(255, 255, 255, 0.96) !important;
+		padding: 10px 12px calc(10px + env(safe-area-inset-bottom)) !important;
+		backdrop-filter: blur(10px);
 	}
 }
 
 @media (max-width: 480px) {
 	.msn-checkout-woo-slot {
-		width: calc(100vw - 12px) !important;
-		max-width: calc(100vw - 12px) !important;
-		margin-inline: calc(50% - 50vw + 6px) !important;
-		padding: 6px !important;
+		width: calc(100vw - 8px) !important;
+		max-width: calc(100vw - 8px) !important;
+		margin-inline: calc(50% - 50vw + 4px) !important;
+		padding: 0 !important;
 	}
 
 	.msn-checkout-woo-slot form.checkout,

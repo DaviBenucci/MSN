@@ -55,7 +55,9 @@ final class MSN_WooCommerce_Layout_Bridge
         add_filter('rocket_defer_inline_exclusions', [__CLASS__, 'exclude_catalog_wp_inline_dependencies_from_rocket']);
         add_filter('rocket_excluded_inline_js_content', [__CLASS__, 'exclude_catalog_wp_inline_dependencies_from_rocket']);
         add_filter('script_loader_tag', [__CLASS__, 'add_nowprocket_to_catalog_dependency_scripts'], 10, 3);
-        add_filter('woocommerce_checkout_fields', [__CLASS__, 'customize_brazilian_checkout_fields'], 20);
+        add_filter('woocommerce_billing_fields', [__CLASS__, 'customize_brazilian_billing_fields'], 999);
+        add_filter('woocommerce_checkout_fields', [__CLASS__, 'customize_brazilian_checkout_fields'], 999);
+        add_filter('woocommerce_form_field_args', [__CLASS__, 'force_brazilian_required_field_args'], 999, 3);
         add_action('woocommerce_checkout_process', [__CLASS__, 'validate_brazilian_checkout_fields']);
         add_action('woocommerce_checkout_create_order', [__CLASS__, 'save_brazilian_checkout_order_fields'], 20, 2);
         add_action('woocommerce_checkout_update_order_meta', [__CLASS__, 'save_brazilian_checkout_order_meta'], 20);
@@ -185,20 +187,20 @@ HTML;
             $fields['billing'] = [];
         }
 
-        if (isset($fields['billing']['billing_phone']) && is_array($fields['billing']['billing_phone'])) {
-            $phone_field = $fields['billing']['billing_phone'];
+        $phone_field = isset($fields['billing']['billing_phone']) && is_array($fields['billing']['billing_phone'])
+            ? $fields['billing']['billing_phone']
+            : [];
 
-            $fields['billing']['billing_phone'] = array_merge($phone_field, [
-                'label'        => __('Telefone', 'msn-woocommerce-layout-bridge'),
-                'placeholder'  => __('(11) 99999-9999', 'msn-woocommerce-layout-bridge'),
-                'required'     => true,
-                'type'         => 'tel',
-                'class'        => self::checkout_field_classes($phone_field['class'] ?? [], 'form-row-first'),
-                'input_class'  => self::merge_html_classes($phone_field['input_class'] ?? [], ['msn-checkout-phone-field']),
-                'autocomplete' => 'tel',
-                'priority'     => 24,
-            ]);
-        }
+        $fields['billing']['billing_phone'] = array_merge($phone_field, [
+            'label'        => __('Telefone', 'msn-woocommerce-layout-bridge'),
+            'placeholder'  => __('(11) 99999-9999', 'msn-woocommerce-layout-bridge'),
+            'required'     => true,
+            'type'         => 'tel',
+            'class'        => self::checkout_field_classes($phone_field['class'] ?? [], 'form-row-first'),
+            'input_class'  => self::merge_html_classes($phone_field['input_class'] ?? [], ['msn-checkout-phone-field']),
+            'autocomplete' => 'tel',
+            'priority'     => 24,
+        ]);
 
         $cpf_field = isset($fields['billing']['billing_cpf']) && is_array($fields['billing']['billing_cpf'])
             ? $fields['billing']['billing_cpf']
@@ -221,6 +223,78 @@ HTML;
         ]);
 
         return $fields;
+    }
+
+    public static function customize_brazilian_billing_fields(array $fields): array
+    {
+        $phone_field = isset($fields['billing_phone']) && is_array($fields['billing_phone'])
+            ? $fields['billing_phone']
+            : [];
+
+        $fields['billing_phone'] = array_merge($phone_field, [
+            'label'        => __('Telefone', 'msn-woocommerce-layout-bridge'),
+            'placeholder'  => __('(11) 99999-9999', 'msn-woocommerce-layout-bridge'),
+            'required'     => true,
+            'type'         => 'tel',
+            'class'        => self::checkout_field_classes($phone_field['class'] ?? [], 'form-row-first'),
+            'input_class'  => self::merge_html_classes($phone_field['input_class'] ?? [], ['msn-checkout-phone-field']),
+            'autocomplete' => 'tel',
+            'priority'     => 24,
+        ]);
+
+        $cpf_field = isset($fields['billing_cpf']) && is_array($fields['billing_cpf'])
+            ? $fields['billing_cpf']
+            : [];
+
+        $fields['billing_cpf'] = array_merge($cpf_field, [
+            'type'              => 'text',
+            'label'             => __('CPF', 'msn-woocommerce-layout-bridge'),
+            'placeholder'       => __('000.000.000-00', 'msn-woocommerce-layout-bridge'),
+            'required'          => true,
+            'class'             => self::checkout_field_classes($cpf_field['class'] ?? [], 'form-row-last'),
+            'input_class'       => self::merge_html_classes($cpf_field['input_class'] ?? [], ['msn-checkout-cpf-field']),
+            'clear'             => true,
+            'priority'          => 25,
+            'custom_attributes' => array_merge($cpf_field['custom_attributes'] ?? [], [
+                'autocomplete' => 'off',
+                'inputmode'    => 'numeric',
+                'maxlength'    => '14',
+            ]),
+        ]);
+
+        return $fields;
+    }
+
+    public static function force_brazilian_required_field_args(array $args, string $key, $value): array
+    {
+        if ($key === 'billing_phone') {
+            $args['label'] = __('Telefone', 'msn-woocommerce-layout-bridge');
+            $args['placeholder'] = __('(11) 99999-9999', 'msn-woocommerce-layout-bridge');
+            $args['required'] = true;
+            $args['type'] = 'tel';
+            $args['class'] = self::checkout_field_classes($args['class'] ?? [], 'form-row-first');
+            $args['input_class'] = self::merge_html_classes($args['input_class'] ?? [], ['msn-checkout-phone-field']);
+            $args['autocomplete'] = 'tel';
+            $args['priority'] = 24;
+        }
+
+        if ($key === 'billing_cpf') {
+            $args['label'] = __('CPF', 'msn-woocommerce-layout-bridge');
+            $args['placeholder'] = __('000.000.000-00', 'msn-woocommerce-layout-bridge');
+            $args['required'] = true;
+            $args['type'] = 'text';
+            $args['class'] = self::checkout_field_classes($args['class'] ?? [], 'form-row-last');
+            $args['input_class'] = self::merge_html_classes($args['input_class'] ?? [], ['msn-checkout-cpf-field']);
+            $args['clear'] = true;
+            $args['priority'] = 25;
+            $args['custom_attributes'] = array_merge($args['custom_attributes'] ?? [], [
+                'autocomplete' => 'off',
+                'inputmode'    => 'numeric',
+                'maxlength'    => '14',
+            ]);
+        }
+
+        return $args;
     }
 
     public static function validate_brazilian_checkout_fields(): void
@@ -404,31 +478,39 @@ HTML;
             $exclusions = [];
         }
 
-        if (!self::is_catalog_script_dependency_context()) {
-            return $exclusions;
+        $required_exclusions = [];
+
+        if (self::is_catalog_script_dependency_context()) {
+            $required_exclusions = array_merge($required_exclusions, [
+                '/wp-includes/js/dist/private-apis',
+                '/wp-includes/js/dist/data',
+                '/wp-includes/js/dist/data-controls',
+                '/wp-includes/js/dist/dom-ready',
+                '/wp-includes/js/dist/hooks',
+                '/wp-includes/js/dist/i18n',
+                '/wp-includes/js/dist/api-fetch',
+                '/wp-includes/js/dist/url',
+                '/wp-content/plugins/wordpress-seo/assets/js/dist/frontend-inspector',
+                '/wp-content/plugins/wordpress-seo-premium/assets/js/dist/frontend-inspector',
+                'private-apis.min.js',
+                'data.min.js',
+                'frontend-inspector',
+                'wp-private-apis-js',
+                'wp-data-js-after',
+                'wp.data.use',
+                'wp.data.register',
+                'wp.apiFetch.use',
+                'wp.i18n.setLocaleData',
+            ]);
         }
 
-        $required_exclusions = [
-            '/wp-includes/js/dist/private-apis',
-            '/wp-includes/js/dist/data',
-            '/wp-includes/js/dist/data-controls',
-            '/wp-includes/js/dist/dom-ready',
-            '/wp-includes/js/dist/hooks',
-            '/wp-includes/js/dist/i18n',
-            '/wp-includes/js/dist/api-fetch',
-            '/wp-includes/js/dist/url',
-            '/wp-content/plugins/wordpress-seo/assets/js/dist/frontend-inspector',
-            '/wp-content/plugins/wordpress-seo-premium/assets/js/dist/frontend-inspector',
-            'private-apis.min.js',
-            'data.min.js',
-            'frontend-inspector',
-            'wp-private-apis-js',
-            'wp-data-js-after',
-            'wp.data.use',
-            'wp.data.register',
-            'wp.apiFetch.use',
-            'wp.i18n.setLocaleData',
-        ];
+        if (self::is_mercado_pago_checkout_context()) {
+            $required_exclusions = array_merge($required_exclusions, self::get_mercado_pago_script_exclusions());
+        }
+
+        if (!$required_exclusions) {
+            return $exclusions;
+        }
 
         foreach ($required_exclusions as $required_exclusion) {
             if (!in_array($required_exclusion, $exclusions, true)) {
@@ -445,24 +527,32 @@ HTML;
             $exclusions = [];
         }
 
-        if (!self::is_catalog_script_dependency_context()) {
-            return $exclusions;
+        $required_exclusions = [];
+
+        if (self::is_catalog_script_dependency_context()) {
+            $required_exclusions = array_merge($required_exclusions, [
+                'wp-private-apis-js-after',
+                'wp-data-js-after',
+                'wp-api-fetch-js-after',
+                'wp-i18n-js-after',
+                'wp-hooks-js-after',
+                'wp-url-js-after',
+                '__dangerousOptInToUnstableAPIsOnlyForCoreModules',
+                'wp.data.use',
+                'wp.data.register',
+                'wp.apiFetch.use',
+                'wp.i18n.setLocaleData',
+                'frontend-inspector',
+            ]);
         }
 
-        $required_exclusions = [
-            'wp-private-apis-js-after',
-            'wp-data-js-after',
-            'wp-api-fetch-js-after',
-            'wp-i18n-js-after',
-            'wp-hooks-js-after',
-            'wp-url-js-after',
-            '__dangerousOptInToUnstableAPIsOnlyForCoreModules',
-            'wp.data.use',
-            'wp.data.register',
-            'wp.apiFetch.use',
-            'wp.i18n.setLocaleData',
-            'frontend-inspector',
-        ];
+        if (self::is_mercado_pago_checkout_context()) {
+            $required_exclusions = array_merge($required_exclusions, self::get_mercado_pago_inline_script_exclusions());
+        }
+
+        if (!$required_exclusions) {
+            return $exclusions;
+        }
 
         foreach ($required_exclusions as $required_exclusion) {
             if (!in_array($required_exclusion, $exclusions, true)) {
@@ -475,33 +565,52 @@ HTML;
 
     public static function add_nowprocket_to_catalog_dependency_scripts(string $tag, string $handle, string $src): string
     {
-        if (!self::is_catalog_script_dependency_context() || strpos($tag, ' nowprocket') !== false) {
+        if (strpos($tag, ' nowprocket') !== false) {
             return $tag;
         }
 
-        $protected_handles = [
-            'wp-private-apis',
-            'wp-data',
-            'wp-data-controls',
-            'wp-dom-ready',
-            'wp-hooks',
-            'wp-i18n',
-            'wp-api-fetch',
-            'wp-url',
-        ];
+        $is_catalog_context = self::is_catalog_script_dependency_context();
+        $is_checkout_context = self::is_mercado_pago_checkout_context();
 
-        $protected_src_parts = [
-            '/wp-includes/js/dist/private-apis',
-            '/wp-includes/js/dist/data',
-            '/wp-includes/js/dist/data-controls',
-            '/wp-includes/js/dist/dom-ready',
-            '/wp-includes/js/dist/hooks',
-            '/wp-includes/js/dist/i18n',
-            '/wp-includes/js/dist/api-fetch',
-            '/wp-includes/js/dist/url',
-            '/wp-content/plugins/wordpress-seo/assets/js/dist/frontend-inspector',
-            '/wp-content/plugins/wordpress-seo-premium/assets/js/dist/frontend-inspector',
-        ];
+        if (!$is_catalog_context && !$is_checkout_context) {
+            return $tag;
+        }
+
+        $protected_handles = [];
+        $protected_src_parts = [];
+
+        if ($is_catalog_context) {
+            $protected_handles = array_merge($protected_handles, [
+                'wp-private-apis',
+                'wp-data',
+                'wp-data-controls',
+                'wp-dom-ready',
+                'wp-hooks',
+                'wp-i18n',
+                'wp-api-fetch',
+                'wp-url',
+            ]);
+
+            $protected_src_parts = array_merge($protected_src_parts, [
+                '/wp-includes/js/dist/private-apis',
+                '/wp-includes/js/dist/data',
+                '/wp-includes/js/dist/data-controls',
+                '/wp-includes/js/dist/dom-ready',
+                '/wp-includes/js/dist/hooks',
+                '/wp-includes/js/dist/i18n',
+                '/wp-includes/js/dist/api-fetch',
+                '/wp-includes/js/dist/url',
+                '/wp-content/plugins/wordpress-seo/assets/js/dist/frontend-inspector',
+                '/wp-content/plugins/wordpress-seo-premium/assets/js/dist/frontend-inspector',
+            ]);
+        }
+
+        if ($is_checkout_context) {
+            $protected_handles = array_merge($protected_handles, self::MERCADO_PAGO_CART_PAYMENT_SCRIPTS, [
+                self::MERCADO_PAGO_CUSTOM_CHECKOUT_SCRIPT,
+            ]);
+            $protected_src_parts = array_merge($protected_src_parts, self::get_mercado_pago_script_exclusions());
+        }
 
         $should_protect = in_array($handle, $protected_handles, true);
 
@@ -518,7 +627,7 @@ HTML;
             return $tag;
         }
 
-        return preg_replace('/^<script\b/', '<script nowprocket', $tag, 1) ?: $tag;
+        return preg_replace('/^<script\b/', '<script nowprocket data-no-defer="1" data-no-minify="1"', $tag, 1) ?: $tag;
     }
 
     private static function is_catalog_script_dependency_context(): bool
@@ -555,6 +664,51 @@ HTML;
             || (function_exists('is_checkout_pay_page') && is_checkout_pay_page())
             || (function_exists('is_add_payment_method_page') && is_add_payment_method_page())
             || (function_exists('get_query_var') && (bool) get_query_var('order-pay'));
+    }
+
+    private static function get_mercado_pago_script_exclusions(): array
+    {
+        return [
+            'wc_mercadopago',
+            'mercadopago',
+            'mercado-pago',
+            'MercadoPago',
+            'mp_checkout',
+            'mp-checkout',
+            'sdk.mercadopago.com',
+            'api.mercadopago.com',
+            'api.mercadolibre.com',
+            'mercadolibre.com',
+            'mlstatic.com',
+            'melidata',
+            '/woocommerce-mercadopago/',
+            '/plugins/woocommerce-mercadopago/',
+            'card_tokens',
+            'checkout_session',
+            'security_session',
+            'three_ds',
+            'threeDS',
+            '3ds',
+        ];
+    }
+
+    private static function get_mercado_pago_inline_script_exclusions(): array
+    {
+        return [
+            'wc_mercadopago',
+            'mercadopago',
+            'MercadoPago',
+            'MP_DEVICE_SESSION_ID',
+            'mp_checkout',
+            'mp-checkout',
+            'card_tokens',
+            'checkout_session',
+            'security_session',
+            'three_ds',
+            'threeDS',
+            '3ds',
+            'melidata',
+        ];
     }
 
     public static function register_rest_routes(): void
