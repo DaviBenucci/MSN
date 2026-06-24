@@ -174,6 +174,25 @@ Erro de console fora do checkout:
 - A correcao deve ser condicional: scripts de checkout do Mercado Pago so devem rodar onde existe checkout.
 - Nao desativar scripts do Mercado Pago globalmente sem testar pagamento, porque isso pode quebrar o gateway na finalizacao.
 
+Complemento de diagnostico em 2026-06-24:
+
+- O HTML publico do carrinho carregava `wc_mercadopago_custom_checkout-js` apontando para `mp-custom-checkout.min.js?ver=8.8.0`.
+- O carrinho nao contem `form[name=checkout]`, `.wc-block-components-form.wc-block-checkout__form` nem `form#order_review`, que sao os formularios buscados pelo script do Mercado Pago.
+- A bridge `msn-woocommerce-layout-bridge` passou a remover somente o handle `wc_mercadopago_custom_checkout` fora de contexto real de checkout/pagamento.
+- Contextos preservados: `is_checkout()`, `is_checkout_pay_page()`, `is_add_payment_method_page()` e `get_query_var('order-pay')`.
+- A primeira correcao nao removia SDK, sessao, health monitor, Pix, boleto, ticket, super token, metricas ou scripts antifraude do Mercado Pago.
+- Avisos de `_gcl_au`, `x-meli-session-id`, `OpaqueResponseBlocking`, fingerprint/WebGL, fonte e Content-Security-Policy foram classificados como navegador/terceiros, principalmente Google/Site Kit, Complianz e Mercado Pago/Mercado Livre. Eles devem ser tratados por configuracao dos respectivos plugins/servicos, nao por JavaScript visual do tema.
+
+Complemento de ajuste em 2026-06-24:
+
+- O carrinho ainda carregava scripts de checkout, SDK, sessao, metricas, super token e ticket do Mercado Pago mesmo sem formulario de pagamento ou botao de carteira visivel.
+- A bridge passou a remover esses handles adicionais somente no carrinho e somente fora dos contextos reais de checkout/pagamento preservados acima.
+- Esta remocao reduz avisos vindos de `security.js`, `local-and-session-storage.js`, cookies `x-meli-session-id`, WebGL e `OpaqueResponseBlocking` no carrinho.
+- Se a loja decidir ativar pagamento expresso/carteira Mercado Pago diretamente no carrinho, esta decisao deve ser revisada e homologada antes da publicacao.
+- O aviso do cookie `_gcl_au` foi reavaliado: o HTML publico mostra Site Kit, Google Listings & Ads, WP Consent API e Complianz ativos. O Complianz aparece com `cookie_domain` vazio, enquanto `www.msndistribuidora.com.br` nao resolve DNS.
+- A bridge passou a imprimir `gtag("set", "cookie_domain", "msndistribuidora.com.br")` cedo no `<head>`, antes dos `gtag("config")`, para evitar tentativa automatica de cookie em dominio invalido.
+- O ajuste nao altera o consentimento: categorias continuam sendo liberadas ou negadas por Site Kit, WP Consent API e Complianz.
+
 ## Checklist de homologacao
 
 - [ ] Produto adicionado ao carrinho.

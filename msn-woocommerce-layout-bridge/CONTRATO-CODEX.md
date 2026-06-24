@@ -20,6 +20,8 @@ Use:
 
 O renderer chama `MSNWooLayout.api.getProducts()` e monta cards no front-end.
 
+Se a URL atual tiver `?s=termo` ou `?search=termo`, o renderer aplica esse termo automaticamente quando o container nao define busca propria no `data-msn-query`.
+
 Campos principais por produto:
 
 ```js
@@ -66,6 +68,7 @@ O plugin atualiza texto, remove `hidden` e sincroniza apos eventos nativos do Wo
 ## Orientacao de implementacao
 
 - Header: usar busca nativa com `post_type=product`, links de conta/carrinho e contador `data-msn-cart-count`.
+- Header: manter o CSS das sections no Elementor; o plugin bridge fornece apenas CSS critico inicial contra carregamento sem formatacao.
 - Home: usar containers separados e `data-msn-products` para produtos em destaque.
 - Loja/categoria/busca: preferir Loop Grid Products, Products/Archive Products ou shortcode `[products]` quando precisar de query nativa completa.
 - Produto individual: usar widgets WooCommerce/Elementor para galeria, preco, estoque, variacoes e Add To Cart; complementar com `[msn_product_whatsapp]` e `[msn_product_data context="detail"]`.

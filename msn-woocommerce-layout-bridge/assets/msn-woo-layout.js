@@ -94,6 +94,27 @@
     }
   }
 
+  function getCurrentSearchTerm() {
+    const params = new URLSearchParams(window.location.search);
+    const term = params.get('search') || params.get('s') || '';
+    return term.trim();
+  }
+
+  function withCurrentSearch(query) {
+    const safeQuery = { ...(query || {}) };
+    const alreadyHasSearch = safeQuery.search || safeQuery.s || safeQuery.sku;
+
+    if (!alreadyHasSearch) {
+      const term = getCurrentSearchTerm();
+
+      if (term) {
+        safeQuery.search = term;
+      }
+    }
+
+    return safeQuery;
+  }
+
   function readInlineProductData(scope = document) {
     return Array.from(scope.querySelectorAll('.msn-product-data')).map((node) => {
       try {
@@ -247,7 +268,7 @@
   }
 
   async function renderProductContainer(container) {
-    const query = parseJsonAttribute(container, 'data-msn-query', {});
+    const query = withCurrentSearch(parseJsonAttribute(container, 'data-msn-query', {}));
     container.classList.add('msn-bridge-products', 'is-loading');
     container.classList.remove('has-error');
     container.setAttribute('aria-busy', 'true');
@@ -296,6 +317,7 @@
     helpers: {
       readInlineProductData,
       readProductCards,
+      getCurrentSearchTerm,
       refreshCartCount,
       renderProductContainers,
       renderProducts,

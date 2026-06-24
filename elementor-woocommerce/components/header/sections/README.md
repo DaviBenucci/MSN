@@ -21,6 +21,8 @@ O script do header aguarda o DOM e tambem observa reinjecoes do Elementor. Ele a
 
 O contador do carrinho depende do plugin `msn-woocommerce-layout-bridge` ativo.
 
+O plugin tambem imprime um CSS critico minimo do header no `<head>`. Essa camada evita FOUC/layout cru em primeiro acesso ou conexao lenta, mas nao substitui os arquivos `01-topbar.css`, `02-main.css` e `03-quickbar.css`, que continuam sendo a fonte do acabamento completo no Elementor.
+
 ## Responsividade mobile obrigatoria
 
 O header e area critica de mobile. Antes de aprovar qualquer alteracao, siga `../../../docs/MOBILE-FIRST-RESPONSIVIDADE.md` e valide:
@@ -43,6 +45,8 @@ A busca do header nao deve ser recriada manualmente no widget HTML. Ela deve usa
 Use o `02-main.html` como estrutura e coloque um unico widget **Shortcode** dentro do espaco com a classe `msn-header__search-slot`.
 
 O shortcode renderiza `get_product_search_form()` do WooCommerce, mantendo `post_type=product` e a compatibilidade com traducoes, tema e plugins. O arquivo `02-main.css` estiliza o formulario gerado pelo WooCommerce para desktop e mobile.
+
+Em vitrines `data-msn-products`, o plugin bridge tambem respeita `?s=termo` e `?search=termo` da URL. Assim, se uma pagina de busca usar renderer AJAX da MSN, os cards deixam de mostrar os mesmos produtos padrao e passam a consultar o termo pesquisado.
 
 Se estiver montando tudo com containers do Elementor, a ordem ideal no header principal e:
 

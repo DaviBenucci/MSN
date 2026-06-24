@@ -26,6 +26,8 @@ Cole um container HTML com:
 
 O JavaScript carrega `/wp-json/msn/v1/products` e renderiza cards com imagem, nome, SKU, preco, estoque e CTA seguro.
 
+Quando a URL atual possui `?s=termo` ou `?search=termo`, o renderer aplica esse termo automaticamente em containers `data-msn-products` que ainda nao definiram `search`, `s` ou `sku` no `data-msn-query`.
+
 ### CTAs retornados
 
 `actions.actionType` pode ser:
@@ -66,6 +68,7 @@ Exemplos:
 await window.MSNWooLayout.helpers.renderProductContainers();
 await window.MSNWooLayout.helpers.refreshCartCount();
 const products = await window.MSNWooLayout.api.getProducts({ per_page: 8, orderby: 'date' });
+const results = await window.MSNWooLayout.api.getProducts({ search: 'toner', per_page: 12 });
 ```
 
 `api.addToCart()` permanece disponivel como legado tecnico, mas nao e usado na Home v1. Compra customizada via JS fica fora do escopo inicial.
@@ -78,15 +81,31 @@ GET /wp-json/msn/v1/products
 GET /wp-json/msn/v1/product/{id}
 ```
 
+`/products` aceita filtros publicos como `category`, `tag`, `sku`, `search`, `s`, `orderby`, `order`, `featured`, `on_sale` e `stock_status`.
+
+## Carregamento critico
+
+O plugin imprime um CSS critico minimo do header no `<head>` para evitar que o primeiro carregamento exiba o cabecalho desmontado quando o CSS do Elementor/cache chegar tarde. O CSS completo das sections continua sendo necessario para o acabamento final.
+
+Em paginas de catalogo, a bridge tambem adiciona exclusoes pontuais ao filtro `rocket_delay_js_exclusions` do WP Rocket para dependencias WordPress usadas por WooCommerce/Elementor, como `wp-data`, `wp-api-fetch`, `wp-i18n` e seus inline `*-js-after`. Isso evita erros como `wp.data is undefined` quando o Delay JavaScript Execution reexecuta scripts apos um clique na quickbar.
+
+## Dominios de cookies Google
+
+O plugin imprime antes do Site Kit/Google Listings & Ads uma configuracao `gtag("set", "cookie_domain", "...")` baseada no dominio canonico do WordPress. Isso evita tentativas automaticas do Google tag em dominios invalidos como sufixos publicos ou `www` inexistente.
+
+No site MSN, o dominio first-party esperado para cookies Google e `msndistribuidora.com.br`. O Complianz continua responsavel por liberar ou negar as categorias de consentimento; esta configuracao apenas corrige o dominio quando o Google puder gravar cookies.
+
 ## Seguranca
 
 - Nao expoe chaves da REST API administrativa do WooCommerce.
 - Nao expoe pedidos, enderecos, telefone ou e-mail do usuario.
+- Nao expoe nome, sobrenome, nonce REST administrativo ou URL de logout com nonce no objeto global.
 - Expoe apenas dados publicos e uteis para layout.
 - Usa `wc_get_products()` para consultas de produto.
 - Usa Store API somente para dados do carrinho do cliente atual.
 - Usa `wp_create_nonce('wc_store_api')` para operacoes legadas de carrinho via Store API.
 - Valida e sanitiza parametros REST.
+- Codifica JSON injetado em `<script>` com flags HEX para reduzir risco de quebra de contexto.
 - Limita `per_page` a 24 produtos por requisicao.
 
 ## Regra de ouro

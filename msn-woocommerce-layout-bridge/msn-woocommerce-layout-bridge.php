@@ -2,7 +2,7 @@
 /**
  * Plugin Name: MSN WooCommerce Layout Bridge
  * Description: Camada segura de dados entre WooCommerce, Elementor e componentes HTML/CSS/JS da MSN Distribuidora.
- * Version: 1.1.1
+ * Version: 1.1.5
  * Author: MSN Distribuidora / Davi Benucci
  * Requires at least: 6.0
  * Requires PHP: 7.4
@@ -15,13 +15,41 @@ if (!defined('ABSPATH')) {
 
 final class MSN_WooCommerce_Layout_Bridge
 {
-    private const VERSION = '1.1.1';
+    private const VERSION = '1.1.5';
     private const REST_NAMESPACE = 'msn/v1';
+    private const MERCADO_PAGO_CUSTOM_CHECKOUT_SCRIPT = 'wc_mercadopago_custom_checkout';
+    private const MERCADO_PAGO_CART_PAYMENT_SCRIPTS = [
+        'wc_mercadopago_woocommerce_scripts',
+        'wc_mercadopago_health_monitor',
+        'wc_mercadopago_checkout_error_dispatcher',
+        'wc_mercadopago_checkout_fields_dispatcher',
+        'wc_mercadopago_checkout_session_data_register',
+        'wc_mercadopago_checkout_components',
+        'wc_mercadopago_checkout_update',
+        'wc_mercadopago_checkout_metrics',
+        'wc_mercadopago_sdk_metrics',
+        'wc_mercadopago_security_session',
+        'wc_mercadopago_sdk',
+        'wc_mercadopago_custom_card_form',
+        'wc_mercadopago_custom_three_ds_handler',
+        'wc_mercadopago_custom_mobile_checkout_classic_observer',
+        'wc_mercadopago_custom_event_handler',
+        'wc_mercadopago_custom_page',
+        'wc_mercadopago_custom_elements',
+        'wc_mercadopago_supertoken',
+        'wc_mercadopago_ticket_page',
+        'wc_mercadopago_ticket_elements',
+        'wc_mercadopago_ticket_checkout',
+    ];
 
     public static function init(): void
     {
         add_action('wp_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+        add_action('wp_enqueue_scripts', [__CLASS__, 'dequeue_mercado_pago_scripts_outside_checkout'], 100);
+        add_action('wp_head', [__CLASS__, 'print_critical_header_css'], 1);
+        add_action('wp_head', [__CLASS__, 'print_google_cookie_domain_config'], 2);
         add_action('rest_api_init', [__CLASS__, 'register_rest_routes']);
+        add_filter('rocket_delay_js_exclusions', [__CLASS__, 'exclude_catalog_wp_dependencies_from_rocket_delay']);
 
         add_shortcode('msn_product_data', [__CLASS__, 'shortcode_product_data']);
         add_shortcode('msn_product_card', [__CLASS__, 'shortcode_product_card']);
@@ -59,9 +87,153 @@ final class MSN_WooCommerce_Layout_Bridge
 
         wp_add_inline_script(
             'msn-woo-layout-bridge',
-            'window.MSNWoo = ' . wp_json_encode(self::get_bootstrap_data(false)) . ';',
+            'window.MSNWoo = ' . self::json_encode_for_script(self::get_bootstrap_data(false)) . ';',
             'before'
         );
+    }
+
+    public static function print_critical_header_css(): void
+    {
+        echo <<<'HTML'
+<style id="msn-woo-layout-critical-header">
+:root{--msn-primary:#0f3d5e;--msn-primary-dark:#082f49;--msn-primary-soft:#eaf4ff;--msn-accent:#0ea5e9;--msn-success:#10b981;--msn-bg:#f4f7fa;--msn-bg-soft:#eef6fb;--msn-surface:#fff;--msn-surface-alt:#f8fafc;--msn-text:#111827;--msn-muted:#64748b;--msn-border:#dbe7f0;--msn-border-strong:#bfdbfe;--msn-radius:8px;--msn-font-sans:Inter,Roboto,Arial,sans-serif;--msn-font-display:Poppins,Montserrat,Inter,Roboto,Arial,sans-serif}
+.msn-header{position:sticky;top:0;z-index:999;width:100%;max-width:100%;border-bottom:1px solid var(--msn-border,#dbe7f0);background:rgba(255,255,255,.96);color:var(--msn-text,#111827);box-shadow:0 1px 0 rgba(15,23,42,.03);container:msn-header/inline-size}
+.msn-header,.msn-header *{box-sizing:border-box;min-width:0}
+.msn-header__topbar{display:flex;max-width:100%;align-items:center;justify-content:center;gap:16px;overflow:hidden;background:var(--msn-primary-dark,#082f49);color:#fff;padding:7px 16px;font:850 .78rem/1.2 var(--msn-font-sans,Arial,sans-serif);white-space:nowrap}
+.msn-header__topbar span,.msn-header__topbar a{display:inline-flex;align-items:center;gap:8px;color:#fff!important;text-decoration:none!important}
+.msn-header__main{display:grid!important;grid-template-areas:"brand search actions";grid-template-columns:minmax(190px,270px) minmax(220px,1fr) auto;align-items:center;gap:clamp(12px,1.7vw,24px);width:min(calc(100% - 32px),1180px);max-width:1180px;margin-inline:auto;padding-block:12px}
+.msn-header__logo{grid-area:brand;display:inline-flex;align-items:center;gap:12px;color:var(--msn-primary,#0f3d5e);text-decoration:none}
+.msn-header__logo img{width:74px;height:auto;flex:0 0 auto;object-fit:contain}
+.msn-header__logo span{display:block;min-width:0}
+.msn-header__logo strong,.msn-header__logo small{display:block;line-height:1.15}
+.msn-header__logo strong{font-family:var(--msn-font-display,Arial,sans-serif);font-size:1rem;font-weight:950;letter-spacing:0}
+.msn-header__logo small{margin-top:3px;color:var(--msn-muted,#64748b);font-size:.76rem;font-weight:800}
+.msn-header__search-slot{grid-area:search;display:grid;width:100%;min-width:0;max-width:100%;gap:6px;justify-self:stretch}
+.msn-header__search-kicker{color:var(--msn-muted,#64748b);font-size:.72rem;font-weight:900;letter-spacing:0;text-transform:uppercase}
+.msn-header__search,.msn-header__search-slot .woocommerce-product-search,.msn-header__search-slot .wp-block-search__inside-wrapper,.msn-header__search-slot form.woocommerce-product-search{display:flex!important;flex-direction:row!important;width:100%;min-width:0;min-height:46px;align-items:stretch;overflow:hidden;border:1px solid var(--msn-border,#dbe7f0);border-radius:999px;background:var(--msn-surface,#fff);box-shadow:inset 0 1px 2px rgba(15,23,42,.04)}
+.msn-header__search-slot:not(:has(input[type="search"]))::after{content:"";display:block;width:100%;min-height:46px;border:1px solid var(--msn-border,#dbe7f0);border-radius:999px;background:linear-gradient(90deg,var(--msn-surface,#fff) 0%,var(--msn-bg-soft,#eef6fb) 48%,var(--msn-surface,#fff) 100%)}
+.msn-header__search input,.msn-header__search-slot .search-field,.msn-header__search-slot .wp-block-search__input,.msn-header__search-slot input[type="search"]{width:0;min-width:0;min-height:46px;flex:1 1 0%;border:0!important;background:transparent!important;color:var(--msn-text,#111827)!important;padding:0 18px;box-shadow:none!important;font:inherit;outline:0;appearance:none}
+.msn-header__search button,.msn-header__search-slot .wp-block-search__button,.msn-header__search-slot button,.msn-header__search-slot input[type="submit"]{display:inline-flex!important;min-width:clamp(88px,9vw,108px);min-height:46px;align-items:center;justify-content:center;border:0!important;border-radius:0!important;background:var(--msn-primary,#0f3d5e)!important;color:#fff!important;padding:0 clamp(14px,1.6vw,20px)!important;box-shadow:none!important;font-size:.92rem;font-weight:950;line-height:1;text-decoration:none!important;white-space:nowrap;cursor:pointer;appearance:none}
+.msn-header__actions{grid-area:actions;display:flex;align-items:center;justify-content:flex-end;gap:8px}
+.msn-header__action-link{display:inline-flex;min-height:42px;align-items:center;justify-content:center;gap:8px;border:1px solid var(--msn-border,#dbe7f0);border-radius:999px;background:var(--msn-surface,#fff);color:var(--msn-text,#111827);padding:0 13px;font-size:.86rem;font-weight:900;text-decoration:none}
+.msn-header__action-icon{display:inline-grid;width:22px;height:22px;place-items:center;border-radius:999px;background:var(--msn-primary-soft,#eaf4ff);color:var(--msn-primary,#0f3d5e);font-size:.7rem;font-weight:950;line-height:1}
+.msn-header__cart{position:relative}.msn-header__cart-icon{display:block;width:19px;height:19px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}.msn-header__cart-count{display:inline-grid;min-width:21px;height:21px;place-items:center;border-radius:999px;background:var(--msn-primary,#0f3d5e);color:#fff;font-size:.72rem;font-weight:950;line-height:1}.msn-header__cart-count[hidden]{display:none}
+.msn-header__quickbar{display:flex!important;width:100%;max-width:100%;align-items:center;justify-content:center;gap:8px;overflow:hidden;border-top:1px solid var(--msn-border,#dbe7f0);background:var(--msn-surface-alt,#f8fafc);padding:8px 16px}
+.msn-header__quickbar a{display:inline-flex;min-height:34px;align-items:center;justify-content:center;border:1px solid transparent;border-radius:999px;color:var(--msn-text,#111827)!important;padding:0 12px;font-size:.86rem;font-weight:850;line-height:1.1;text-decoration:none!important;white-space:nowrap}
+.msn-header__quickbar-label--short,.msn-header__quickbar-mobile-only{display:none!important}
+@media (max-width:1200px){.msn-header__main{grid-template-areas:"brand actions" "search search";grid-template-columns:minmax(0,1fr) auto;gap:10px 14px}.msn-header__action-link:not(.msn-header__cart){display:none!important}.msn-header__cart{display:inline-flex!important;width:46px;height:46px;padding:0;border-radius:var(--msn-radius,8px)}.msn-header__cart-label{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.msn-header__quickbar{justify-content:flex-start;overflow-x:auto;overflow-y:hidden;padding:8px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.msn-header__quickbar::-webkit-scrollbar{display:none}.msn-header__quickbar a{min-height:36px;flex:0 0 auto;border-color:var(--msn-border,#dbe7f0);background:var(--msn-surface,#fff);font-size:.82rem}}
+@media (max-width:1024px){.msn-header__main{width:min(calc(100% - 24px),1180px);gap:10px 12px;padding-block:9px}.msn-header__logo{gap:10px}.msn-header__logo img{width:62px}.msn-header__logo strong{font-size:.92rem}.msn-header__logo small{font-size:.72rem}.msn-header__cart{width:44px;height:44px}.msn-header__cart-count{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;border:2px solid var(--msn-surface,#fff);font-size:.68rem}.msn-header__search-kicker{display:none}.msn-header__search,.msn-header__search-slot .woocommerce-product-search,.msn-header__search-slot .wp-block-search__inside-wrapper,.msn-header__search-slot form.woocommerce-product-search{min-height:42px;max-height:42px}.msn-header__search-slot:not(:has(input[type="search"]))::after{min-height:42px;max-height:42px}.msn-header__search input,.msn-header__search-slot .search-field,.msn-header__search-slot .wp-block-search__input,.msn-header__search-slot input[type="search"]{min-height:42px;padding-inline:14px}.msn-header__search button,.msn-header__search-slot .wp-block-search__button,.msn-header__search-slot button,.msn-header__search-slot input[type="submit"]{min-width:86px;min-height:42px;padding-inline:14px!important;font-size:.86rem}}
+@media (max-width:640px){.msn-header__quickbar-mobile-hide{display:none!important}.msn-header__quickbar-mobile-only{display:inline-flex!important}.msn-header__quickbar-label{display:none}.msn-header__quickbar-label--short{display:inline!important}}
+@media (max-width:520px){.msn-header__main{width:min(calc(100% - 20px),1180px);gap:8px 10px}.msn-header__logo{gap:8px}.msn-header__logo img{width:56px}.msn-header__logo strong{font-size:.88rem}.msn-header__logo small{display:none}.msn-header__search-slot{justify-items:stretch}.msn-header__search-slot .elementor-widget,.msn-header__search-slot .elementor-widget-container,.msn-header__search-slot .msn-product-search-slot{width:100%;max-width:100%}.msn-header__topbar span:nth-of-type(n+2){display:none}}
+@media (max-width:420px){.msn-header__search input,.msn-header__search-slot .search-field,.msn-header__search-slot .wp-block-search__input,.msn-header__search-slot input[type="search"]{padding-inline:12px}.msn-header__search button,.msn-header__search-slot .wp-block-search__button,.msn-header__search-slot button,.msn-header__search-slot input[type="submit"]{min-width:78px;padding-inline:12px!important}}
+</style>
+HTML;
+    }
+
+    public static function print_google_cookie_domain_config(): void
+    {
+        $cookie_domain = self::get_first_party_cookie_domain();
+
+        if ($cookie_domain === '') {
+            return;
+        }
+
+        echo '<script id="msn-google-cookie-domain-config">';
+        echo 'window.dataLayer=window.dataLayer||[];';
+        echo 'function gtag(){window.dataLayer.push(arguments);}';
+        echo 'gtag("set","cookie_domain",' . self::json_encode_for_script($cookie_domain) . ');';
+        echo 'gtag("set","linker",{"domains":[' . self::json_encode_for_script($cookie_domain) . ']});';
+        echo '</script>';
+    }
+
+    private static function get_first_party_cookie_domain(): string
+    {
+        $host = wp_parse_url(home_url('/'), PHP_URL_HOST);
+
+        if (!is_string($host) || $host === '') {
+            return '';
+        }
+
+        $host = strtolower(trim($host));
+        $host = preg_replace('/^www\./', '', $host);
+
+        if (!is_string($host) || $host === '' || strpos($host, '.') === false) {
+            return '';
+        }
+
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            return '';
+        }
+
+        return sanitize_text_field($host);
+    }
+
+    public static function exclude_catalog_wp_dependencies_from_rocket_delay($exclusions): array
+    {
+        if (!is_array($exclusions)) {
+            $exclusions = [];
+        }
+
+        if (!self::is_catalog_script_dependency_context()) {
+            return $exclusions;
+        }
+
+        $required_exclusions = [
+            '/wp-includes/js/dist/data',
+            '/wp-includes/js/dist/dom-ready',
+            '/wp-includes/js/dist/hooks',
+            '/wp-includes/js/dist/i18n',
+            '/wp-includes/js/dist/api-fetch',
+            '/wp-includes/js/dist/url',
+            'wp-data-js-after',
+            'wp.data.use',
+            'wp.apiFetch.use',
+            'wp.i18n.setLocaleData',
+        ];
+
+        foreach ($required_exclusions as $required_exclusion) {
+            if (!in_array($required_exclusion, $exclusions, true)) {
+                $exclusions[] = $required_exclusion;
+            }
+        }
+
+        return $exclusions;
+    }
+
+    private static function is_catalog_script_dependency_context(): bool
+    {
+        return (function_exists('is_shop') && is_shop())
+            || (function_exists('is_product_category') && is_product_category())
+            || (function_exists('is_product_tag') && is_product_tag())
+            || (function_exists('is_product_taxonomy') && is_product_taxonomy())
+            || (function_exists('is_search') && is_search() && get_query_var('post_type') === 'product');
+    }
+
+    public static function dequeue_mercado_pago_scripts_outside_checkout(): void
+    {
+        if (self::is_mercado_pago_checkout_context()) {
+            return;
+        }
+
+        $script_handles = [self::MERCADO_PAGO_CUSTOM_CHECKOUT_SCRIPT];
+
+        if (function_exists('is_cart') && is_cart()) {
+            $script_handles = array_merge($script_handles, self::MERCADO_PAGO_CART_PAYMENT_SCRIPTS);
+        }
+
+        foreach (array_unique($script_handles) as $script_handle) {
+            if (wp_script_is($script_handle, 'enqueued')) {
+                wp_dequeue_script($script_handle);
+            }
+        }
+    }
+
+    private static function is_mercado_pago_checkout_context(): bool
+    {
+        return (function_exists('is_checkout') && is_checkout())
+            || (function_exists('is_checkout_pay_page') && is_checkout_pay_page())
+            || (function_exists('is_add_payment_method_page') && is_add_payment_method_page())
+            || (function_exists('get_query_var') && (bool) get_query_var('order-pay'));
     }
 
     public static function register_rest_routes(): void
@@ -92,6 +264,12 @@ final class MSN_WooCommerce_Layout_Bridge
                     'sanitize_callback' => 'sanitize_title',
                 ],
                 'sku' => [
+                    'sanitize_callback' => 'sanitize_text_field',
+                ],
+                'search' => [
+                    'sanitize_callback' => 'sanitize_text_field',
+                ],
+                's' => [
                     'sanitize_callback' => 'sanitize_text_field',
                 ],
                 'orderby' => [
@@ -137,6 +315,13 @@ final class MSN_WooCommerce_Layout_Bridge
         return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 
+    private static function json_encode_for_script($data): string
+    {
+        $json = wp_json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+
+        return is_string($json) ? $json : 'null';
+    }
+
     public static function rest_bootstrap(WP_REST_Request $request): WP_REST_Response
     {
         return rest_ensure_response(self::get_bootstrap_data(true));
@@ -176,6 +361,12 @@ final class MSN_WooCommerce_Layout_Bridge
         $sku = sanitize_text_field((string) $request->get_param('sku'));
         if ($sku !== '') {
             $args['sku'] = $sku;
+        }
+
+        $search = sanitize_text_field((string) ($request->get_param('search') ?: $request->get_param('s')));
+        if ($search !== '') {
+            $args['search'] = $search;
+            $args['s'] = $search;
         }
 
         if (self::sanitize_bool($request->get_param('featured'))) {
@@ -239,7 +430,6 @@ final class MSN_WooCommerce_Layout_Bridge
             'version' => self::VERSION,
             'rest'    => [
                 'base'          => esc_url_raw(rest_url(self::REST_NAMESPACE . '/')),
-                'nonce'         => wp_create_nonce('wp_rest'),
                 'storeApiBase'  => esc_url_raw(rest_url('wc/store/v1/')),
                 'storeApiNonce' => wp_create_nonce('wc_store_api'),
             ],
@@ -309,8 +499,7 @@ final class MSN_WooCommerce_Layout_Bridge
 
         return [
             'isLoggedIn'  => true,
-            'displayName' => sanitize_text_field($user->display_name),
-            'firstName'   => sanitize_text_field($user->first_name),
+            'displayName' => '',
             'accountUrls' => self::get_account_urls(),
         ];
     }
@@ -330,7 +519,6 @@ final class MSN_WooCommerce_Layout_Bridge
             'editAddress'   => esc_url_raw(wc_get_endpoint_url('edit-address', '', $myaccount)),
             'editAccount'   => esc_url_raw(wc_get_endpoint_url('edit-account', '', $myaccount)),
             'lostPassword'  => esc_url_raw(wp_lostpassword_url()),
-            'logout'        => esc_url_raw(wc_logout_url()),
         ];
     }
 
@@ -386,13 +574,15 @@ final class MSN_WooCommerce_Layout_Bridge
         $categories = [];
 
         foreach ($terms as $term) {
+            $term_link = get_term_link($term);
+
             $categories[] = [
                 'id'     => absint($term->term_id),
                 'name'   => sanitize_text_field($term->name),
                 'slug'   => sanitize_title($term->slug),
                 'count'  => absint($term->count),
                 'parent' => absint($term->parent),
-                'url'    => esc_url_raw(get_term_link($term)),
+                'url'    => is_wp_error($term_link) ? '' : esc_url_raw($term_link),
             ];
         }
 
@@ -614,11 +804,13 @@ final class MSN_WooCommerce_Layout_Bridge
         }
 
         return array_values(array_map(static function ($term): array {
+            $term_link = get_term_link($term);
+
             return [
                 'id'   => absint($term->term_id),
                 'name' => sanitize_text_field($term->name),
                 'slug' => sanitize_title($term->slug),
-                'url'  => esc_url_raw(get_term_link($term)),
+                'url'  => is_wp_error($term_link) ? '' : esc_url_raw($term_link),
             ];
         }, $terms));
     }
@@ -710,7 +902,11 @@ final class MSN_WooCommerce_Layout_Bridge
         $context = $atts['context'] === 'detail' ? 'detail' : 'card';
         $data = self::product_to_layout_data($product, $context);
 
-        return '<script type="application/json" class="msn-product-data" data-product-id="' . esc_attr($product->get_id()) . '">' . wp_json_encode($data) . '</script>';
+        if (!is_array($data)) {
+            return '<script type="application/json" class="msn-product-data">{}</script>';
+        }
+
+        return '<script type="application/json" class="msn-product-data" data-product-id="' . esc_attr($product->get_id()) . '">' . self::json_encode_for_script($data) . '</script>';
     }
 
     public static function shortcode_product_card($atts): string
@@ -727,6 +923,10 @@ final class MSN_WooCommerce_Layout_Bridge
 
         $data = self::product_to_layout_data($product, 'card');
 
+        if (!is_array($data)) {
+            return '<!-- MSN: produto nao publicado ou indisponivel -->';
+        }
+
         ob_start();
         ?>
         <?php
@@ -737,7 +937,7 @@ final class MSN_WooCommerce_Layout_Bridge
             $button_classes .= ' ajax_add_to_cart add_to_cart_button';
         }
         ?>
-        <article class="msn-product-card msn-bridge-product-card" data-msn-product='<?php echo esc_attr(wp_json_encode($data)); ?>'>
+        <article class="msn-product-card msn-bridge-product-card" data-msn-product='<?php echo esc_attr(self::json_encode_for_script($data)); ?>'>
             <a class="msn-product-card__image-link" href="<?php echo esc_url($data['permalink']); ?>">
                 <img class="msn-product-card__image" src="<?php echo esc_url($data['image']['src']); ?>" alt="<?php echo esc_attr($data['image']['alt'] ?: $data['name']); ?>" loading="lazy">
             </a>
@@ -833,7 +1033,7 @@ final class MSN_WooCommerce_Layout_Bridge
             return '<!-- MSN: informe o telefone no shortcode msn_product_whatsapp -->';
         }
 
-        $message = 'Olá! Gostaria de confirmar a compatibilidade deste produto: ' . $product->get_name();
+        $message = 'Olá! Gostaria de confirmar a compatibilidade deste produto: ' . wp_strip_all_tags($product->get_name());
 
         if ($product->get_sku()) {
             $message .= ' | SKU: ' . $product->get_sku();

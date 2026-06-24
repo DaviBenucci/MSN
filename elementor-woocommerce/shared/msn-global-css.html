@@ -516,73 +516,6 @@ body.msn-lock-scroll {
 	border-bottom-color: var(--msn-surface-alt);
 }
 
-.cmplz-cookiebanner,
-#cmplz-cookiebanner-container .cmplz-cookiebanner {
-	position: fixed !important;
-	inset: auto 16px max(12px, env(safe-area-inset-bottom)) 16px !important;
-	z-index: 9998 !important;
-	left: 16px !important;
-	right: 16px !important;
-	bottom: max(12px, env(safe-area-inset-bottom)) !important;
-	width: min(1120px, calc(100vw - 32px)) !important;
-	max-width: calc(100vw - 32px) !important;
-	max-height: min(34vh, 230px) !important;
-	margin-inline: auto !important;
-	overflow-y: auto !important;
-	border: 1px solid var(--msn-border) !important;
-	border-radius: var(--msn-radius) !important;
-	background: color-mix(in srgb, var(--msn-surface) 96%, transparent) !important;
-	color: var(--msn-text) !important;
-	padding: 14px 16px !important;
-	box-shadow: 0 16px 42px rgba(15, 23, 42, 0.16) !important;
-	backdrop-filter: blur(14px);
-}
-
-.cmplz-cookiebanner .cmplz-header,
-.cmplz-cookiebanner .cmplz-body,
-.cmplz-cookiebanner .cmplz-buttons,
-.cmplz-cookiebanner .cmplz-links {
-	max-width: 100% !important;
-}
-
-.cmplz-cookiebanner .cmplz-title {
-	color: var(--msn-primary) !important;
-	font-family: var(--msn-font-display);
-	font-size: 1rem !important;
-	line-height: 1.2 !important;
-}
-
-.cmplz-cookiebanner .cmplz-message,
-.cmplz-cookiebanner .cmplz-categories,
-.cmplz-cookiebanner .cmplz-links {
-	color: var(--msn-text) !important;
-	font-size: 0.88rem !important;
-	line-height: 1.5 !important;
-}
-
-.cmplz-cookiebanner .cmplz-buttons {
-	display: flex !important;
-	flex-wrap: wrap !important;
-	gap: 8px !important;
-	margin-top: 10px !important;
-}
-
-.cmplz-cookiebanner .cmplz-buttons .cmplz-btn {
-	min-height: 40px !important;
-	flex: 1 1 140px !important;
-	border-radius: var(--msn-radius) !important;
-	font-weight: 850 !important;
-	line-height: 1.15 !important;
-	white-space: normal !important;
-}
-
-body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-checkout,
-body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-cart,
-body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-account,
-body:has(.cmplz-cookiebanner.cmplz-show).single-product {
-	padding-bottom: clamp(118px, 20vh, 180px);
-}
-
 @media (max-width: 1024px) {
 	.msn-grid--4,
 	.woocommerce ul.products {
@@ -613,24 +546,6 @@ body:has(.cmplz-cookiebanner.cmplz-show).single-product {
 
 	.msn-button {
 		width: 100%;
-	}
-
-	.cmplz-cookiebanner,
-	#cmplz-cookiebanner-container .cmplz-cookiebanner {
-		inset: auto 10px max(10px, env(safe-area-inset-bottom)) 10px !important;
-		left: 10px !important;
-		right: 10px !important;
-		width: calc(100vw - 20px) !important;
-		max-width: calc(100vw - 20px) !important;
-		max-height: min(42vh, 300px) !important;
-		padding: 12px !important;
-	}
-
-	body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-checkout,
-	body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-cart,
-	body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-account,
-	body:has(.cmplz-cookiebanner.cmplz-show).single-product {
-		padding-bottom: clamp(150px, 44vh, 320px);
 	}
 }
 

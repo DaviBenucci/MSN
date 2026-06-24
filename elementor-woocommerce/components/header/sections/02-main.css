@@ -398,12 +398,12 @@
         display: none;
     }
     .msn-header__search-slot {
-        justify-items: center;
+        justify-items: stretch;
     }
     .msn-header__search-slot .elementor-widget,
     .msn-header__search-slot .elementor-widget-container,
     .msn-header__search-slot .msn-product-search-slot {
-        width: min(100%, 360px);
+        width: 100%;
         max-width: 100%;
     }
 }
@@ -581,12 +581,12 @@
         display: none;
     }
     .msn-header__search-slot {
-        justify-items: center;
+        justify-items: stretch;
     }
     .msn-header__search-slot .elementor-widget,
     .msn-header__search-slot .elementor-widget-container,
     .msn-header__search-slot .msn-product-search-slot {
-        width: min(100%, 360px);
+        width: 100%;
         max-width: 100%;
     }
 }
