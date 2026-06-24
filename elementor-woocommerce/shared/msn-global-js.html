@@ -123,10 +123,66 @@
       }, 250);
     }
 
-    var mobilePaymentPanelMedia = window.matchMedia ? window.matchMedia("(max-width: 640px)") : null;
+    function onlyDigits(value) {
+      return String(value || "").replace(/\D+/g, "");
+    }
+
+    function formatCpf(value) {
+      var digits = onlyDigits(value).slice(0, 11);
+      if (digits.length <= 3) return digits;
+      if (digits.length <= 6) return digits.replace(/(\d{3})(\d+)/, "$1.$2");
+      if (digits.length <= 9) return digits.replace(/(\d{3})(\d{3})(\d+)/, "$1.$2.$3");
+      return digits.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+    }
+
+    function formatBrazilPhone(value) {
+      var digits = onlyDigits(value).slice(0, 11);
+      if (digits.length <= 2) return digits;
+      if (digits.length <= 6) return digits.replace(/(\d{2})(\d+)/, "($1) $2");
+      if (digits.length <= 10) return digits.replace(/(\d{2})(\d{4})(\d+)/, "($1) $2-$3");
+      return digits.replace(/(\d{2})(\d{5})(\d+)/, "($1) $2-$3");
+    }
+
+    function bindCheckoutInputFormatter(input, formatter) {
+      if (!input || input.dataset.msnCheckoutFormatter === "true") return;
+      input.dataset.msnCheckoutFormatter = "true";
+
+      input.addEventListener("input", function () {
+        var start = input.selectionStart;
+        var beforeLength = input.value.length;
+        input.value = formatter(input.value);
+
+        if (typeof start === "number" && document.activeElement === input) {
+          var diff = input.value.length - beforeLength;
+          var next = Math.max(0, start + diff);
+          input.setSelectionRange(next, next);
+        }
+      });
+
+      input.value = formatter(input.value);
+    }
+
+    function formatCheckoutIdentityFields(scope) {
+      var root = scope && scope.querySelectorAll ? scope : document;
+      Array.prototype.slice.call(root.querySelectorAll('input[name="billing_cpf"], #billing_cpf')).forEach(function (input) {
+        bindCheckoutInputFormatter(input, formatCpf);
+      });
+      Array.prototype.slice.call(root.querySelectorAll('input[name="billing_phone"], #billing_phone')).forEach(function (input) {
+        bindCheckoutInputFormatter(input, formatBrazilPhone);
+      });
+    }
+
+    function scheduleCheckoutIdentityFields(scope) {
+      formatCheckoutIdentityFields(scope);
+      window.setTimeout(function () {
+        formatCheckoutIdentityFields(scope);
+      }, 250);
+    }
+
+    var mobilePaymentPanelMedia = window.matchMedia ? window.matchMedia("(max-width: 768px)") : null;
 
     function isMobilePaymentPanelLayout() {
-      return mobilePaymentPanelMedia ? mobilePaymentPanelMedia.matches : window.innerWidth <= 640;
+      return mobilePaymentPanelMedia ? mobilePaymentPanelMedia.matches : window.innerWidth <= 768;
     }
 
     function directPaymentRadio(method) {
@@ -200,10 +256,12 @@
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", function () {
         scheduleMercadoPagoCpfOnly(document);
+        scheduleCheckoutIdentityFields(document);
         scheduleCheckoutPaymentPanels(document);
       });
     } else {
       scheduleMercadoPagoCpfOnly(document);
+      scheduleCheckoutIdentityFields(document);
       scheduleCheckoutPaymentPanels(document);
     }
 
@@ -219,6 +277,7 @@
         "updated_checkout payment_method_selected checkout_error",
         function () {
           scheduleMercadoPagoCpfOnly(document);
+          scheduleCheckoutIdentityFields(document);
           scheduleCheckoutPaymentPanels(document);
         }
       );
@@ -240,6 +299,7 @@
     if (paymentRoot && window.MutationObserver) {
       new MutationObserver(function () {
         scheduleMercadoPagoCpfOnly(paymentRoot);
+        scheduleCheckoutIdentityFields(paymentRoot);
         scheduleCheckoutPaymentPanels(paymentRoot);
       }).observe(paymentRoot, { childList: true, subtree: true });
     }
@@ -249,6 +309,7 @@
       lockScroll: lockScroll,
       trapFocus: trapFocus,
       enforceMercadoPagoCpfOnly: enforceMercadoPagoCpfOnly,
+      formatCheckoutIdentityFields: formatCheckoutIdentityFields,
       syncCheckoutPaymentPanels: syncCheckoutPaymentPanels
     };
   })();

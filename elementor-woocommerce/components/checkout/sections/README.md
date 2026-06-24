@@ -60,7 +60,8 @@ CPF, CNPJ e telefone precisam ser campos reais do WooCommerce. Nao crie esses ca
 Para resolver o fluxo de pagamento no Brasil:
 
 - Mantenha o checkout nativo em `msn-checkout-woo-slot`.
-- Use plugin de campos brasileiros ou snippet PHP controlado para adicionar `billing_persontype`, `billing_cpf`, `billing_cnpj` e tornar `billing_phone` obrigatorio.
+- Use a bridge `msn-woocommerce-layout-bridge` para tornar `billing_phone` obrigatorio e adicionar o campo real `billing_cpf`, com validacao, salvamento no pedido e leitura pelo Mercado Pago.
+- Se Pessoa juridica/CNPJ for necessario no futuro, adicione `billing_persontype` e `billing_cnpj` como campos reais do WooCommerce seguindo o mesmo padrao da bridge.
 - Depois de configurar a conta Mercado Pago, teste em modo teste com Pessoa fisica e Pessoa juridica.
 - Se o JS do Mercado Pago aparecer em paginas sem checkout, trate como carregamento indevido de script, sem desativar o gateway no checkout.
 

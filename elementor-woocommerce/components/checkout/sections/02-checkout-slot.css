@@ -57,7 +57,7 @@
 	}
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
 	.msn-checkout-content {
 		padding-top: 8px;
 	}
