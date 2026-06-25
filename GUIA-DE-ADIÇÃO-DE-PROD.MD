@@ -1,4 +1,4 @@
-Sim, isso não só é perfeitamente possível como é a **melhor forma de estruturar automações**. A sua lógica de organizar por pastas utilizando o código do produto é o padrão ouro para não se perder no cadastro de e-commerces volumosos.
+# Sim, isso não só é perfeitamente possível como é a **melhor forma de estruturar automações**. A sua lógica de organizar por pastas utilizando o código do produto é o padrão ouro para não se perder no cadastro de e-commerces volumosos
 
 Nós vamos criar um script que faz exatamente o que você descreveu: ele entra na sua pasta de extração, lê o código do produto, acha a imagem, recorta o fundo, centraliza em um quadrado branco perfeito de 800x800 e salva já em formato **WebP** lá no seu Desktop, dentro de `msn/products/[código do produto]`.
 
@@ -6,7 +6,7 @@ Aqui está o passo a passo de como vamos colocar isso para rodar.
 
 ---
 
-### Passo 1: Instalar as Bibliotecas
+## Passo 1: Instalar as Bibliotecas
 
 Abra o **Terminal** (ou Prompt de Comando/CMD no Windows) e digite o seguinte comando para instalar a Inteligência Artificial que remove fundos e a biblioteca de manipulação de imagens:
 
@@ -17,7 +17,7 @@ pip install rembg pillow
 
 *(Nota: O primeiro download do `rembg` pode demorar um pouquinho, pois ele baixa o modelo de IA treinado para reconhecer os objetos).*
 
-### Passo 2: O Script de Automação
+## Passo 2: O Script de Automação
 
 Abra o seu editor de código (ou o Bloco de Notas), copie o código abaixo e salve-o com o nome `otimizador_imagens.py`.
 
@@ -97,7 +97,7 @@ print("\n🚀 Processamento totalmente concluído!")
 
 ```
 
-### Passo 3: Como utilizar
+## Passo 3: Como utilizar
 
 1. No script acima, encontre a linha `pasta_origem = r"C:\Caminho\Para\Sua\Pasta\Produtos_Brutos"` e substitua pelo endereço real de onde você extrai as pastas do Icecat.
 2. Abra o terminal na mesma pasta onde você salvou o script.
@@ -105,9 +105,3 @@ print("\n🚀 Processamento totalmente concluído!")
 4. O script fará todo o trabalho sozinho e as pastas prontas mágicamente aparecerão no seu Desktop.
 
 ---
-
-Se quiser um fundo totalmente transparente modifique;
-
-`# 4. Cria um fundo quadrado TOTALMENTE TRANSPARENTE (800x800)`
-
-`fundo_branco = Image.new('RGBA', TAMANHO_FINAL, (255, 255, 255, 0))`

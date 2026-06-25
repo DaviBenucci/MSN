@@ -1,0 +1,5 @@
+rembg[cpu]
+pillow
+requests
+pywin32
+openpyxl
