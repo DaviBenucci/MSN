@@ -192,6 +192,13 @@ Complemento de ajuste em 2026-06-24:
 - O aviso do cookie `_gcl_au` foi reavaliado: o HTML publico mostra Site Kit, Google Listings & Ads, WP Consent API e Complianz ativos. O Complianz aparece com `cookie_domain` vazio, enquanto `www.msndistribuidora.com.br` nao resolve DNS.
 - A bridge passou a imprimir `gtag("set", "cookie_domain", "msndistribuidora.com.br")` cedo no `<head>`, antes dos `gtag("config")`, para evitar tentativa automatica de cookie em dominio invalido.
 - O ajuste nao altera o consentimento: categorias continuam sendo liberadas ou negadas por Site Kit, WP Consent API e Complianz.
+- O campo `Documento do titular` do Mercado Pago passou a manter o tipo `CPF` selecionado no DOM, mas esconder o seletor para o cliente e expandir apenas o input numerico do CPF. Isso preserva o dado tecnico exigido pelo gateway sem deixar o input do CPF espremido atras do select.
+- Em novo teste mobile no site ao vivo, foram auditadas Home, Loja, Produto, Carrinho, Checkout, Minha conta, Contato, Privacidade e Devolucoes em 320, 360, 375, 390, 412, 430, 768, 820, 1024 e 1440 px.
+- Os problemas reais de largura surgiram em 320 px na Loja, por cards de produto com 354 px, e no Produto, por galeria/zoom e relacionados com 396 px.
+- Os CSS de produtos, loja, produto individual, relacionados, quickbar, Complianz e global foram reforcados para impedir que cards, imagens, zoom e banner empurrem o viewport no mobile.
+- A validacao com CSS/JS local injetado confirmou `document.scrollWidth = 320` para Loja, Produto e Checkout em 320 px.
+- O ajuste do CPF do Mercado Pago passou a tratar tambem o caso em que `#form-checkout__identificationType` nasce sem opcoes: o codigo injeta a opcao tecnica `CPF`, desativa `CNPJ`, oculta o seletor visual e mantem `identificationNumber` como input numerico de 11 digitos.
+- Relatorio e prints da nova auditoria estao em `elementor-woocommerce/docs/auditoria-layout-screenshots/2026-06-24-mobile/`.
 
 ## Checklist de homologacao
 

@@ -1,0 +1,1294 @@
+[
+  {
+    "page": "home",
+    "width": 320,
+    "status": 200,
+    "overflow": false,
+    "scroll": 320,
+    "viewport": 320,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 320,
+    "status": 200,
+    "overflow": true,
+    "scroll": 354,
+    "viewport": 320,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 320,
+    "status": 200,
+    "overflow": true,
+    "scroll": 396,
+    "viewport": 320,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 320,
+    "status": 200,
+    "overflow": false,
+    "scroll": 320,
+    "viewport": 320,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 320,
+    "status": 200,
+    "overflow": false,
+    "scroll": 320,
+    "viewport": 320,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 320,
+    "status": 200,
+    "overflow": false,
+    "scroll": 320,
+    "viewport": 320,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "contato",
+    "width": 320,
+    "status": 200,
+    "overflow": false,
+    "scroll": 320,
+    "viewport": 320,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "privacidade",
+    "width": 320,
+    "status": 200,
+    "overflow": false,
+    "scroll": 320,
+    "viewport": 320,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 320,
+    "status": 200,
+    "overflow": false,
+    "scroll": 320,
+    "viewport": 320,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "home",
+    "width": 360,
+    "status": 200,
+    "overflow": false,
+    "scroll": 360,
+    "viewport": 360,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 360,
+    "status": 200,
+    "overflow": false,
+    "scroll": 360,
+    "viewport": 360,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 360,
+    "status": 200,
+    "overflow": false,
+    "scroll": 360,
+    "viewport": 360,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 360,
+    "status": 200,
+    "overflow": false,
+    "scroll": 360,
+    "viewport": 360,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 360,
+    "status": 200,
+    "overflow": false,
+    "scroll": 360,
+    "viewport": 360,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 360,
+    "status": 200,
+    "overflow": false,
+    "scroll": 360,
+    "viewport": 360,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "contato",
+    "width": 360,
+    "status": 200,
+    "overflow": false,
+    "scroll": 360,
+    "viewport": 360,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "privacidade",
+    "width": 360,
+    "status": 200,
+    "overflow": false,
+    "scroll": 360,
+    "viewport": 360,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 360,
+    "status": 200,
+    "overflow": false,
+    "scroll": 360,
+    "viewport": 360,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@327/438",
+      "a.msn-header__quickbar-mobile-only@446/527",
+      "a.msn-header__quickbar-mobile-only@535/709"
+    ],
+    "errors": 1
+  },
+  {
+    "page": "home",
+    "width": 375,
+    "status": 200,
+    "overflow": false,
+    "scroll": 375,
+    "viewport": 375,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 375,
+    "status": 200,
+    "overflow": false,
+    "scroll": 375,
+    "viewport": 375,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 375,
+    "status": 200,
+    "overflow": false,
+    "scroll": 375,
+    "viewport": 375,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 375,
+    "status": 200,
+    "overflow": false,
+    "scroll": 375,
+    "viewport": 375,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 375,
+    "status": 200,
+    "overflow": false,
+    "scroll": 375,
+    "viewport": 375,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 375,
+    "status": 200,
+    "overflow": false,
+    "scroll": 375,
+    "viewport": 375,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "contato",
+    "width": 375,
+    "status": 200,
+    "overflow": false,
+    "scroll": 375,
+    "viewport": 375,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "privacidade",
+    "width": 375,
+    "status": 200,
+    "overflow": false,
+    "scroll": 375,
+    "viewport": 375,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 375,
+    "status": 200,
+    "overflow": false,
+    "scroll": 375,
+    "viewport": 375,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "home",
+    "width": 390,
+    "status": 200,
+    "overflow": false,
+    "scroll": 390,
+    "viewport": 390,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 390,
+    "status": 200,
+    "overflow": false,
+    "scroll": 390,
+    "viewport": 390,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 390,
+    "status": 200,
+    "overflow": false,
+    "scroll": 390,
+    "viewport": 390,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 390,
+    "status": 200,
+    "overflow": false,
+    "scroll": 390,
+    "viewport": 390,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 390,
+    "status": 200,
+    "overflow": false,
+    "scroll": 390,
+    "viewport": 390,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 390,
+    "status": 200,
+    "overflow": false,
+    "scroll": 390,
+    "viewport": 390,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "contato",
+    "width": 390,
+    "status": 200,
+    "overflow": false,
+    "scroll": 390,
+    "viewport": 390,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "privacidade",
+    "width": 390,
+    "status": 200,
+    "overflow": false,
+    "scroll": 390,
+    "viewport": 390,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 390,
+    "status": 200,
+    "overflow": false,
+    "scroll": 390,
+    "viewport": 390,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "home",
+    "width": 412,
+    "status": 200,
+    "overflow": false,
+    "scroll": 412,
+    "viewport": 412,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 412,
+    "status": 200,
+    "overflow": false,
+    "scroll": 412,
+    "viewport": 412,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 412,
+    "status": 200,
+    "overflow": false,
+    "scroll": 412,
+    "viewport": 412,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 412,
+    "status": 200,
+    "overflow": false,
+    "scroll": 412,
+    "viewport": 412,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 412,
+    "status": 200,
+    "overflow": false,
+    "scroll": 412,
+    "viewport": 412,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 412,
+    "status": 200,
+    "overflow": false,
+    "scroll": 412,
+    "viewport": 412,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "contato",
+    "width": 412,
+    "status": 200,
+    "overflow": false,
+    "scroll": 412,
+    "viewport": 412,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@323/432",
+      "a.msn-header__quickbar-mobile-only@440/519",
+      "a.msn-header__quickbar-mobile-only@527/699"
+    ],
+    "errors": 1
+  },
+  {
+    "page": "privacidade",
+    "width": 412,
+    "status": 200,
+    "overflow": false,
+    "scroll": 412,
+    "viewport": 412,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 412,
+    "status": 200,
+    "overflow": false,
+    "scroll": 412,
+    "viewport": 412,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "home",
+    "width": 430,
+    "status": 200,
+    "overflow": false,
+    "scroll": 430,
+    "viewport": 430,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 430,
+    "status": 200,
+    "overflow": false,
+    "scroll": 430,
+    "viewport": 430,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 430,
+    "status": 200,
+    "overflow": false,
+    "scroll": 430,
+    "viewport": 430,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 430,
+    "status": 200,
+    "overflow": false,
+    "scroll": 430,
+    "viewport": 430,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 430,
+    "status": 200,
+    "overflow": false,
+    "scroll": 430,
+    "viewport": 430,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 430,
+    "status": 200,
+    "overflow": false,
+    "scroll": 430,
+    "viewport": 430,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "contato",
+    "width": 430,
+    "status": 200,
+    "overflow": false,
+    "scroll": 430,
+    "viewport": 430,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "privacidade",
+    "width": 430,
+    "status": 200,
+    "overflow": false,
+    "scroll": 430,
+    "viewport": 430,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 430,
+    "status": 200,
+    "overflow": false,
+    "scroll": 430,
+    "viewport": 430,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-only@329/440",
+      "a.msn-header__quickbar-mobile-only@448/529",
+      "a.msn-header__quickbar-mobile-only@537/711"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "home",
+    "width": 768,
+    "status": 200,
+    "overflow": false,
+    "scroll": 768,
+    "viewport": 768,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@673/796",
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 768,
+    "status": 200,
+    "overflow": false,
+    "scroll": 768,
+    "viewport": 768,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@673/796",
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 768,
+    "status": 200,
+    "overflow": false,
+    "scroll": 768,
+    "viewport": 768,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@673/796",
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 768,
+    "status": 200,
+    "overflow": false,
+    "scroll": 768,
+    "viewport": 768,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@673/796",
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 768,
+    "status": 200,
+    "overflow": false,
+    "scroll": 768,
+    "viewport": 768,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@673/796",
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 768,
+    "status": 200,
+    "overflow": false,
+    "scroll": 768,
+    "viewport": 768,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@673/796",
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 1
+  },
+  {
+    "page": "contato",
+    "width": 768,
+    "status": 200,
+    "overflow": false,
+    "scroll": 768,
+    "viewport": 768,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@673/796",
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "privacidade",
+    "width": 768,
+    "status": 200,
+    "overflow": false,
+    "scroll": 768,
+    "viewport": 768,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@673/796",
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 768,
+    "status": 200,
+    "overflow": false,
+    "scroll": 768,
+    "viewport": 768,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@673/796",
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "home",
+    "width": 820,
+    "status": 200,
+    "overflow": false,
+    "scroll": 820,
+    "viewport": 820,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 820,
+    "status": 200,
+    "overflow": false,
+    "scroll": 820,
+    "viewport": 820,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 820,
+    "status": 200,
+    "overflow": false,
+    "scroll": 820,
+    "viewport": 820,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036",
+      "div.woocommerce-product-gallery__image@775/1505"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 820,
+    "status": 200,
+    "overflow": false,
+    "scroll": 820,
+    "viewport": 820,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 820,
+    "status": 200,
+    "overflow": false,
+    "scroll": 820,
+    "viewport": 820,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 820,
+    "status": 200,
+    "overflow": false,
+    "scroll": 820,
+    "viewport": 820,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "contato",
+    "width": 820,
+    "status": 200,
+    "overflow": false,
+    "scroll": 820,
+    "viewport": 820,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036",
+      "input.@-9950/-9228"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "privacidade",
+    "width": 820,
+    "status": 200,
+    "overflow": false,
+    "scroll": 820,
+    "viewport": 820,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 820,
+    "status": 200,
+    "overflow": false,
+    "scroll": 820,
+    "viewport": 820,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-keep@804/901",
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "home",
+    "width": 1024,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1024,
+    "viewport": 1024,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 1024,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1024,
+    "viewport": 1024,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 1024,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1024,
+    "viewport": 1024,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 1024,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1024,
+    "viewport": 1024,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 1024,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1024,
+    "viewport": 1024,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 1024,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1024,
+    "viewport": 1024,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "contato",
+    "width": 1024,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1024,
+    "viewport": 1024,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-hide@909/1036",
+      "input.@-9950/-9414"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "privacidade",
+    "width": 1024,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1024,
+    "viewport": 1024,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 1024,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1024,
+    "viewport": 1024,
+    "cookie": 1,
+    "overflowers": [
+      "a.msn-header__quickbar-mobile-hide@909/1036"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "home",
+    "width": 1440,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1440,
+    "viewport": 1440,
+    "cookie": 1,
+    "overflowers": [],
+    "errors": 0
+  },
+  {
+    "page": "loja",
+    "width": 1440,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1440,
+    "viewport": 1440,
+    "cookie": 1,
+    "overflowers": [],
+    "errors": 0
+  },
+  {
+    "page": "produto",
+    "width": 1440,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1440,
+    "viewport": 1440,
+    "cookie": 1,
+    "overflowers": [],
+    "errors": 0
+  },
+  {
+    "page": "carrinho",
+    "width": 1440,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1440,
+    "viewport": 1440,
+    "cookie": 1,
+    "overflowers": [],
+    "errors": 0
+  },
+  {
+    "page": "checkout",
+    "width": 1440,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1440,
+    "viewport": 1440,
+    "cookie": 1,
+    "overflowers": [],
+    "errors": 0
+  },
+  {
+    "page": "minha-conta",
+    "width": 1440,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1440,
+    "viewport": 1440,
+    "cookie": 1,
+    "overflowers": [],
+    "errors": 0
+  },
+  {
+    "page": "contato",
+    "width": 1440,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1440,
+    "viewport": 1440,
+    "cookie": 1,
+    "overflowers": [
+      "input.@-9810/-9138"
+    ],
+    "errors": 0
+  },
+  {
+    "page": "privacidade",
+    "width": 1440,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1440,
+    "viewport": 1440,
+    "cookie": 1,
+    "overflowers": [],
+    "errors": 0
+  },
+  {
+    "page": "devolucoes",
+    "width": 1440,
+    "status": 200,
+    "overflow": false,
+    "scroll": 1440,
+    "viewport": 1440,
+    "cookie": 1,
+    "overflowers": [],
+    "errors": 0
+  }
+]

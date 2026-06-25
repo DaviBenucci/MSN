@@ -52,7 +52,71 @@
       ) || element.parentElement;
     }
 
+    function closestMercadoPagoDocumentGroup(select) {
+      var current = select.parentElement;
+      var paymentBox = select.closest("#payment div.payment_box, #payment .payment_box");
+
+      while (current && current !== document.documentElement && current !== paymentBox) {
+        var hasSelect = current.querySelector("select");
+        var hasDocumentInput = current.querySelector(
+          'input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"])'
+        );
+
+        if (hasSelect && hasDocumentInput) {
+          return current;
+        }
+
+        current = current.parentElement;
+      }
+
+      return closestMercadoPagoField(select);
+    }
+
+    function findMercadoPagoDocumentInput(group, select) {
+      if (!group) return null;
+
+      var inputs = Array.prototype.slice.call(
+        group.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"])')
+      );
+
+      return inputs.find(function (input) {
+        return input !== select;
+      }) || null;
+    }
+
+    function isMercadoPagoDocumentSelect(select) {
+      return !!(select && select.matches([
+        "#form-checkout__identificationType",
+        'select[name="identificationType"]',
+        'select[data-checkout="doc_type"]',
+        'select[data-cy="select-document"]'
+      ].join(",")));
+    }
+
+    function findMercadoPagoKnownDocumentInput(group, select) {
+      return (group && group.querySelector(
+        '#form-checkout__identificationNumber, input[name="identificationNumber"], input[data-checkout="doc_number"], input[data-cy="input-document"]'
+      )) || findMercadoPagoDocumentInput(group, select);
+    }
+
+    function ensureMercadoPagoCpfOption(select) {
+      var cpfOption = Array.prototype.slice.call(select.options || []).find(function (option) {
+        return normalizeText(option.textContent || option.value).indexOf("cpf") !== -1;
+      });
+
+      if (!cpfOption && isMercadoPagoDocumentSelect(select) && !(select.options || []).length) {
+        cpfOption = document.createElement("option");
+        cpfOption.value = "CPF";
+        cpfOption.textContent = "CPF";
+        select.appendChild(cpfOption);
+      }
+
+      return cpfOption;
+    }
+
     function selectLooksLikeDocument(select) {
+      if (isMercadoPagoDocumentSelect(select)) return true;
+
       var options = Array.prototype.slice.call(select.options || []);
       var hasCpf = options.some(function (option) {
         return normalizeText(option.textContent || option.value).indexOf("cpf") !== -1;
@@ -92,9 +156,7 @@
       Array.prototype.slice.call(root.querySelectorAll(selectors)).forEach(function (select) {
         if (!selectLooksLikeDocument(select)) return;
 
-        var cpfOption = Array.prototype.slice.call(select.options || []).find(function (option) {
-          return normalizeText(option.textContent || option.value).indexOf("cpf") !== -1;
-        });
+        var cpfOption = ensureMercadoPagoCpfOption(select);
 
         if (!cpfOption) return;
 
@@ -111,8 +173,42 @@
         }
 
         select.dataset.msnCpfOnly = "true";
-        var field = closestMercadoPagoField(select);
-        if (field) field.classList.add("msn-mp-cpf-only-field");
+        select.setAttribute("aria-hidden", "true");
+        select.setAttribute("tabindex", "-1");
+
+        var selectField = closestMercadoPagoField(select);
+        var documentGroup = closestMercadoPagoDocumentGroup(select);
+        var documentInput = findMercadoPagoKnownDocumentInput(documentGroup, select);
+        var directSelectContainer = select.parentElement;
+
+        if (selectField && selectField !== documentGroup && !findMercadoPagoDocumentInput(selectField, select)) {
+          selectField.classList.add("msn-mp-document-type-field");
+        }
+
+        if (
+          directSelectContainer &&
+          directSelectContainer !== documentGroup &&
+          !findMercadoPagoDocumentInput(directSelectContainer, select)
+        ) {
+          directSelectContainer.classList.add("msn-mp-document-type-field");
+        }
+
+        if (documentGroup) {
+          documentGroup.classList.add("msn-mp-cpf-only-field");
+        }
+
+        if (documentInput) {
+          documentInput.setAttribute("inputmode", "numeric");
+          documentInput.setAttribute("autocomplete", "off");
+          documentInput.setAttribute("maxlength", "11");
+          documentInput.setAttribute("pattern", "\\d{11}");
+
+          if (!documentInput.getAttribute("placeholder")) {
+            documentInput.setAttribute("placeholder", "00000000000");
+          }
+
+          bindCheckoutInputFormatter(documentInput, formatCpfDigits);
+        }
       });
     }
 
@@ -133,6 +229,10 @@
       if (digits.length <= 6) return digits.replace(/(\d{3})(\d+)/, "$1.$2");
       if (digits.length <= 9) return digits.replace(/(\d{3})(\d{3})(\d+)/, "$1.$2.$3");
       return digits.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+    }
+
+    function formatCpfDigits(value) {
+      return onlyDigits(value).slice(0, 11);
     }
 
     function formatBrazilPhone(value) {

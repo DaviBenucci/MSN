@@ -20,6 +20,7 @@
 
 .cmplz-cookiebanner,
 #cmplz-cookiebanner-container .cmplz-cookiebanner {
+	box-sizing: border-box !important;
 	position: fixed !important;
 	inset: auto 16px max(12px, env(safe-area-inset-bottom)) 16px !important;
 	z-index: 999999 !important;
@@ -284,9 +285,9 @@ body:has(.cmplz-cookiebanner.cmplz-show).single-product {
 		right: 10px !important;
 		width: calc(100vw - 20px) !important;
 		max-width: calc(100vw - 20px) !important;
-		max-height: min(64dvh, 460px) !important;
+		max-height: min(46dvh, 330px) !important;
 		border-radius: 14px 14px 10px 10px !important;
-		padding: 14px !important;
+		padding: 12px !important;
 	}
 
 	.cmplz-cookiebanner.cmplz-show,
@@ -312,6 +313,18 @@ body:has(.cmplz-cookiebanner.cmplz-show).single-product {
 	.cmplz-cookiebanner .cmplz-documents {
 		font-size: 0.84rem !important;
 		line-height: 1.45 !important;
+	}
+
+	.cmplz-cookiebanner .cmplz-message {
+		max-height: 96px !important;
+		overflow: auto !important;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.cmplz-cookiebanner .cmplz-categories {
+		max-height: 116px !important;
+		overflow: auto !important;
+		-webkit-overflow-scrolling: touch;
 	}
 
 	.cmplz-cookiebanner .cmplz-buttons {
@@ -369,12 +382,21 @@ body:has(.cmplz-cookiebanner.cmplz-show).single-product {
 	body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-cart,
 	body:has(.cmplz-cookiebanner.cmplz-show).woocommerce-account,
 	body:has(.cmplz-cookiebanner.cmplz-show).single-product {
-		padding-bottom: clamp(170px, 58dvh, 450px);
+		padding-bottom: clamp(150px, 46dvh, 340px);
 	}
 }
 
 @media (max-width: 380px) {
 	.cmplz-cookiebanner .cmplz-buttons {
 		grid-template-columns: 1fr !important;
+	}
+
+	.cmplz-cookiebanner,
+	#cmplz-cookiebanner-container .cmplz-cookiebanner {
+		max-height: min(42dvh, 300px) !important;
+	}
+
+	.cmplz-cookiebanner .cmplz-message {
+		max-height: 78px !important;
 	}
 }

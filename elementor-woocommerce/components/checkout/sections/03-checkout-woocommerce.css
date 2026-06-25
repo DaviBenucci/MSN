@@ -1141,8 +1141,76 @@ body.woocommerce-checkout .msn-checkout-woo-slot #payment div.payment_box :where
 	outline: 0 !important;
 }
 
-body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field select {
-	cursor: default;
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) !important;
+	gap: 7px !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+	align-items: stretch !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field .msn-mp-document-type-field,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field :where([class*="select-container"], [class*="SelectContainer"], [class*="document-type"], [class*="DocumentType"]):has(select[data-msn-cpf-only="true"]),
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field select[data-msn-cpf-only="true"],
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field select[data-msn-cpf-only="true"] + .select2-container,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field select[data-msn-cpf-only="true"] ~ .select2-container {
+	display: none !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment #mp-doc-div .mp-input,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment #form-checkout__identificationNumber-container {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+	gap: 0 !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment #form-checkout__identificationType,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment #form-checkout__identificationNumber-container .mp-document-select,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment #form-checkout__identificationNumber-container .mp-vertical-line {
+	display: none !important;
+	width: 0 !important;
+	min-width: 0 !important;
+	max-width: 0 !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field :where([class*="input-container"], [class*="InputContainer"], [class*="inputContainer"], [class*="document"], [class*="Document"], [class*="identification"], [class*="Identification"]):not(.msn-mp-document-type-field) {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) !important;
+	grid-column: 1 / -1 !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+	flex: 1 1 100% !important;
+	margin-inline: 0 !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]) {
+	display: block !important;
+	grid-column: 1 / -1 !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+}
+
+body.woocommerce-checkout .msn-checkout-woo-slot #payment #form-checkout__identificationNumber-container .mp-document,
+body.woocommerce-checkout .msn-checkout-woo-slot #payment input[name="identificationNumber"][data-checkout="doc_number"] {
+	display: block !important;
+	grid-column: 1 / -1 !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+	flex: 1 1 100% !important;
 }
 
 body.woocommerce-checkout .msn-checkout-woo-slot #payment .msn-mp-cpf-only-field option:not(:checked) {

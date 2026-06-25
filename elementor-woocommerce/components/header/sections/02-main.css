@@ -4,6 +4,8 @@
     z-index: 999;
     width: 100%;
     max-width: 100%;
+    overflow-x: hidden;
+    overflow-x: clip;
     border-bottom: 1px solid color-mix(in srgb, var(--msn-border) 86%, transparent);
     background: color-mix(in srgb, var(--msn-surface) 94%, transparent);
     color: var(--msn-text);
