@@ -17,5 +17,35 @@
 }
 
 .msn-product-related-slot {
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
 	min-height: 80px;
+}
+
+.msn-product-related-slot .woocommerce,
+.msn-product-related-slot ul.products,
+.msn-product-related-slot li.product {
+	box-sizing: border-box;
+	min-width: 0;
+	max-width: 100%;
+}
+
+.msn-product-related-slot ul.products {
+	width: 100% !important;
+}
+
+@media (max-width: 420px) {
+	.msn-product-related .msn-home-section-head {
+		margin-bottom: 18px;
+	}
+
+	.msn-product-related-slot ul.products {
+		grid-template-columns: minmax(0, 1fr) !important;
+		gap: 10px !important;
+	}
+
+	.msn-product-related-slot li.product {
+		width: 100% !important;
+	}
 }

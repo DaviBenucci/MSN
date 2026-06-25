@@ -32,6 +32,7 @@
 
 html {
 	box-sizing: border-box;
+	overflow-x: hidden;
 	overflow-x: clip;
 	scroll-behavior: smooth;
 	background: var(--msn-bg);
@@ -46,6 +47,7 @@ html {
 body {
 	margin: 0;
 	min-width: 320px;
+	overflow-x: hidden;
 	overflow-x: clip;
 	background: var(--msn-bg);
 	color: var(--msn-text);
@@ -398,6 +400,10 @@ body.msn-lock-scroll {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 18px;
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+	overflow: visible;
 }
 
 .woocommerce ul.products::before,
@@ -406,10 +412,13 @@ body.msn-lock-scroll {
 }
 
 .woocommerce ul.products li.product {
+	box-sizing: border-box;
 	display: flex;
 	min-height: 100%;
 	flex-direction: column;
 	width: auto !important;
+	min-width: 0;
+	max-width: 100%;
 	margin: 0 !important;
 	border: 1px solid var(--msn-border);
 	border-radius: var(--msn-radius);
@@ -420,6 +429,9 @@ body.msn-lock-scroll {
 }
 
 .woocommerce ul.products li.product img {
+	display: block;
+	width: 100%;
+	max-width: 100%;
 	aspect-ratio: 1 / 1;
 	border-radius: var(--msn-radius);
 	background: var(--msn-surface-alt);
@@ -544,8 +556,34 @@ body.msn-lock-scroll {
 		grid-template-columns: 1fr;
 	}
 
+	.woocommerce ul.products {
+		width: 100% !important;
+		max-width: 100% !important;
+		gap: 14px;
+	}
+
+	.woocommerce ul.products li.product {
+		width: 100% !important;
+		max-width: 100% !important;
+		padding: 10px !important;
+	}
+
 	.msn-button {
 		width: 100%;
+	}
+}
+
+@media (max-width: 360px) {
+	.msn-container {
+		width: min(calc(100% - 16px), 1180px);
+	}
+
+	.woocommerce ul.products {
+		gap: 10px;
+	}
+
+	.woocommerce ul.products li.product {
+		padding: 8px !important;
 	}
 }
 
