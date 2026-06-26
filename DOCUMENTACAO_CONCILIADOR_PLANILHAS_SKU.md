@@ -2,23 +2,39 @@
 
 ## Objetivo
 
-O script `conciliador_planilhas_sku.py` serve para receber uma planilha de estoque/produtos enviada por cliente, gerar um SKU padronizado a partir do nome do produto e comparar essa planilha com a planilha usada para importacao no WordPress/WooCommerce.
+O script `conciliador_planilhas_sku.py` atualiza uma copia da planilha usada para importacao no WordPress/WooCommerce usando a planilha do cliente como fonte principal de informacao.
 
-Ele foi criado para responder rapidamente tres perguntas:
+Regra central: **a planilha do cliente tem precedencia para estoque e preco**.
 
-1. Quais produtos do cliente ja existem na planilha WordPress?
-2. Quais produtos parecem ser novos e precisam ser importados?
-3. Qual SKU padronizado pode ser usado para organizar imagens, pastas e importacao?
+O script faz quatro coisas:
 
-## Arquivo de entrada
+1. Le a planilha do cliente.
+2. Localiza produtos existentes na planilha WordPress pelo nome do produto.
+3. Atualiza estoque e preco dos produtos existentes.
+4. Adiciona produtos novos ao final da planilha WordPress com novo ID e novo SKU.
 
-O script aceita:
+A planilha WordPress original nao e sobrescrita por padrao. O script gera uma copia atualizada.
+
+## Arquivos de entrada
+
+### Planilha do cliente
+
+Aceita:
 
 - `.xlsx`
 - `.xls`
 - `.csv`
 
-A planilha do cliente precisa ter uma coluna com nome/produto. O script tenta encontrar automaticamente colunas comuns, como:
+Colunas importantes na planilha do cliente:
+
+- Nome/produto: obrigatoria.
+- Estoque: opcional, mas recomendada.
+- Preco: opcional, mas recomendada.
+- SKU/codigo: opcional; normalmente o cliente nao usa SKU.
+
+O script tenta encontrar automaticamente nomes comuns de coluna.
+
+Para nome/produto:
 
 - `Nome`
 - `Produto`
@@ -27,37 +43,92 @@ A planilha do cliente precisa ter uma coluna com nome/produto. O script tenta en
 - `Mercadoria`
 - `Item`
 
-Se a coluna tiver outro nome, informe no comando com `--nome-coluna`.
+Para estoque:
 
-Exemplo:
+- `Estoque`
+- `Stock`
+- `Quantidade`
+- `Qtd`
+- `Saldo`
+
+Para preco:
+
+- `Preco`
+- `Preço`
+- `Valor`
+- `Valor Unitario`
+- `Preco de Venda`
+
+Se a coluna tiver outro nome, informe no comando:
 
 ```bash
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
   "/c/caminho/cliente.xlsx" \
-  --nome-coluna "Descricao do item"
+  --nome-coluna "Descricao do Produto" \
+  --estoque-coluna "Saldo Atual" \
+  --preco-coluna "Valor Venda"
 ```
 
-## Planilha WordPress
+### Planilha WordPress
 
-Por padrao, o script compara a planilha do cliente com:
+Por padrao, o script usa:
 
 ```text
 C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\Controle_de_estoque_Com_Filtro.xlsx
 ```
 
-Essa planilha deve ter uma coluna de SKU e uma coluna de nome/produto. Se as colunas tiverem nomes diferentes, use:
+Colunas esperadas na planilha WordPress:
 
-```bash
---wordpress-sku-coluna "Codigo"
---wordpress-nome-coluna "Produto"
-```
+- `ID`
+- `SKU`
+- `Nome`
+- `Estoque`
+- `Preço`
 
-Tambem e possivel informar outro arquivo WordPress:
+Se a planilha tiver nomes diferentes:
 
 ```bash
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
   "/c/caminho/cliente.xlsx" \
-  --wordpress "/c/caminho/Controle_de_estoque_Com_Filtro.xlsx"
+  --wordpress-id-coluna "ID Produto" \
+  --wordpress-sku-coluna "Codigo" \
+  --wordpress-nome-coluna "Produto" \
+  --wordpress-estoque-coluna "Qtd" \
+  --wordpress-preco-coluna "Valor"
+```
+
+## Como a conciliacao funciona
+
+O produto do cliente e comparado com a planilha WordPress pelo nome normalizado.
+
+Exemplo:
+
+```text
+Toner HP CE253AZ Magenta
+```
+
+Se o mesmo nome ja existe na planilha WordPress:
+
+- O `ID` existente e mantido.
+- O `SKU` existente e mantido.
+- O `Nome` existente e mantido.
+- O `Estoque` e atualizado com o valor do cliente.
+- O `Preço` e atualizado com o valor do cliente.
+
+Se o nome nao existe na planilha WordPress:
+
+- O produto e adicionado ao final da planilha WordPress.
+- O novo `ID` sera o maior ID existente + 1.
+- O novo `SKU` sera gerado pelo script.
+- `Nome`, `Estoque` e `Preço` virao da planilha do cliente.
+- Outras colunas da planilha WordPress ficam vazias, salvo preenchimento posterior.
+
+Se o SKU gerado para um produto novo ja existir, o script cria uma variacao unica:
+
+```text
+TON-HP-CE253AZ-MAG
+TON-HP-CE253AZ-MAG-2
+TON-HP-CE253AZ-MAG-3
 ```
 
 ## Geracao de SKU
@@ -122,56 +193,97 @@ Variacoes reconhecidas:
 - `NV`: caixa nova preta
 - `BR`: caixa branca
 
-## Conciliacao
+## Arquivos gerados
 
-O script compara a planilha do cliente com a planilha WordPress nesta ordem:
+Em modo normal, o script gera dois arquivos:
 
-1. SKU original do cliente, se existir.
-2. SKU gerado pelo script.
-3. Nome do produto normalizado.
-
-O resultado vai para a coluna `Status_Conciliacao`.
-
-Status possiveis:
-
-- `novo_para_wordpress`: nao foi encontrado na planilha WordPress.
-- `existe_por_sku_cliente`: o SKU que veio do cliente ja existe na planilha WordPress.
-- `existe_por_sku_gerado`: o SKU gerado pelo script ja existe na planilha WordPress.
-- `possivel_existente_por_nome`: o nome bate com um produto da planilha WordPress, mesmo sem SKU igual.
-- `sem_wordpress`: o script foi executado com `--sem-wordpress`.
-
-Outras colunas adicionadas:
-
-- `SKU_Gerado`: SKU padronizado criado pelo script.
-- `SKU_Encontrado_WordPress`: SKU correspondente encontrado na base WordPress.
-- `Nome_WordPress`: nome correspondente encontrado na base WordPress.
-- `Observacao_Conciliacao`: avisos, como SKU duplicado ou nome divergente.
-
-## Arquivo de saida
-
-Por padrao, a saida e criada ao lado da planilha do cliente:
+1. Planilha WordPress atualizada:
 
 ```text
-cliente_conciliada.xlsx
+Controle_de_estoque_Com_Filtro_atualizada.xlsx
 ```
 
-O arquivo `.xlsx` gerado tem tres abas:
+2. Relatorio de conciliacao:
 
-- `conciliacao`: todos os itens analisados.
-- `novos`: somente itens com `novo_para_wordpress`.
-- `existentes`: itens encontrados ou possivelmente encontrados na base WordPress.
+```text
+Controle_de_estoque_Com_Filtro_atualizada_relatorio.xlsx
+```
 
-Para escolher outro destino:
+O relatorio tem abas:
+
+- `conciliacao`: todas as linhas da planilha do cliente analisadas.
+- `novos`: produtos adicionados ao WordPress.
+- `adicionados`: mesmo recorte dos produtos adicionados.
+- `atualizados`: produtos ja existentes que tiveram estoque/preco atualizados.
+
+## Status de conciliacao
+
+Principais status:
+
+- `atualizado_por_nome`: produto ja existia na planilha WordPress e foi atualizado pelo nome.
+- `adicionado_ao_wordpress`: produto nao existia e foi anexado ao final da planilha WordPress.
+- `ignorado_sem_nome`: linha sem nome/produto na planilha do cliente.
+- `sem_wordpress`: usado quando o comando roda com `--sem-wordpress`.
+
+Colunas adicionadas ao relatorio:
+
+- `SKU_Gerado`
+- `Status_Conciliacao`
+- `ID_WordPress`
+- `SKU_Encontrado_WordPress`
+- `Nome_WordPress`
+- `Observacao_Conciliacao`
+
+## Comando principal
+
+Git Bash:
+
+```bash
+cd "/c/Users/Sama Contabilidade/Desktop/MSN"
+
+./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
+  "/c/caminho/cliente.xlsx"
+```
+
+PowerShell:
+
+```powershell
+cd "$env:USERPROFILE\Desktop\MSN"
+
+.\.venv\Scripts\python.exe -B conciliador_planilhas_sku.py `
+  "C:\caminho\cliente.xlsx"
+```
+
+## Informar outra planilha WordPress
 
 ```bash
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
   "/c/caminho/cliente.xlsx" \
-  --saida "/c/caminho/cliente_conciliado_final.xlsx"
+  --wordpress "/c/caminho/Controle_de_estoque_Com_Filtro.xlsx"
+```
+
+## Escolher saida e relatorio
+
+```bash
+./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
+  "/c/caminho/cliente.xlsx" \
+  --saida "/c/caminho/wordpress_atualizada.xlsx" \
+  --relatorio "/c/caminho/relatorio_conciliacao.xlsx"
+```
+
+## Definir ID inicial manualmente
+
+Use `--proximo-id` quando quiser forcar o ID inicial dos novos produtos.
+
+```bash
+./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
+  "/c/caminho/cliente.xlsx" \
+  --proximo-id 2000
 ```
 
 ## Modo somente gerar SKU
 
-Use `--sem-wordpress` quando voce quiser apenas gerar os SKUs, sem comparar com a planilha WordPress.
+Use `--sem-wordpress` quando quiser apenas gerar o relatorio com `SKU_Gerado`, sem atualizar a planilha WordPress.
 
 ```bash
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
@@ -185,9 +297,9 @@ Revise manualmente quando:
 
 - `SKU_Gerado` terminar com `MOD`, pois o modelo nao foi identificado.
 - `Observacao_Conciliacao` indicar SKU duplicado.
-- O status for `possivel_existente_por_nome`.
-- O nome do cliente estiver muito diferente do nome WordPress.
 - O produto tiver variacao de caixa, cor ou rendimento que nao esteja clara no nome.
+- A planilha do cliente vier com nomes muito diferentes dos nomes da planilha WordPress.
+- O cliente tiver dois produtos diferentes com nomes iguais.
 
 ## Dependencias
 

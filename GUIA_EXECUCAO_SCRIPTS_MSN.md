@@ -54,7 +54,7 @@ Git Bash:
 ./.venv/Scripts/python.exe -m pip install -r requirements-planilhas.txt
 ```
 
-## 1. Conciliar planilha do cliente com WordPress
+## 1. Atualizar planilha WordPress com a planilha do cliente
 
 Uso padrao:
 
@@ -63,13 +63,22 @@ Uso padrao:
   "/c/caminho/planilha-do-cliente.xlsx"
 ```
 
-O script gera:
+Neste fluxo, a planilha do cliente tem precedencia para `Estoque` e `Preço`.
+
+O script compara pelo nome do produto:
+
+- se o nome ja existir na planilha WordPress, atualiza estoque e preco;
+- se o nome nao existir, adiciona o produto ao final da planilha WordPress;
+- produtos novos recebem ID novo e SKU gerado automaticamente.
+
+O script gera dois arquivos:
 
 ```text
-planilha-do-cliente_conciliada.xlsx
+Controle_de_estoque_Com_Filtro_atualizada.xlsx
+Controle_de_estoque_Com_Filtro_atualizada_relatorio.xlsx
 ```
 
-Ele compara automaticamente com:
+Ele usa automaticamente esta planilha WordPress como base:
 
 ```text
 C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\Controle_de_estoque_Com_Filtro.xlsx
@@ -93,14 +102,25 @@ Use quando a planilha nao tiver coluna `Nome`, `Produto` ou `Descricao`.
   --nome-coluna "Descricao do Produto"
 ```
 
-### Informar coluna de SKU do cliente
+### Informar colunas de estoque e preco do cliente
 
-Use quando a planilha do cliente ja vier com codigo/SKU proprio.
+Use quando os nomes das colunas nao forem detectados automaticamente.
 
 ```bash
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
   "/c/caminho/cliente.xlsx" \
   --nome-coluna "Produto" \
+  --estoque-coluna "Saldo Atual" \
+  --preco-coluna "Valor Venda"
+```
+
+### Informar coluna de SKU do cliente
+
+Use apenas se a planilha do cliente vier com algum codigo proprio. A atualizacao principal continua sendo feita pelo nome.
+
+```bash
+./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
+  "/c/caminho/cliente.xlsx" \
   --sku-coluna "Codigo"
 ```
 
@@ -113,20 +133,31 @@ Use quando a planilha do cliente ja vier com codigo/SKU proprio.
   --sheet-wordpress "Controle de Estoque"
 ```
 
-### Somente gerar SKU sem conciliar
+### Escolher arquivo WordPress atualizado e relatorio
+
+```bash
+./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
+  "/c/caminho/cliente.xlsx" \
+  --saida "/c/caminho/wordpress_atualizada.xlsx" \
+  --relatorio "/c/caminho/relatorio_conciliacao.xlsx"
+```
+
+### Definir ID inicial dos produtos novos
+
+Por padrao, o proximo ID sera o maior ID da planilha WordPress + 1. Para forcar outro inicio:
+
+```bash
+./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
+  "/c/caminho/cliente.xlsx" \
+  --proximo-id 2000
+```
+
+### Somente gerar SKU sem atualizar WordPress
 
 ```bash
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
   "/c/caminho/cliente.xlsx" \
   --sem-wordpress
-```
-
-### Escolher arquivo de saida
-
-```bash
-./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
-  "/c/caminho/cliente.xlsx" \
-  --saida "/c/caminho/cliente_conciliado_final.xlsx"
 ```
 
 ## 2. Buscar candidatas de imagens
@@ -325,18 +356,18 @@ Use quando a imagem ja estiver boa e voce so quiser padronizar tamanho/formato.
 
 ## 4. Fluxo recomendado completo
 
-1. Conciliar planilha do cliente:
+1. Atualizar uma copia da planilha WordPress com a planilha do cliente:
 
 ```bash
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
   "/c/caminho/cliente.xlsx"
 ```
 
-2. Revisar a aba `novos` da planilha conciliada.
+2. Revisar o arquivo `Controle_de_estoque_Com_Filtro_atualizada_relatorio.xlsx`.
 
-3. Atualizar/importar a planilha WordPress quando necessario.
+3. Usar `Controle_de_estoque_Com_Filtro_atualizada.xlsx` como a planilha preparada para importacao no WordPress.
 
-4. Buscar imagens pendentes:
+4. Buscar imagens pendentes usando a planilha/pasta de produtos:
 
 ```bash
 ./.venv/Scripts/python.exe -B buscador_candidatas_imagens.py \
