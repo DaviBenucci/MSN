@@ -26,4 +26,4 @@ python otimizador_imagens.py --input "C:\Users\Davi Benucci\Desktop\cópia de pr
 
 cd "C:\Users\Davi Benucci\Desktop\MSN"
 
-python buscador_candidatas_imagens.py --only-missing --limit 30 --local-root "C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos" --web --download --max-queries 2 --max-results 12 --keep-per-product 8
+python buscador_candidatas_imagens.py --only-missing --limit 30 --web --download

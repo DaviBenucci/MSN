@@ -286,14 +286,11 @@ def main() -> int:
     products = load_products(args)
     skipped_existing = getattr(args, "_skipped_existing_products", [])
     if skipped_existing:
-        write_skipped_products(skipped_existing)
-        print(
-            f"SKUs pulados por ja terem imagens em {PRODUCTS_DIR}: "
-            f"{len(skipped_existing)}"
-        )
+        write_skipped_products(skipped_existing, args)
+        print(f"SKUs pulados por ja terem imagens prontas/localizadas: {len(skipped_existing)}")
         print(f"Relatorio de pulados: {SKIPPED_PRODUCTS_CSV}")
     else:
-        write_skipped_products([])
+        write_skipped_products([], args)
     if not products:
         print("Nenhum produto encontrado.")
         return 0
@@ -381,20 +378,27 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--download-root",
         type=Path,
-        default=PRODUCTS_DIR,
+        default=None,
         help=(
             "Pasta raiz onde as candidatas baixadas serao salvas em [raiz]/[SKU]. "
-            f"Padrao: products. Para o modo antigo, use {LEGACY_CANDIDATES_DIR}."
+            "Padrao: [source-root], ou seja, Desktop/copia de produtos/Produtos. "
+            f"Para baixar dentro do MSN, use {PRODUCTS_DIR}."
         ),
     )
     parser.add_argument(
         "--include-existing-products",
         action="store_true",
-        help="Nao pula SKUs que ja possuem imagens em products/[SKU].",
+        help="Nao pula SKUs que ja possuem imagens em products/[SKU] ou source-root/[SKU].",
     )
-    parser.add_argument("--max-results", type=int, default=25, help="Resultados web analisados por consulta.")
-    parser.add_argument("--max-queries", type=int, default=3, help="Consultas web por produto.")
-    parser.add_argument("--keep-per-product", type=int, default=12, help="Candidatas mantidas no relatorio por produto.")
+    parser.add_argument("--max-results", type=int, default=8, help="Resultados web analisados por consulta.")
+    parser.add_argument("--max-queries", type=int, default=2, help="Consultas web por produto.")
+    parser.add_argument("--keep-per-product", type=int, default=8, help="Candidatas mantidas no relatorio por produto.")
+    parser.add_argument(
+        "--download-per-product",
+        type=int,
+        default=6,
+        help="Quantidade maxima de imagens baixadas por produto.",
+    )
     parser.add_argument("--delay", type=float, default=1.2, help="Pausa entre consultas web.")
     parser.add_argument("--apply-approvals", type=Path, help="CSV de aprovacao preenchido com approved=1/sim/ok.")
     args = parser.parse_args()
@@ -409,6 +413,10 @@ def normalize_runtime_paths(args: argparse.Namespace) -> None:
         args.local_root = args.source_root
     elif getattr(args, "local_root", None) is not None:
         args.local_root = args.local_root.expanduser().resolve()
+    if getattr(args, "download_root", None) is None:
+        args.download_root = args.source_root
+    else:
+        args.download_root = args.download_root.expanduser().resolve()
 
 
 def resolve_source_root(source_root: Path | None) -> Path:
@@ -511,7 +519,7 @@ def load_products(args: argparse.Namespace) -> list[Product]:
         kept_products: list[Product] = []
         skipped_products: list[Product] = []
         for product in products:
-            if product_has_downloaded_images(product):
+            if product_has_existing_images(product, args):
                 skipped_products.append(product)
             else:
                 kept_products.append(product)
@@ -534,11 +542,33 @@ def final_product_dir(product: Product) -> Path:
     return PRODUCTS_DIR / safe_folder_name(product.sku)
 
 
-def product_has_downloaded_images(product: Product) -> bool:
-    product_dir = final_product_dir(product)
-    if not product_dir.exists():
-        return False
-    return any_product_image(product_dir)
+def product_has_existing_images(product: Product, args: argparse.Namespace) -> bool:
+    return bool(product_existing_locations(product, args))
+
+
+def product_existing_locations(product: Product, args: argparse.Namespace) -> list[Path]:
+    locations: list[Path] = []
+    for folder in product_existing_dirs(product, args):
+        if folder.exists() and any_product_image(folder):
+            locations.append(folder)
+    return locations
+
+
+def product_existing_dirs(product: Product, args: argparse.Namespace) -> list[Path]:
+    dirs = [final_product_dir(product)]
+    source_root = getattr(args, "source_root", None)
+    if source_root is not None:
+        dirs.append(Path(source_root) / safe_folder_name(product.sku))
+
+    unique_dirs: list[Path] = []
+    seen: set[str] = set()
+    for folder in dirs:
+        key = str(folder.expanduser().resolve()).lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        unique_dirs.append(folder)
+    return unique_dirs
 
 
 def any_product_image(root: Path) -> bool:
@@ -649,14 +679,29 @@ def collect_duckduckgo_candidates(product: Product, args: argparse.Namespace) ->
                 page_url=str(item.get("url") or ""),
             )
             score_candidate(candidate, product)
-            if args.download and candidate.status != "rejeitada":
-                download_candidate(candidate, product, args)
-                analyze_image_candidate(candidate)
-                score_candidate(candidate, product)
-                maybe_ocr_candidate(candidate, product, args)
             candidates.append(candidate)
 
         time.sleep(max(0.0, args.delay))
+
+    candidates = dedupe_candidates(candidates)
+    candidates.sort(key=lambda item: (candidate_status_rank(item), item.score), reverse=True)
+
+    if args.download:
+        downloaded = 0
+        download_limit = max(0, getattr(args, "download_per_product", 6))
+        for candidate in candidates:
+            if downloaded >= download_limit:
+                break
+            if candidate.status in {"rejeitada", "erro"}:
+                continue
+            download_candidate(candidate, product, args)
+            if not candidate.local_path:
+                continue
+            analyze_image_candidate(candidate)
+            score_candidate(candidate, product)
+            maybe_ocr_candidate(candidate, product, args)
+            downloaded += 1
+        candidates.sort(key=lambda item: (candidate_status_rank(item), item.score), reverse=True)
 
     return candidates
 
@@ -1329,20 +1374,20 @@ def write_reports(candidates: list[Candidate]) -> None:
     REVIEW_HTML.write_text(render_review_html(candidates), encoding="utf-8")
 
 
-def write_skipped_products(products: list[Product]) -> None:
+def write_skipped_products(products: list[Product], args: argparse.Namespace) -> None:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
-    fields = ["sku", "name", "output_dir", "image_count"]
+    fields = ["sku", "name", "existing_locations", "image_count"]
     with SKIPPED_PRODUCTS_CSV.open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         for product in products:
-            output_dir = final_product_dir(product)
+            locations = product_existing_locations(product, args)
             writer.writerow(
                 {
                     "sku": product.sku,
                     "name": product.name,
-                    "output_dir": str(output_dir),
-                    "image_count": product_image_count(output_dir),
+                    "existing_locations": " | ".join(str(location) for location in locations),
+                    "image_count": sum(product_image_count(location) for location in locations),
                 }
             )
 
