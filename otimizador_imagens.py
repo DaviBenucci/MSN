@@ -278,17 +278,29 @@ def load_products(args: argparse.Namespace) -> list[Product]:
 
 
 def products_from_local_input(input_path: Path, sku_filters: list[str] | None) -> list[Product]:
-    base = input_path.resolve()
+    base = input_path.expanduser().resolve()
     if not base.exists():
-        raise FileNotFoundError(f"Pasta de entrada nao encontrada: {base}")
+        raise FileNotFoundError(f"Entrada local nao encontrada: {base}")
 
     wanted = {normalize_sku(sku) for sku in sku_filters or []}
-    if base.name.lower() != "_raw" and any(is_supported_asset(path) for path in base.rglob("*") if path.is_file()):
+
+    if base.is_file():
+        if not is_supported_asset(base):
+            return []
+        sku = sku_filters[0] if sku_filters else base.stem
+        if wanted and normalize_sku(sku) not in wanted:
+            return []
+        return [Product(sku=safe_folder_name(sku), name=sku, source_dir=base)]
+
+    direct_assets = [path for path in base.iterdir() if path.is_file() and is_supported_asset(path)]
+    if base.name.lower() != "_raw" and direct_assets:
         sku = sku_filters[0] if sku_filters else base.name
-        return [Product(sku=safe_folder_name(sku), name=sku)]
+        if wanted and normalize_sku(sku) not in wanted:
+            return []
+        return [Product(sku=safe_folder_name(sku), name=sku, source_dir=base)]
 
     candidates: list[Path]
-    if any(is_supported_asset(path) for path in base.iterdir() if path.is_file()):
+    if direct_assets:
         candidates = [base]
     else:
         candidates = [path for path in base.iterdir() if path.is_dir()]
@@ -298,7 +310,7 @@ def products_from_local_input(input_path: Path, sku_filters: list[str] | None) -
         sku = path.name
         if wanted and normalize_sku(sku) not in wanted:
             continue
-        products.append(Product(sku=safe_folder_name(sku), name=sku))
+        products.append(Product(sku=safe_folder_name(sku), name=sku, source_dir=path))
     return products
 
 
@@ -846,14 +858,16 @@ def process_downloads_product(product: Product, args: argparse.Namespace) -> Pro
 def process_local_product(product: Product, args: argparse.Namespace) -> ProductResult:
     assert args.input is not None
     input_root = args.input.resolve()
-    product_input = input_root
-    if not any(is_supported_asset(path) for path in input_root.iterdir() if path.is_file()):
+    product_input = product.source_dir or input_root
+    if product.source_dir is None and input_root.is_dir() and not any(
+        is_supported_asset(path) for path in input_root.iterdir() if path.is_file()
+    ):
         child = input_root / safe_folder_name(product.sku)
         if child.exists():
             product_input = child
 
     output_dir = PRODUCTS_DIR / safe_folder_name(product.sku)
-    processed, failed, message = process_image_folder(product_input, output_dir, product.sku, args)
+    processed, failed, message = process_image_source(product_input, output_dir, product.sku, args)
     return ProductResult(
         sku=product.sku,
         name=product.name,
@@ -1048,6 +1062,9 @@ def collect_image_files(source_dir: Path, output_dir: Path | None = None, sku: s
     output_root = output_dir.resolve() if output_dir else None
     for path in sorted(source_dir.rglob("*")):
         if not path.is_file():
+            continue
+        relative_parts = path.relative_to(source_dir).parts[:-1]
+        if any(part.startswith("_") for part in relative_parts):
             continue
         if output_root and safe_sku:
             try:
@@ -1296,7 +1313,7 @@ def run_dry_run(products: list[Product], args: argparse.Namespace) -> int:
         if args.manual_downloads or args.icecat_public:
             search_url = public_search_url(attempts[0] if attempts else product.name)
         if args.input:
-            raw_dir = str(args.input.expanduser().resolve())
+            raw_dir = str(product.source_dir or args.input.expanduser().resolve())
         elif product.source_dir:
             raw_dir = str(product.source_dir)
         else:

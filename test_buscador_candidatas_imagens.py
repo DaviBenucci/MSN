@@ -122,6 +122,84 @@ class BuscadorCandidatasTest(unittest.TestCase):
             self.assertEqual([product.sku for product in products], ["TON-HP-BBB222A-CIA"])
             self.assertEqual([product.sku for product in args._skipped_existing_products], ["TON-HP-AAA111A-PRT"])
 
+    def test_empty_source_product_folder_is_not_skipped(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            source_root = Path(temp_dir) / "Produtos"
+            source_root.mkdir()
+            workbook_path = source_root / buscador.DEFAULT_WORKBOOK_NAME
+            write_workbook(
+                workbook_path,
+                [
+                    ("TON-HP-AAA111A-PRT", "Toner HP AAA111A Preto", ""),
+                    ("TON-HP-BBB222A-CIA", "Toner HP BBB222A Ciano", ""),
+                ],
+            )
+
+            (source_root / "TON-HP-AAA111A-PRT").mkdir()
+
+            args = Namespace(
+                source_root=source_root,
+                workbook=None,
+                sheet=buscador.DEFAULT_SHEET,
+                sku=None,
+                only_missing=False,
+                include_existing_products=False,
+                limit=None,
+            )
+
+            products = buscador.load_products(args)
+
+            self.assertEqual([product.sku for product in products], ["TON-HP-AAA111A-PRT", "TON-HP-BBB222A-CIA"])
+            self.assertEqual(args._skipped_existing_products, [])
+
+    def test_review_subfolder_images_do_not_skip_product(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            source_root = Path(temp_dir) / "Produtos"
+            source_root.mkdir()
+            workbook_path = source_root / buscador.DEFAULT_WORKBOOK_NAME
+            write_workbook(workbook_path, [("TON-HP-AAA111A-PRT", "Toner HP AAA111A Preto", "")])
+
+            review_dir = source_root / "TON-HP-AAA111A-PRT" / "_review"
+            review_dir.mkdir(parents=True)
+            (review_dir / "candidata-rejeitada.jpg").write_bytes(b"fake")
+
+            args = Namespace(
+                source_root=source_root,
+                workbook=None,
+                sheet=buscador.DEFAULT_SHEET,
+                sku=None,
+                only_missing=False,
+                include_existing_products=False,
+                limit=None,
+            )
+
+            products = buscador.load_products(args)
+
+            self.assertEqual([product.sku for product in products], ["TON-HP-AAA111A-PRT"])
+            self.assertEqual(args._skipped_existing_products, [])
+
+    def test_download_folder_is_created_even_without_downloaded_images(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            download_root = Path(temp_dir) / "Produtos"
+            product = buscador.Product(
+                row_number=2,
+                sku="TON-HP-AAA111A-PRT",
+                name="Toner HP AAA111A Preto",
+                brand="HP",
+                code="AAA111A",
+                codes=["AAA111A"],
+                kind="toner",
+                color="preto",
+                package=None,
+            )
+            args = Namespace(download_root=download_root)
+
+            target = buscador.ensure_product_download_folder(product, args)
+
+            self.assertTrue(target.exists())
+            self.assertTrue(target.is_dir())
+            self.assertEqual(target, download_root.resolve() / "TON-HP-AAA111A-PRT")
+
     def test_runtime_paths_default_local_root_to_source_root(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             source_root = Path(temp_dir) / "Produtos"

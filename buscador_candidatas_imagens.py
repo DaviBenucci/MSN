@@ -306,6 +306,8 @@ def main() -> int:
     candidates: list[Candidate] = []
     for index, product in enumerate(products, start=1):
         print(f"[{index}/{len(products)}] {product.sku} - {product.name}")
+        if args.download:
+            ensure_product_download_folder(product, args)
         product_candidates: list[Candidate] = []
 
         if args.local_root:
@@ -376,6 +378,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--web", action="store_true", help="Coleta candidatas no DuckDuckGo Images.")
     parser.add_argument("--download", action="store_true", help="Baixa candidatas web que passaram no filtro de codigo.")
     parser.add_argument(
+        "--download-rejected-review",
+        action="store_true",
+        help=(
+            "Tambem baixa candidatas rejeitadas em [SKU]/_review para revisao manual. "
+            "Imagens em pastas iniciadas com _ nao fazem o SKU ser pulado."
+        ),
+    )
+    parser.add_argument(
         "--download-root",
         type=Path,
         default=None,
@@ -398,6 +408,12 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=6,
         help="Quantidade maxima de imagens baixadas por produto.",
+    )
+    parser.add_argument(
+        "--review-per-product",
+        type=int,
+        default=8,
+        help="Quantidade maxima de candidatas rejeitadas baixadas em _review por produto.",
     )
     parser.add_argument("--delay", type=float, default=1.2, help="Pausa entre consultas web.")
     parser.add_argument("--apply-approvals", type=Path, help="CSV de aprovacao preenchido com approved=1/sim/ok.")
@@ -536,6 +552,12 @@ def load_products(args: argparse.Namespace) -> list[Product]:
 
 def download_root(args: argparse.Namespace) -> Path:
     return args.download_root.expanduser().resolve()
+
+
+def ensure_product_download_folder(product: Product, args: argparse.Namespace) -> Path:
+    target_dir = download_root(args) / safe_folder_name(product.sku)
+    target_dir.mkdir(parents=True, exist_ok=True)
+    return target_dir
 
 
 def final_product_dir(product: Product) -> Path:
@@ -703,6 +725,18 @@ def collect_duckduckgo_candidates(product: Product, args: argparse.Namespace) ->
             downloaded += 1
         candidates.sort(key=lambda item: (candidate_status_rank(item), item.score), reverse=True)
 
+    if getattr(args, "download_rejected_review", False):
+        reviewed = 0
+        review_limit = max(0, getattr(args, "review_per_product", 8))
+        for candidate in candidates:
+            if reviewed >= review_limit:
+                break
+            if candidate.status != "rejeitada":
+                continue
+            download_candidate(candidate, product, args, subdir="_review")
+            if candidate.local_path:
+                reviewed += 1
+
     return candidates
 
 
@@ -740,9 +774,16 @@ def fetch_text(url: str, referer: str | None = None) -> str:
         return response.read().decode("utf-8", errors="replace")
 
 
-def download_candidate(candidate: Candidate, product: Product, args: argparse.Namespace) -> None:
-    target_dir = download_root(args) / safe_folder_name(product.sku)
-    target_dir.mkdir(parents=True, exist_ok=True)
+def download_candidate(
+    candidate: Candidate,
+    product: Product,
+    args: argparse.Namespace,
+    subdir: str | None = None,
+) -> None:
+    target_dir = ensure_product_download_folder(product, args)
+    if subdir:
+        target_dir = target_dir / safe_folder_name(subdir)
+        target_dir.mkdir(parents=True, exist_ok=True)
     parsed = urlparse(candidate.image_url)
     suffix = Path(unquote(parsed.path)).suffix.lower()
     if suffix not in IMAGE_EXTENSIONS:

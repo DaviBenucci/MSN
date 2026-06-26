@@ -1,51 +1,459 @@
 ﻿sku,name,existing_locations,image_count
-TON-HP-CE313AB-MAG,Toner HP CE313AB Magenta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CE313AB-MAG,7
-TON-HP-Q5942YC-PRT,Toner HP Q5942YC Preto,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q5942YC-PRT,3
-TON-HP-C3906A-AZ,Toner HP C3906A cx. Azul e Branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-C3906A-AZ,4
-TON-HP-C4127A-AZ,Toner HP C4127A cx. Azul e Branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-C4127A-AZ,5
-TON-HP-Q2624A-AZ,Toner HP Q2624A cx. Azul e branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q2624A-AZ,3
-TON-HP-Q2613A-AZ,Toner HP Q2613A cx. Azul e branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q2613A-AZ,3
-TON-HP-Q2681A-CIA-NV,Toner HP Q2681A Ciano cx. Nova preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q2681A-CIA-NV,5
-TON-HP-Q2682A-AMR-NV,Toner HP Q2682A Amarelo cx. Nova preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q2682A-AMR-NV,5
-TON-HP-Q2683A-MAG-NV,Toner HP Q2683A Magenta cx. Nova preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q2683A-MAG-NV,4
-TON-HP-Q3963A-MAG-NV,Toner HP Q3963A Magenta Cx. Nova Preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q3963A-MAG-NV,3
-TON-HP-Q6002A-AMR,Toner HP Q6002A Amarelo,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q6002A-AMR,4
-TON-HP-Q6470A-NV,Toner HP Q6470A cx. Nova preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q6470A-NV,4
-TON-HP-Q6471A-CIA-NV,Toner HP Q6471A Ciano cx. Nova preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q6471A-CIA-NV,4
-TON-HP-Q6472A-AMR-NV,Toner HP Q6472A Amarelo cx. Nova preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q6472A-AMR-NV,3
-TON-HP-Q6470AC-PRT,Toner HP Q6470AC Preto,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q6470AC-PRT,5
-TON-HP-Q6471A-CIA-AZ,Toner HP Q6471A Ciano cx. Azul e branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q6471A-CIA-AZ,4
-TON-HP-Q6472A-AMR-AZ,Toner HP Q6472A Amarelo cx. Azul e branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q6472A-AMR-AZ,4
-TON-HP-Q6473A-MAG-AZ,Toner HP Q6473A Magenta cx. Azul e branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q6473A-MAG-AZ,4
-TON-HP-CC530A-PRT,Toner HP CC530A Preto,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CC530A-PRT,5
-TON-HP-CC531A-CIA-NV,Toner HP CC531A Ciano cx. Nova Preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CC531A-CIA-NV,5
-TON-HP-CC532A-AMR-NV,Toner HP CC532A Amarelo cx. Nova Preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CC532A-AMR-NV,5
-TON-HP-CC532A-AMR-AZ,Toner HP CC532A Amarelo cx. Azul e branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CC532A-AMR-AZ,1
-TON-HP-CC533A-MAG-NV,Toner HP CC533A Magenta cx. Nova Preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CC533A-MAG-NV,4
-TON-HP-CC533A-MAG-AZ,Toner HP CC533A Magenta cx. Azul e branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CC533A-MAG-AZ,2
-TON-HP-CB390A-PRT,Toner HP CB390A/YC Preto sendo 1 cx. Preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CB390A-PRT,2
-TON-HP-Q6460AC-PRT-BR,Toner HP Q6460AC Preto cx. branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q6460AC-PRT-BR,4
-TON-HP-Q5950A-PRT,Toner HP Q5950A Preto,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q5950A-PRT,3
-TON-HP-Q5952A-AMR,Toner HP Q5952A Amarelo cx. preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q5952A-AMR,6
-TON-HP-Q5953AC-MAG,Toner HP Q5953AC Magenta sendo 5 cx. Preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q5953AC-MAG,3
-TON-HP-C9730A-PRT,Toner HP C9730A Preto,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-C9730A-PRT,5
-TON-HP-C9731A-CIA,Toner Hp C9731A/AC Ciano,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-C9731A-CIA,5
-TON-HP-C9732A-AMR-AB,Toner HP C9732A/ AC Amarelo sendo 1 cx. Aberta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-C9732A-AMR-AB,5
-TON-HP-Q2610A,Toner HP Q2610A caixa Preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q2610A,5
-TON-HP-Q2610A-BR,Toner HP Q2610A Caixa Branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q2610A-BR,1
-TON-HP-Q7551X-PRT,Toner HP Q7551X/XZ Preto,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q7551X-PRT,3
-TON-HP-Q7551A,Toner HP Q7551A cx. Preta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q7551A,3
-TON-HP-Q7551A-BR,Toner HP Q7551A Caixa Branca,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q7551A-BR,3
-TON-HP-Q7581AC-CIA,Toner HP Q7581AC Ciano,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-Q7581AC-CIA,2
-TON-HP-CF320XC-PRT,Toner HP CF320XC Preto,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CF320XC-PRT,2
-TON-HP-CF322AC-AMR,Toner HP CF322AC Amarelo,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CF322AC-AMR,3
-TON-HP-CF323AC-MAG,Toner HP CF323AC Magenta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CF323AC-MAG,4
-TON-HP-CE402YC-AMR,Toner HP CE402YC/AC Amarelo,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-CE402YC-AMR,2
-PROD-HP-W9048MC,Recipiente de Residuo HP W9048MC,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\PROD-HP-W9048MC,6
-PROD-HP-W9058MC,Recipiente de Residuo HP W9058MC,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\PROD-HP-W9058MC,4
-PROD-HP-6SB85A,Recipiente de Residuo HP 6SB85A,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\PROD-HP-6SB85A,2
-TON-HP-W9010MC-PRT,Toner HP W9010MC Preto,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-W9010MC-PRT,2
-TON-HP-W9011MC-CIA,Toner HP W9011MC Ciano,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-W9011MC-CIA,2
-TON-HP-W9012MC-AMR,Toner HP W9012MC Amarelo,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-W9012MC-AMR,4
-TON-HP-W9013MC-MAG,Toner HP W9013MC Magenta,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\TON-HP-W9013MC-MAG,2
-DRU-HP-W9215MC,Drum HP W9215MC,C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\DRU-HP-W9215MC,2
+TON-HP-CE313AB-MAG,Toner HP CE313AB Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE313AB-MAG,7
+TON-HP-Q5942YC-PRT,Toner HP Q5942YC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q5942YC-PRT,3
+TON-HP-C3906A-AZ,Toner HP C3906A cx. Azul e Branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-C3906A-AZ,4
+TON-HP-C4127A-AZ,Toner HP C4127A cx. Azul e Branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-C4127A-AZ,5
+TON-HP-Q2624A-AZ,Toner HP Q2624A cx. Azul e branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q2624A-AZ,3
+TON-HP-Q2613A-AZ,Toner HP Q2613A cx. Azul e branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q2613A-AZ,3
+TON-HP-Q2681A-CIA-NV,Toner HP Q2681A Ciano cx. Nova preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q2681A-CIA-NV,5
+TON-HP-Q2682A-AMR-NV,Toner HP Q2682A Amarelo cx. Nova preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q2682A-AMR-NV,5
+TON-HP-Q2683A-MAG-NV,Toner HP Q2683A Magenta cx. Nova preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q2683A-MAG-NV,4
+TON-HP-Q3963A-MAG-NV,Toner HP Q3963A Magenta Cx. Nova Preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q3963A-MAG-NV,3
+TON-HP-Q6002A-AMR,Toner HP Q6002A Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6002A-AMR,4
+TON-HP-Q6470A-NV,Toner HP Q6470A cx. Nova preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6470A-NV,4
+TON-HP-Q6471A-CIA-NV,Toner HP Q6471A Ciano cx. Nova preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6471A-CIA-NV,4
+TON-HP-Q6472A-AMR-NV,Toner HP Q6472A Amarelo cx. Nova preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6472A-AMR-NV,3
+TON-HP-Q6470AC-PRT,Toner HP Q6470AC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6470AC-PRT,5
+TON-HP-Q6471A-CIA-AZ,Toner HP Q6471A Ciano cx. Azul e branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6471A-CIA-AZ,4
+TON-HP-Q6472A-AMR-AZ,Toner HP Q6472A Amarelo cx. Azul e branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6472A-AMR-AZ,4
+TON-HP-Q6473A-MAG-AZ,Toner HP Q6473A Magenta cx. Azul e branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6473A-MAG-AZ,4
+TON-HP-CC530A-PRT,Toner HP CC530A Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CC530A-PRT,5
+TON-HP-CC531A-CIA-NV,Toner HP CC531A Ciano cx. Nova Preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CC531A-CIA-NV,5
+TON-HP-CC532A-AMR-NV,Toner HP CC532A Amarelo cx. Nova Preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CC532A-AMR-NV,5
+TON-HP-CC532A-AMR-AZ,Toner HP CC532A Amarelo cx. Azul e branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CC532A-AMR-AZ,1
+TON-HP-CC533A-MAG-NV,Toner HP CC533A Magenta cx. Nova Preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CC533A-MAG-NV,4
+TON-HP-CC533A-MAG-AZ,Toner HP CC533A Magenta cx. Azul e branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CC533A-MAG-AZ,2
+TON-HP-CB390A-PRT,Toner HP CB390A/YC Preto sendo 1 cx. Preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CB390A-PRT,2
+TON-HP-Q6460AC-PRT-BR,Toner HP Q6460AC Preto cx. branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6460AC-PRT-BR,4
+TON-HP-Q5950A-PRT,Toner HP Q5950A Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q5950A-PRT,3
+TON-HP-Q5952A-AMR,Toner HP Q5952A Amarelo cx. preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q5952A-AMR,6
+TON-HP-Q5953AC-MAG,Toner HP Q5953AC Magenta sendo 5 cx. Preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q5953AC-MAG,3
+TON-HP-C9730A-PRT,Toner HP C9730A Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-C9730A-PRT,5
+TON-HP-C9731A-CIA,Toner Hp C9731A/AC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-C9731A-CIA,5
+TON-HP-C9732A-AMR-AB,Toner HP C9732A/ AC Amarelo sendo 1 cx. Aberta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-C9732A-AMR-AB,5
+TON-HP-Q2610A,Toner HP Q2610A caixa Preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q2610A,5
+TON-HP-Q2610A-BR,Toner HP Q2610A Caixa Branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q2610A-BR,1
+TON-HP-Q7551X-PRT,Toner HP Q7551X/XZ Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q7551X-PRT,3
+TON-HP-Q7551A,Toner HP Q7551A cx. Preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q7551A,3
+TON-HP-Q7551A-BR,Toner HP Q7551A Caixa Branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q7551A-BR,3
+TON-HP-Q7581AC-CIA,Toner HP Q7581AC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q7581AC-CIA,2
+TON-HP-CF320XC-PRT,Toner HP CF320XC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF320XC-PRT,2
+TON-HP-CF322AC-AMR,Toner HP CF322AC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF322AC-AMR,3
+TON-HP-CF323AC-MAG,Toner HP CF323AC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF323AC-MAG,4
+TON-HP-CE402YC-AMR,Toner HP CE402YC/AC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE402YC-AMR,2
+PROD-HP-W9048MC,Recipiente de Residuo HP W9048MC,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-W9048MC,6
+PROD-HP-W9058MC,Recipiente de Residuo HP W9058MC,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-W9058MC,4
+PROD-HP-6SB85A,Recipiente de Residuo HP 6SB85A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-6SB85A,2
+TON-HP-W9010MC-PRT,Toner HP W9010MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9010MC-PRT,2
+TON-HP-W9011MC-CIA,Toner HP W9011MC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9011MC-CIA,2
+TON-HP-W9012MC-AMR,Toner HP W9012MC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9012MC-AMR,4
+TON-HP-W9013MC-MAG,Toner HP W9013MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9013MC-MAG,2
+DRU-HP-W9215MC,Drum HP W9215MC,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-W9215MC,2
+TON-HP-W9210MC-PRT,Toner HP W9210MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9210MC-PRT,6
+TON-HP-W9211MC-CIA,Toner HP W9211MC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9211MC-CIA,5
+TON-HP-W9212MC-AMR,Toner HP W9212MC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9212MC-AMR,6
+TON-HP-W9213MC-MAG,Toner HP W9213MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9213MC-MAG,5
+TON-HP-W2010A-PRT,Toner HP W2010A Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2010A-PRT,6
+TON-HP-W2011A-CIA,Toner HP W2011A Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2011A-CIA,6
+TON-HP-W2012A-AMR,Toner HP W2012A Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2012A-AMR,6
+TON-HP-W2020XC-PRT,Toner HP W2020XC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2020XC-PRT,6
+TON-HP-W2021XC-CIA,Toner HP W2021XC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2021XC-CIA,6
+TON-HP-W2022XC-AMR,Toner HP W2022XC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2022XC-AMR,6
+TON-HP-W2023XC-MAG,Toner HP W2023XC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2023XC-MAG,6
+TON-HP-W2150XC-PRT,Toner HP W2150XC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2150XC-PRT,6
+TON-HP-W2151XC-CIA,Toner HP W2151XC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2151XC-CIA,6
+TON-HP-W2152XC-AMR,Toner HP W2152XC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2152XC-AMR,3
+TON-HP-W2153XC-MAG,Toner HP W2153XC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W2153XC-MAG,6
+TON-HP-W9170MC-PRT,Toner HP W9170MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9170MC-PRT,6
+TON-HP-W9171MC-CIA,Toner HP W9171MC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9171MC-CIA,6
+TON-HP-W9172MC-AMR,Toner HP W9172MC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9172MC-AMR,2
+TON-HP-W9173MC-MAG,Toner HP W9173MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9173MC-MAG,6
+TON-HP-W9060MC-PRT,Toner HP W9060MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9060MC-PRT,6
+TON-HP-W9061MC-CIA,Toner HP W9061MC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9061MC-CIA,6
+TON-HP-W9062MC-AMR,Toner HP W9062MC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9062MC-AMR,5
+TON-HP-W9063MC-MAG,Toner HP W9063MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9063MC-MAG,6
+TON-HP-W9093MC-MAG,Toner HP W9093MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9093MC-MAG,5
+DRU-HP-W9018MC,Drum HP W9018MC,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-W9018MC,6
+DRU-HP-W9055MC,Drum HP W9055MC,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-W9055MC,6
+TON-HP-CF214XC-PRT,Toner HP CF214XC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF214XC-PRT,6
+TON-HP-W9004MZ-PRT,Toner HP W9004MZ Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9004MZ-PRT,1
+TON-HP-W9008MZ-PRT,Toner HP W9008MZ Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9008MZ-PRT,5
+TON-HP-W9024MZ-PRT,Toner HP W9024MZ Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9024MZ-PRT,3
+TON-HP-W9037MC-PRT,Toner HP W9037MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9037MC-PRT,6
+TON-HP-CF258XZ-PRT,Toner HP CF258XZ Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF258XZ-PRT,3
+TON-HP-W1030XZ-PRT,Toner HP W1030XZ Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W1030XZ-PRT,1
+TON-HP-W1330XZ-PRT,Toner HP W1330XZ Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W1330XZ-PRT,6
+DRU-HP-W1332AC,Drum HP W1332AC,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-W1332AC,6
+TON-HP-CE255A-PRT,Toner HP CE255A Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE255A-PRT,6
+TON-HP-CE255X-PRT,Toner HP CE255X Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE255X-PRT,6
+TON-HP-CE255XZ-PRT,Toner HP CE255XZ Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE255XZ-PRT,1
+TON-HP-Q2612A-PRT,Toner HP Q2612A Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q2612A-PRT,6
+DRU-HP-CP5525,Unidade Coletora HP CP5525 - CE980A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-CP5525,6
+TON-HP-W9030MC-PRT-AB,Toner HP W9030MC Preto sendo 1 cx. Aberta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9030MC-PRT-AB,6
+TON-HP-W9031MC-CIA,Toner HP W9031MC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9031MC-CIA,6
+TON-HP-W9032MC-AMR,Toner HP W9032MC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9032MC-AMR,6
+TON-HP-W9033MC-MAG,Toner HP W9033MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9033MC-MAG,6
+TON-HP-W9017MC-PRT,Toner HP W9017MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9017MC-PRT,6
+TON-HP-W9005MC-PRT,Toner HP W9005MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9005MC-PRT,6
+PROD-HP-M830-MAG,Kit Manutenção HP M830 / M806 - C2H67A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-M830-MAG,6
+PROD-HP-M606,"Kit de Manutenção F2G76A HP Original | M606, M605, M604",C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-M606,6
+FUS-HP-110V,UNIDADE FUSORA HP LJ E87640 / E87650 / E87660 110V - X3A73-60016,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-110V,6
+FUS-GEN-K7400,Unidade Fusora Sl-k7400 Sl-k7500 Sl-k7600 - ss053-60005,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-GEN-K7400,6
+PROD-HP-M607,Kit de Manutenção HP L0H24A-67901 - 225.000 PGS HP M607/M608/M609,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-M607,6
+FUS-HP-M404,Fusor HP RM2-2554-000CN - HP M404 - M428,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-M404,1
+FUS-HP-RM22585000CN,Fusor HP RM2-2585-000CN,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-RM22585000CN,6
+FUS-HP-110V-736,Fusor HP 527G6A - 6QN29-67008 - 110v HP 5700dn/ 5800dn/ X57945dn,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-110V-736,6
+FUS-HP-110,"Kit de fusor para HP LaserJet (110 V) (527G0A) 5700, 5800, X55745 e X57945",C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-110,6
+PROD-HP-220V,HP LaserJet 220V Maintenance Kit (L0H25A),C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-220V,6
+FUS-HP-JC9101210A,Fusor HP JC91-01210A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-JC9101210A,4
+DRU-HP-W9006MC,Drum HP W9006MC,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-W9006MC,6
+TON-HP-W9190MC-PRT,Toner HP W9190MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9190MC-PRT,6
+TON-HP-W9191MC-CIA,Toner HP W9191MC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9191MC-CIA,6
+TON-HP-W9192MC-AMR,Toner HP W9192MC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9192MC-AMR,6
+TON-HP-W9193MC-MAG,Toner HP W9193MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9193MC-MAG,6
+TON-HP-W9050MC-PRT-SC,Toner HP W9050MC Preto - 2 sem caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9050MC-PRT-SC,6
+TON-HP-W9051MC-CIA-SC,Toner HP W9051MC Ciano - 6 sem caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9051MC-CIA-SC,6
+TON-HP-W9052MC-AMR-SC,Toner HP W9052MC Amarelo - 5 sem caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9052MC-AMR-SC,6
+TON-HP-W9053MC-MAG-SC,Toner HP W9053MC Magenta - 7 sem caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9053MC-MAG-SC,6
+TON-HP-W9150MC-PRT,Toner HP W9150MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9150MC-PRT,6
+TON-HP-W9151MC-CIA,Toner HP W9151MC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9151MC-CIA,5
+TON-HP-W9152MC-AMR,Toner HP W9152MC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9152MC-AMR,6
+TON-HP-W9153MC-MAG,Toner HP W9153MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9153MC-MAG,6
+TON-HP-W9241MC-CIA,Toner HP W9241MC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9241MC-CIA,3
+TON-HP-W9242MC-AMR,Toner HP W9242MC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9242MC-AMR,5
+TON-HP-W9243MC-MAG,Toner HP W9243MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9243MC-MAG,5
+TON-HP-W9250MC-PRT,Toner HP W9250MC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9250MC-PRT,6
+TON-HP-W9251MC-CIA,Toner HP W9251MC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9251MC-CIA,6
+TON-HP-W9252MC-AMR,Toner HP W9252MC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9252MC-AMR,4
+TON-HP-W9253MC-MAG,Toner HP W9253MC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9253MC-MAG,5
+TON-HP-CF412XC-AMR,Toner HP CF412XC Amarelo cx. Recolada,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF412XC-AMR,6
+TON-HP-CE340AC-PRT,Toner HP CE340AC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE340AC-PRT,6
+TON-HP-CE341AC-CIA,Toner HP CE341AC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE341AC-CIA,6
+TON-HP-CE342AC-AMR,Toner HP CE342AC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE342AC-AMR,6
+TON-HP-CE343AC-MAG-AB,Toner HP CE343AC Magenta cx. Aberta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE343AC-MAG-AB,6
+TON-HP-CF300AC-PRT,Toner HP CF300AC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF300AC-PRT,6
+TON-HP-CF301AC-CIA,Toner HP CF301AC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF301AC-CIA,6
+TON-HP-CF302AC-AMR,Toner HP CF302AC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF302AC-AMR,6
+TON-HP-CF303AC-MAG,Toner HP CF303AC Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF303AC-MAG,6
+TON-HP-CF311AC-CIA,Toner HP CF311AC Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF311AC-CIA,3
+TON-HP-CF312AC-AMR,Toner HP CF312AC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF312AC-AMR,6
+TON-HP-CF313AC-MAG-AB,Toner HP CF313AC Magenta sendo 1 cx. aberta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF313AC-MAG-AB,6
+TON-HP-CF332AC-AMR,Toner HP CF332AC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF332AC-AMR,6
+TON-HP-CF333AC-MAG,Toner HP CF333AC Magenta cx. Rasgada/boa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF333AC-MAG,6
+TON-HP-CE250X-PRT,Toner HP CE250X Preto cx. Preta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE250X-PRT,6
+TON-HP-CE262AC-AMR,Toner HP CE262AC Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE262AC-AMR,6
+TON-HP-Q7570AC-PRT,Toner HP Q7570AC Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q7570AC-PRT,6
+DRU-HP-CB386A-AMR,Unidade de imagem HP CB386A Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-CB386A-AMR,6
+DRU-HP-CF364A-AMR,Unidade de imagem HP CF364A Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-CF364A-AMR,6
+PROD-HP-X3A6561001,HP Printer Part X3A65-61001,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-X3A6561001,5
+PROD-XER-008R013021,Recipiente de residuo Xerox 008R013021 - WorkCentre 7132/7232/7242,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-XER-008R013021,6
+TON-XER-106R01084-AMR,Toner Xerox 106R01084 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-106R01084-AMR,6
+FUS-XER-6300,Fusor Xerox 6300/6350 - 115R00035,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-XER-6300,6
+DRU-XER-108R00645,Unidade de Imagem Xerox 108R00645,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-XER-108R00645,6
+TON-XER-006R01738-PRT,Toner Xerox 006R01738 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-006R01738-PRT,6
+TON-XER-6600-PRT,Toner Xerox 6600/6605 - 106R02236 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-6600-PRT,6
+TON-XER-6600-CIA,Toner Xerox 6600/6605 - 106R02233 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-6600-CIA,6
+TON-XER-6600-AMR,Toner Xerox 6600/6605 - 106R02235 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-6600-AMR,6
+TON-XER-6600-MAG,Toner Xerox 6600/6605 - 106R02234 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-6600-MAG,6
+TON-XER-C7120-PRT,Toner Xerox C7120 - 006R01828 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C7120-PRT,4
+TON-XER-C7120-CIA,Toner Xerox C7120 - 006R01829 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C7120-CIA,6
+TON-XER-C7120-MAG,Toner Xerox C7120 - 006R01830 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C7120-MAG,6
+TON-XER-C7120-AMR,Toner Xerox C7120 - 006R01831 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C7120-AMR,2
+DRU-XER-C8130,Drum Xerox C8130/8145 - 013R00681,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-XER-C8130,3
+TON-XER-C8130-PRT,Toner Xerox C8130 - 006R01742 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C8130-PRT,6
+TON-XER-C8130-CIA,Toner Xerox C8130 - 006R01743 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C8130-CIA,4
+TON-XER-C8130-MAG,Toner Xerox C8130 - 006R01744 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C8130-MAG,6
+TON-XER-C8130-AMR,Toner Xerox C8130 - 006R01745 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C8130-AMR,3
+TON-XER-C8130-AMR-799,Toner Xerox C8130 - 006R01757 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C8130-AMR-799,4
+TON-XER-C7020-AMR,Toner Xerox C7020 - 106R03746 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C7020-AMR,2
+PROD-XER-C600,Kit de Manutenção Xerox C600 / C605 - 108R01492,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-XER-C600,4
+FUS-XER-C600,Fusor Xerox C600 / C605 - 115R00135,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-XER-C600,6
+DRU-XER-C600-PRT,Drum Xerox C600 - 108R01488 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-XER-C600-PRT,3
+DRU-XER-C600-CIA,Drum Xerox C600 - 108R01485 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-XER-C600-CIA,2
+DRU-XER-C600-AMR,Drum Xerox C600 - 108R01487 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-XER-C600-AMR,1
+DRU-XER-C600-MAG,Drum Xerox C600 - 108R01486 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-XER-C600-MAG,1
+TON-XER-C600-PRT,Toner Xerox C600 - 106R03927 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C600-PRT,6
+TON-XER-C600-CIA,Toner Xerox C600 - 106R03924 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C600-CIA,6
+TON-XER-C600-MAG,Toner Xerox C600 - 106R03925 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C600-MAG,4
+TON-XER-C600-AMR,Toner Xerox C600 - 106R03926 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C600-AMR,5
+TON-XER-C600-AMR-811,Toner Xerox C600/C605 - 106R03938 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C600-AMR-811,6
+TON-XER-B400-PRT,Toner Xerox B400 - 106R03586 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-B400-PRT,2
+PROD-XER-676K51541-CIA,Revelador Xerox 676K51541 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-XER-676K51541-CIA,6
+PROD-XER-676K51561-AMR,Revelador Xerox 676K51561 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-XER-676K51561-AMR,6
+PROD-XER-676K51531-PRT,Developer Xerox 676K51531 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-XER-676K51531-PRT,6
+PROD-XER-675K85030-PRT,Developer Xerox 675K85030 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-XER-675K85030-PRT,6
+PROD-XER-675K85040-CIA,Developer Xerox 675K85040 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-XER-675K85040-CIA,6
+PROD-XER-675K85060-AMR,Developer Xerox 675K85060 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-XER-675K85060-AMR,6
+PROD-XER-8870-CIA,Cera Xerox ColorQube 8870 / 8880 - 108R00958 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-XER-8870-CIA,6
+TON-XER-7500-CIA,Toner Xerox 7500 - 106R01443 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-7500-CIA,6
+TON-XER-7500-MAG,Toner Xerox 7500 - 106R01444 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-7500-MAG,6
+TON-XER-7500-AMR,Toner Xerox 7500 - 106R01445 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-7500-AMR,6
+TON-XER-7500-PRT,Toner Xerox 7500 - 106R01446 Black,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-7500-PRT,6
+TON-XER-7830-AMR,Toner Xerox 7830 - 006R01518 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-7830-AMR,6
+TON-XER-7800-AMR,Toner Xerox 7800 - 106R01572 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-7800-AMR,6
+TON-XER-7800-MAG,Toner Xerox 7800 - 106R01571 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-7800-MAG,6
+TON-XER-7800-PRT,Toner Xerox 7800 - 106R01573 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-7800-PRT,6
+DRU-XER-B7025,Drum Xerox B7025/B7030/B7035 - 113R00779,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-XER-B7025,6
+TON-XER-B7025-PRT,Toner Xerox B7025/B7030/B7035 - 106R03396 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-B7025-PRT,6
+TON-XER-B8045-PRT,Toner Xerox B8045 - 006R01683 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-B8045-PRT,6
+DRU-XER-B9100,Fotorreceptor Xerox Drum Cru Primelink B9100 - 013R00684,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-XER-B9100,4
+FUS-XER-C8000,Fusor Xerox C8000/C9000 - 115R00143,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-XER-C8000,6
+TON-XER-C9000-CIA,Toner Xerox C9000 - 106R04082 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-XER-C9000-CIA,6
+PAP-SAM-M4080FX,Conjunto Passagem Papel Samsung M4080fx M4580 Jc82-00376a,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PAP-SAM-M4080FX,6
+FUS-SAM-SCX4828,Fusor Samsung SCX-4828 / Xerox 3220 - JC96-05133A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-SCX4828,6
+PROD-SAM-X4300-PRT,Developer Samsung X4300 - JC96-06732A Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-X4300-PRT,6
+PROD-SAM-X7400,"Developer Samsung X7400,X7500,X7600 - JC96-12518A",C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-X7400,6
+DRU-HP-X4220-PRT,UNIDADE REVELADORA HP-SAMSUNG E77422/428 X4220/50 4300 JC96-11666A Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-X4220-PRT,4
+DRU-HP-X4220-CIA,UNIDADE REVELADORA HP-SAMSUNG E77422/428 X4220/50 4300 JC96-06731A Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-X4220-CIA,3
+DRU-HP-X4220-AMR,UNIDADE REVELADORA HP-SAMSUNG E77422/428 X4220/50 4300 JC96-06729A Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-X4220-AMR,3
+DRU-HP-X4220-MAG,UNIDADE REVELADORA HP-SAMSUNG E77422/428 X4220/50 4300 JC96-06730A Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-X4220-MAG,4
+FUS-SAM-K2200,Fusor Samsung K2200 - JC91-01127A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-K2200,3
+FUS-SAM-ML5510ND,Fusor Samsung ML5510ND/ML5512N /ML6510ND/ML6512ND - JC91-01104A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-ML5510ND,6
+FUS-SAM-X4220,Fusor Samsung X4220/4250/4300 - JC91-01210A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-X4220,6
+FUS-SAM-C3010DW,Fusor Samsung CLP-680 / CLX-6260 / SL-C3010DW - JC91-0112A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-C3010DW,6
+FUS-SAM-C3010DW-846,Fusor Samsung CLP-680 / CLX-6260 / SL-C3010DW - JC91-01213A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-C3010DW-846,6
+FUS-SAM-M4530,Fusor Samsung SL-M4530/M4560/M4580 - JC91-01176A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-M4530,6
+FUS-HP-M4070,Fusor Samsung M4070 / HP M408 - JC91-01023A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-M4070,2
+FUS-SAM-D6555A,Fusor Samsung D6555A - JC91-00973A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-D6555A,6
+FUS-SAM-ML4510,Fusor Samsung ML-4510 - JC91-01029A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-ML4510,6
+FUS-SAM-C4010ND,Fusor Samsung C4010ND - JC91-01227A - SS218-67004,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-C4010ND,2
+FUS-HP-E7782,Fusor Samsung/HP HP LASERJET E77822 E77830 E77825 E7782 - JC91-01235A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-E7782,6
+PROD-SAM-JC6108019A,Samsung JC61-08019A Guia Interno,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-JC6108019A,4
+PROD-SAM-JC6601871A,Rolete Heat Samsung JC66-01871A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-JC6601871A,6
+FUS-HP-JC6604148A,Rolete Fusor Samsung HP JC66-04148A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-JC6604148A,6
+PROD-HP-JC6601825A,Roletes de pressão Samsung HP JC66-01825A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-JC6601825A,6
+PROD-SAM-JC6601861A,Rolete Heat Samsung JC66-01861A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-JC6601861A,6
+PROD-SAM-JC6903309A00,Samsung JC69-03309A00,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-JC6903309A00,2
+PROD-SAM-T609,Belt Samsung CLT-T609,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-T609,6
+TON-SAM-K609S-PRT,Toner Samsung K609s Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K609S-PRT,6
+TON-SAM-C609S-CIA,Toner Samsung C609s Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-C609S-CIA,6
+TON-SAM-Y609S-AMR,Toner Samsung Y609s Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-Y609S-AMR,6
+TON-SAM-M609S-MAG,Toner Samsung M609s Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M609S-MAG,6
+TON-SAM-D201L-PRT,Toner Samsung D201L Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-D201L-PRT,6
+TON-SAM-D203U-PRT,Toner Samsung D203U Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-D203U-PRT,6
+TON-SAM-D358S-PRT,Toner Samsung D358s Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-D358S-PRT,6
+TON-SAM-K706S-PRT,Toner Samsung K706s Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K706S-PRT,5
+DRU-SAM-R708,Unidade de Imagem Samsung R708,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-SAM-R708,6
+DRU-SAM-R307,Unidade de Imagem Samsung R307,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-SAM-R307,6
+TON-SAM-307E-PRT,Toner Samsung 307E Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-307E-PRT,6
+TON-SAM-307U-PRT,Toner Samsung 307U Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-307U-PRT,6
+DRU-SAM-R204,Unidade de Imagem Samsung R204,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-SAM-R204,6
+TON-SAM-204L-PRT,Toner Samsung 204L Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-204L-PRT,6
+TON-SAM-204U-PRT,Toner Samsung 204U Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-204U-PRT,6
+DRU-SAM-R304,Unidade de Imagem Samsung R304,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-SAM-R304,6
+TON-SAM-304E-PRT,Toner Samsung 304E Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-304E-PRT,6
+TON-SAM-K503L-PRT,Toner Samsung K503L Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K503L-PRT,6
+TON-SAM-C503L-CIA,Toner Samsung C503L Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-C503L-CIA,6
+TON-SAM-Y503L-AMR,Toner Samsung Y503L Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-Y503L-AMR,6
+TON-SAM-M503L-MAG,Toner Samsung M503L Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M503L-MAG,6
+PROD-SAM-W506,Recipiente de Residuo Samsung W506,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-W506,6
+TON-SAM-K506L-PRT,Toner Samsung K506L Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K506L-PRT,6
+TON-SAM-K603L-PRT,Toner Samsung K603L Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K603L-PRT,6
+TON-SAM-C603L-CIA,Toner Samsung C603L Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-C603L-CIA,5
+TON-SAM-Y603L-AMR,Toner Samsung Y603L Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-Y603L-AMR,6
+TON-SAM-M603L-MAG,Toner Samsung M603L Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M603L-MAG,6
+DRU-SAM-R6555A,Unidade de Imagem Samsung R6555A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-SAM-R6555A,6
+TON-SAM-D6555A-PRT,Toner Samsung D6555A Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-D6555A-PRT,6
+DRU-SAM-R808,Unidade de Imagem Samsung R808,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-SAM-R808,6
+TON-SAM-K808S-PRT,Toner Samsung K808s Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K808S-PRT,6
+TON-SAM-C808S-CIA,Toner Samsung C808s Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-C808S-CIA,6
+TON-SAM-Y808S-AMR,Toner Samsung Y808s Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-Y808S-AMR,6
+TON-SAM-M808S-MAG,Toner Samsung M808s Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M808S-MAG,6
+PROD-SAM-W806,Recipiente de Residuo Samsung W806,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-W806,6
+DRU-SAM-R806K-PRT,Unidade de Imagem Samsung R806K Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-SAM-R806K-PRT,6
+DRU-SAM-R806X,Unidade de Imagem Samsung R806X Colorido,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-SAM-R806X,6
+TON-SAM-K806S-PRT,Toner Samsung K806s Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K806S-PRT,6
+TON-SAM-C806S-CIA,Toner Samsung C806s Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-C806S-CIA,6
+TON-SAM-Y806S-AMR,Toner Samsung Y806s Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-Y806S-AMR,6
+TON-SAM-M806S-MAG,Toner Samsung M806s Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M806S-MAG,6
+PROD-SAM-W659,Recipiente de residuo Samsung W659,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-W659,6
+DRU-SAM-R659,Unidade de Imagem Samsung R659,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-SAM-R659,6
+TON-SAM-K659-PRT,Toner Samsung K659 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K659-PRT,4
+TON-SAM-C659-CIA,Toner Samsung C659 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-C659-CIA,2
+TON-SAM-Y659-AMR,Toner Samsung Y659 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-Y659-AMR,1
+TON-SAM-M659-MAG,Toner Samsung M659 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M659-MAG,2
+TON-SAM-K508L-PRT,Toner Samsung K508L Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K508L-PRT,6
+TON-SAM-Y508L-AMR,Toner Samsung Y508L Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-Y508L-AMR,6
+TON-SAM-M508L-MAG,Toner Samsung M508L Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M508L-MAG,6
+TON-SAM-104S-PRT,Toner Samsung 104S Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-104S-PRT,6
+TON-SAM-105L-PRT,Toner Samsung 105L Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-105L-PRT,6
+TON-SAM-2850-PRT,Toner Samsung 2850 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-2850-PRT,6
+TON-SAM-208L-PRT-BR,Toner Samsung 208L Preto cx. Branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-208L-PRT-BR,6
+TON-SAM-2010D3-PRT,Toner Samsung 2010D3 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-2010D3-PRT,6
+PROD-SAM-W8380A,Waste Recipiente Samsung W8380A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-W8380A,6
+TON-SAM-D4550B-PRT,Toner Samsung D4550B Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-D4550B-PRT,6
+PROD-SAM-JC9501941AR,Rolo de transferência Samsung JC95-01941AR,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-JC9501941AR,2
+FUS-SAM-JC9105704A,Fusor Samsung JC91-05704A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-SAM-JC9105704A,6
+PROD-SAM-JC6905689A00,Samsung JC69-05689A00,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-JC6905689A00,2
+PROD-SAM-JC6905718A00,Samsung JC69-05718A00,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-JC6905718A00,2
+PROD-SAM-JC6903309A00-921,Samsung JC69-03309A00,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-SAM-JC6903309A00-921,2
+DRU-GEN-4500,Unidade de Imagem Ricoh SP 4500,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-GEN-4500,6
+TON-GEN-4500,Toner Ricoh SP 4500,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-4500,6
+TON-GEN-C2551-CIA,Toner Ricoh C2551/C2550 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C2551-CIA,6
+TON-GEN-C2551-AMR,Toner Ricoh C2551 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C2551-AMR,5
+TON-GEN-C2551-MAG,Toner Ricoh C2551 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C2551-MAG,3
+TON-GEN-145-CIA,Toner Ricoh 145 HY Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-145-CIA,6
+TON-GEN-145-MAG,Toner Ricoh 145 HY Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-145-MAG,6
+TON-GEN-C401-PRT,Toner Ricoh C401 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C401-PRT,3
+TON-GEN-C400-MAG,Toner Ricoh C400 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C400-MAG,6
+TON-GEN-C400-AMR,Toner Ricoh C400 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C400-AMR,5
+TON-GEN-SPC430-PRT,Toner Ricoh SPC430 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-SPC430-PRT,6
+TON-GEN-SPC430-CIA,Toner Ricoh SPC430 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-SPC430-CIA,6
+TON-GEN-SPC430-AMR,Toner Ricoh SPC430 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-SPC430-AMR,6
+TON-GEN-SPC430-MAG,Toner Ricoh SPC430 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-SPC430-MAG,4
+TON-GEN-305-PRT,Toner Ricoh MP 305 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-305-PRT,6
+TON-GEN-C406-PRT,Toner Ricoh C406 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C406-PRT,6
+TON-GEN-MP601-PRT,Toner Ricoh MP-601 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-MP601-PRT,6
+TON-GEN-C300-PRT,Toner Ricoh IM C300 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C300-PRT,6
+TON-GEN-C300-AMR,Toner Ricoh IM C300 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C300-AMR,3
+TON-GEN-C300-MAG,Toner Ricoh IM C300 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C300-MAG,6
+TON-GEN-C2000-AMR,Toner Ricoh C2000/2500 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C2000-AMR,3
+TON-GEN-C2000-MAG,Toner Ricoh C2000/2500 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C2000-MAG,1
+TON-GEN-C2503H-PRT,Toner Ricoh C2503H Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C2503H-PRT,1
+TON-GEN-C2503H-CIA,Toner Ricoh C2503H Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C2503H-CIA,3
+TON-GEN-C2503H-AMR,Toner Ricoh C2503H Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C2503H-AMR,2
+TON-GEN-3503H-PRT,Toner Ricoh 3503H Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-3503H-PRT,1
+TON-GEN-3503H-MAG,Toner Ricoh 3503H Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-3503H-MAG,1
+PROD-GEN-C220,Waste Recipiente Ricoh SP C220,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-GEN-C220,6
+TON-GEN-310C-CIA,Toner Ricoh SP 310C Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-310C-CIA,2
+TON-GEN-310Y-AMR,Toner Ricoh SP 310Y Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-310Y-AMR,1
+TON-GEN-310M-MAG,Toner Ricoh SP 310M Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-310M-MAG,4
+TON-GEN-C310-MAG,Toner Ricoh SP C310 - 406477-TT Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C310-MAG,2
+TON-GEN-C252DN-MAG,Toner Ricoh SP C252DN - 407655-TT Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-C252DN-MAG,4
+TON-GEN-3710-PRT,Toner Ricoh SP 3710 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-3710-PRT,6
+TON-OKI-B431D-PRT,Toner Okidata B431d/MB491 p/n 44917601 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-OKI-B431D-PRT,2
+TON-CAN-GPR52-AMR,Toner Canon GPR-52 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-GPR52-AMR,6
+TON-CAN-GPR53-PRT,Toner Canon GPR-53 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-GPR53-PRT,6
+TON-CAN-GPR53-AMR,Toner Canon GPR-53 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-GPR53-AMR,6
+TON-CAN-GPR53-MAG,Toner Canon GPR-53 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-GPR53-MAG,6
+TON-CAN-GPR42-PRT,Toner Canon GPR-42 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-GPR42-PRT,6
+TON-CAN-GPR48-PRT,Toner Canon GPR-48 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-GPR48-PRT,6
+TON-CAN-GPR31-PRT,Toner Canon GPR-31 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-GPR31-PRT,6
+TON-CAN-GPR31-CIA,Toner Canon GPR-31 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-GPR31-CIA,6
+TON-CAN-GPR31-AMR,Toner Canon GPR-31 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-GPR31-AMR,6
+TON-CAN-T09-PRT,Toner Canon T09 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-T09-PRT,6
+TON-CAN-T09-CIA,Toner Canon T09 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-T09-CIA,6
+TON-CAN-T09-MAG,Toner Canon T09 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-T09-MAG,6
+TON-CAN-T10-PRT,Toner Canon T10 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-T10-PRT,6
+TON-CAN-T10-CIA,Toner Canon T10 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-T10-CIA,6
+TON-CAN-T10-AMR,Toner Canon T10 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-T10-AMR,6
+TON-CAN-T10-MAG,Toner Canon T10 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-T10-MAG,6
+TON-CAN-T03-PRT,Toner Canon T03 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-T03-PRT,6
+TON-CAN-T06-PRT,Toner Canon T06 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-CAN-T06-PRT,6
+TON-LEX-E350H80G-PRT,TONER LEXMARK E350H80G Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-LEX-E350H80G-PRT,1
+TON-LEX-C736H1MG-MAG,TONER LEXMARK C736H1MG Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-LEX-C736H1MG-MAG,6
+PROD-LEX-C925X76G,Recipiente de residuo Lexmark C925X76G,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-LEX-C925X76G,6
+TON-LEX-C782X1CG-CIA,Toner Lexmark C782X1CG Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-LEX-C782X1CG-CIA,5
+TON-LEX-24B7265,Toner Lexmark 24B7265,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-LEX-24B7265,5
+TON-LEX-24B7505,Toner Lexmark 24B7505,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-LEX-24B7505,1
+TON-LEX-24B6709,Toner Lexmark 24B6709,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-LEX-24B6709,3
+TON-LEX-808XY-AMR,Toner Lexmark 808XY Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-LEX-808XY-AMR,4
+TON-GEN-592M-MAG,Toner Kyocera TK-592M Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-592M-MAG,6
+TON-GEN-542K-PRT,Toner Kyocera TK-542K Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-542K-PRT,6
+TON-GEN-542M-MAG,Toner kyocera TK-542M Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-542M-MAG,6
+TON-GEN-572K-PRT,Toner Kyocera TK-572K Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-572K-PRT,6
+TON-GEN-572M-MAG,Toner Kyocera TK-572M Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-572M-MAG,6
+TON-GEN-867C-CIA,Toner Kyocera TK-867C Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-867C-CIA,6
+TON-GEN-867Y-AMR,Toner Kyocera TK-867Y Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-867Y-AMR,6
+TON-GEN-867M-MAG,Toner kyocera TK-867M Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-867M-MAG,6
+TON-GEN-857K-PRT,Toner Kyocera TK-857K Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-GEN-857K-PRT,5
+TON-MIN-324M-MAG,Toner Konica Minolta TN-324M Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-MIN-324M-MAG,6
+TON-MIN-328K-PRT,Toner Konica Minolta TN-328K Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-MIN-328K-PRT,6
+TON-MIN-C3100P-AMR,Toner Minolta Bizhub C3100P - TNP50Y Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-MIN-C3100P-AMR,5
+DRU-MIN-IUP14M-MAG,Unidade Imagem Konica Minolta IUP14M Magenta A0WG0EG | Bizhub C35 C25 30k,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-MIN-IUP14M-MAG,6
+FUS-OKI-C3400,Fusor Okidata C3400 - 43377001,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-OKI-C3400,6
+DRU-BRO-DR411CL,Drum Brother DR411CL - HL-8360CDW / L8900CDW / L9570CDW,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-BRO-DR411CL,6
+TON-BRO-TN319-PRT,Toner Brother TN-319 Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-BRO-TN319-PRT,3
+TON-BRO-TN319-CIA,Toner Brother TN-319 Ciano,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-BRO-TN319-CIA,4
+TON-BRO-TN319-AMR,Toner Brother TN-319 Amarelo,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-BRO-TN319-AMR,5
+TON-BRO-TN319-MAG,Toner Brother TN-319 Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-BRO-TN319-MAG,6
+TON-BRO-815M-MAG,Toner Brother TN-815M Magenta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-BRO-815M-MAG,4
+PAP-HP-1010-BR,Pacote de Sulfite A4 - HP 75g - Branca,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PAP-HP-1010-BR,2
+PAP-GEN-180G-BR,Pacote de Sulfite A4 - Filicoat laser 180g - Branca 80 folhas,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PAP-GEN-180G-BR,6
+PAP-GEN-180G-BR-1012,Pacote de Sulfite A3 - Filicoat laser 180g - Branca 80 folhas,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PAP-GEN-180G-BR-1012,6
+FUS-HP-M4070-CPT,Fusor Samsung M4070 / HP M408 - JC91-01023A Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-HP-M4070-CPT,3
+TON-SAM-D6555A-PRT-CPT,Toner Samsung D6555A Preto Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-D6555A-PRT-CPT,6
+TON-SAM-K503L-PRT-CPT,Toner Samsung K503L Preto Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K503L-PRT-CPT,6
+TON-SAM-C503L-CIA-CPT,Toner Samsung C503L Ciano Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-C503L-CIA-CPT,6
+TON-SAM-Y503L-AMR-CPT,Toner Samsung Y503L Amarelo Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-Y503L-AMR-CPT,6
+TON-SAM-M503L-MAG-CPT,Toner Samsung M503L Magenta Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M503L-MAG-CPT,6
+TON-SAM-K808S-PRT-CPT,Toner Samsung K808s Preto Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K808S-PRT-CPT,6
+TON-SAM-C808S-CIA-CPT,Toner Samsung C808s Ciano Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-C808S-CIA-CPT,6
+TON-SAM-Y808S-AMR-CPT,Toner Samsung Y808s Amarelo Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-Y808S-AMR-CPT,6
+TON-SAM-M808S-MAG-CPT,Toner Samsung M808s Magenta Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M808S-MAG-CPT,6
+TON-HP-W9014MC-PRT-SC,Toner HP W9014MC Preto Original fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9014MC-PRT-SC,6
+TON-HP-W9037MC-PRT-SC,Toner HP W9037MC Preto Original fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-W9037MC-PRT-SC,6
+TON-SAM-M806S-MAG-SC,Toner Samsung M806s Magenta fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M806S-MAG-SC,6
+TON-HP-CE400AB-PRT,Toner HP CE400AB Preto caixa rasgada,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE400AB-PRT,6
+TON-SAM-D203U-CPT,Toner Samsung D203U Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-D203U-CPT,6
+TON-BRO-TN350-SC,Toner Brother TN-350 fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-BRO-TN350-SC,6
+DRU-BRO-DR250-SC,Unidade de imagem brother DR-250 fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-BRO-DR250-SC,5
+TON-HP-CE287A-SC,Toner HP CE287A fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE287A-SC,2
+TON-HP-CF313AC-MAG-SC,Toner HP CF313AC Magenta fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF313AC-MAG-SC,6
+TON-HP-CF311A-CIA-SC,Toner HP CF311A/AC Ciano fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF311A-CIA-SC,6
+TON-HP-CF310A-PRT-CPT,Toner HP CF310A Preto Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF310A-PRT-CPT,5
+TON-HP-CF311A-CIA-CPT,Toner HP CF311A Ciano Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF311A-CIA-CPT,6
+TON-HP-CF313A-MAG-CPT,Toner HP CF313A Magenta Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF313A-MAG-CPT,6
+TON-HP-CF382A-AMR-CPT,Toner HP CF382A Amarelo Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF382A-AMR-CPT,6
+TON-HP-CF383A-MAG-CPT,Toner HP CF383A Magenta Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF383A-MAG-CPT,6
+TON-HP-CB390A-PRT-CPT,Toner HP CB390A Preto Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CB390A-PRT-CPT,6
+TON-SAM-K506L-PRT-SC,Toner Samsung K506L Preto fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K506L-PRT-SC,6
+TON-SAM-M506L-MAG-SC,Toner Samsung M506L Magenta fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-M506L-MAG-SC,6
+DRU-HP-Q3964A-SC,Unidade de Imagem HP Q3964A fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\DRU-HP-Q3964A-SC,6
+FUS-GEN-6245-SC,Unidade Fusor Scx 6245 / 6345 - Jc91 00923a Original fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-GEN-6245-SC,6
+FUS-LEX-E460-SC,Fusor Lexmark E460 / X464 - 40X5344 fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\FUS-LEX-E460-SC,2
+TON-HP-Q5945AC-SC,Toner HP Q5945AC/YC fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q5945AC-SC,6
+TON-HP-Q7570A-PRT-SC,Toner HP Q7570A Preto fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q7570A-PRT-SC,6
+TON-HP-Q6461AC-CIA-SC,Toner HP Q6461AC Ciano fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q6461AC-CIA-SC,3
+TON-HP-CF330XC-PRT-SC,Toner HP CF330XC Preto fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF330XC-PRT-SC,6
+TON-HP-CF331AC-CIA-SC,Toner HP CF331AC Ciano fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF331AC-CIA-SC,6
+TON-HP-CF333AC-MAG-SC,Toner HP CF333AC Magenta fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CF333AC-MAG-SC,6
+TON-HP-C4182X-SC,Toner HP C4182X fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-C4182X-SC,6
+TON-HP-Q5942X-SC,Toner HP Q5942X fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-Q5942X-SC,6
+TON-HP-C3909A-SC,Toner HP C3909A fora da caixa,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-C3909A-SC,6
+PROD-HP-Y1G14A,Caixa de grampo HP Y1G14A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-Y1G14A,6
+PROD-HP-Q7432A,Caixa de grampo HP Q7432A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-Q7432A,6
+PROD-HP-C8091A,Caixa de grampo HP C8091A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-HP-C8091A,6
+CRT-HP-727-CIA-VNC,Cartucho HP 727 - B3P19A Ciano 130 ml vencido 02/21 e 07/22 e 07/24,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-727-CIA-VNC,6
+CRT-HP-727-MAG-VNC,Cartucho HP 727 - B3P20A Magenta 130 ml vencido 12/25,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-727-MAG-VNC,6
+CRT-HP-727-PRT-VNC,Cartucho HP 727 - B3P23A Photo Black 130 ml vencido,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-727-PRT-VNC,6
+CRT-HP-727-CIA-VNC-1059,Cartucho HP 727 - Ciano B3P13A - 40 ML Vencido,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-727-CIA-VNC-1059,5
+CRT-HP-727-MAG-VNC-1060,Cartucho HP 727 - Magenta B3P14A - 40 ML Vencido,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-727-MAG-VNC-1060,5
+CRT-HP-836,Cartucho Latex HP 836,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-836,6
+CRT-HP-974A-PRT-VNC,Cartucho HP 974A Preto validade 04/2024,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-974A-PRT-VNC,6
+CRT-HP-974X-MAG-VNC,Cartucho HP 974X Magenta validade boa 10/2025,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-974X-MAG-VNC,6
+CRT-HP-974X-CIA-AB,Cartucho HP 974X Ciano 08/2024 cx. Aberta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-974X-CIA-AB,6
+CRT-HP-974X-MAG-AB,Cartucho HP 974X Magenta 08/2024 cx. Aberta,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-974X-MAG-AB,6
+CRT-HP-972X-CIA,Cartucho HP 972X Ciano L0R98AN,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-972X-CIA,6
+CRT-HP-972X-MAG,Cartucho HP 972X Magenta L0S01AN,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-972X-MAG,6
+CRT-HP-992X-MAG,Cartucho HP 992X Magenta M0J95AL,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-992X-MAG,6
+CRT-HP-981Y-MAG,Cartucho HP 981Y Magenta L0R14A,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-981Y-MAG,6
+CRT-HP-CN627AM-MAG,Cartucho HP 971XL Magenta CN627AM,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-CN627AM-MAG,6
+CRT-HP-976YC-PRT,Cartucho HP 976YC - L0S20YC Preto Novembro/Dezembro 2022,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-976YC-PRT,6
+CRT-HP-976YC-MAG,Cartucho HP 976YC - L0S30YC Magenta 3 janeiro/ 1 agosto/ 1 dezembro 2022,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-976YC-MAG,6
+CRT-HP-980-CIA,Cartucho HP 980 - D8J07A Ciano Abril/Novembro 2021,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-980-CIA,6
+CRT-HP-951XL-CIA-VNC,Cartucho HP 951XL Ciano vencidos,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-951XL-CIA-VNC,6
+CRT-HP-951XL-AMR-VNC,Cartucho HP 951XL Amarelo vencido,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-951XL-AMR-VNC,6
+CRT-HP-951XL-MAG-VNC,Cartucho HP 951XL Magenta vencido,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-951XL-MAG-VNC,6
+CRT-EPS-788XXL-PRT-VNC,Cartucho Epson 788XXL Preto vencido 02/2025,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-EPS-788XXL-PRT-VNC,6
+CRT-EPS-788XXL-CIA-VNC,Cartucho Epson 788XXL Ciano vencido 02/2025,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-EPS-788XXL-CIA-VNC,6
+CRT-EPS-788XL-AMR-VNC,Cartucho Epson 788XL Amarelo vencido 02/2020 e 2025,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-EPS-788XL-AMR-VNC,2
+CRT-EPS-788XXL-MAG-VNC,Cartucho Epson 788XXL Magenta vencido 02/2025,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-EPS-788XXL-MAG-VNC,6
+PROD-EPS-M5399-PRT,Tinta Epson Workforce pro WF M5399 - T12A1 - Preto,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\PROD-EPS-M5399-PRT,1
+CRT-EPS-T6942-CIA-VNC,Cartucho Epson T6942 Ciano 700 ML vencido 12/2015,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-EPS-T6942-CIA-VNC,5
+CRT-EPS-TO90120-PRT,Cartucho Epson 90 Preto TO90120,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-EPS-TO90120-PRT,4
+CRT-HP-C4906AP-CPT,Cartucho HP 940XL - C4906AP Pro 8000/8500 Compativel,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\CRT-HP-C4906AP-CPT,5
+IMP-SAM-M4070,Impressora Multifuncional Samsung M4070 - Contador 100k,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-M4070,5
+IMP-SAM-M4080,Impressora Multifuncional Samsung M4080 - Contador 124k,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-M4080,3
+IMP-SAM-M5360,Impressora Multifuncional Samsung M5360,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-M5360,4
+IMP-SAM-M4580FX,Impressora Multifuncional Samsung M4580FX Contador,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-M4580FX,6
+IMP-SAM-C4062FX,Impressora Multifuncional Samsung C4062FX - Contador 50K / 59K /,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-C4062FX,6
+IMP-SAM-C4010ND,Impressora Samsung Color C4010ND - Contador 7K / 17K / 33K / 34K / 44K / 68K / 147K,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-C4010ND,6
+IMP-SAM-C3010,Impressora Samsung Color C3010 - Contador 58K,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-C3010,2
+IMP-SAM-X7500LX,Impressora Multifuncional Samsung MultiXpress SL-X7500LX - Contador 53K / 127K,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-X7500LX,6
+IMP-SAM-K7500LX,Impressora Multifuncional Samsung MultiXpress SL-K7500LX - Contador31K/48K/57K/102K/155K/161K/1M,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-K7500LX,6
+TON-SAM-X4300LX,Impressora Multifuncional Samsung X4300LX,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-X4300LX,3
+TON-SAM-K4250RX,Impressora Multifuncional Samsung K4250RX - Contador 4K / 35K / 578K,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-SAM-K4250RX,3
+IMP-SAM-K7600LX,Impressora Multifuncional Samsung K7600LX - Contador 1M,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-SAM-K7600LX,6
+IMP-HP-E60065DN,Impressora HP Laser Jet Managed E60065dn - Contador 1M / 1M / 2M,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\IMP-HP-E60065DN,6
+TON-HP-CE255X-CPT,Toner HP CE255X Caixa preta Compatível,C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\TON-HP-CE255X-CPT,6

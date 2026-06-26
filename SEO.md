@@ -19,11 +19,10 @@ Requisições:
 
 ## Otimizador de imagens
 
-cd "C:\Users\Davi Benucci\Desktop\MSN"
-python otimizador_imagens.py --input "C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos"
+cd "C:\Users\Sama Contabilidade\Desktop\MSN"
+python otimizador_imagens.py --input "C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos"
 
 ## buscador de imagens
 
-cd "C:\Users\Davi Benucci\Desktop\MSN"
-
+cd "C:\Users\Sama Contabilidade\Desktop\MSN"
 python buscador_candidatas_imagens.py --only-missing --limit 30 --web --download
