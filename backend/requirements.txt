@@ -4,3 +4,6 @@ python-multipart
 pytest
 httpx
 aiofiles
+pandas
+openpyxl
+xlrd

@@ -189,3 +189,34 @@ Validacao executada:
 ## Proximo passo sugerido
 - Testar manualmente a conciliacao pela tela usando uma planilha WordPress e uma planilha do cliente.
 - Depois disso, definir a proxima etapa fora deste documento: conectar a busca de imagens ao resultado gerado.
+
+## Verificacao e Guia Operacional - 26/06/2026
+Arquivos criados:
+- `backend/tests/test_conciliador_real_integration.py`
+- `GUIA_RODAR_AUTOMACAO_WEB_MSN.md`
+
+Arquivos alterados:
+- `backend/requirements.txt`
+
+Implementacao entregue:
+- Adicionado teste de integracao real do conciliador.
+- O teste cria planilhas XLSX em memoria, chama `POST /api/v1/conciliar`, executa o script Python real por subprocesso, baixa os artefatos e valida a planilha WordPress atualizada e o relatorio.
+- `backend/requirements.txt` agora inclui tambem `pandas`, `openpyxl` e `xlrd`, pois o backend executa o script `conciliador_planilhas_sku.py`.
+- Criado guia para instalar, rodar e testar a automacao em outra maquina.
+
+Validacao executada:
+- Comando: `cd backend; ..\.venv\Scripts\python.exe -m pytest -v`
+- Resultado: `14 passed, 1 warning`
+- Comando: `cd frontend; npm.cmd run build`
+- Resultado: build concluido com sucesso.
+- Comando: `cd frontend; npm.cmd run lint`
+- Resultado: lint concluido sem erros.
+- Smoke test ao vivo via HTTP contra `http://127.0.0.1:8000`:
+  - `GET /api/v1/health` retornou HTTP 200.
+  - `POST /api/v1/conciliar` retornou HTTP 200.
+  - Downloads de `wordpress_atualizado` e `relatorio` retornaram HTTP 200.
+  - Planilha atualizada validada com 2 linhas.
+  - Relatorio validado com 2 linhas.
+
+Observacao:
+- Um primeiro smoke test colado no PowerShell com a coluna `Preço` sofreu problema de encoding e virou `Pre?o`; por isso ele nao reconheceu a coluna de preco. O teste automatizado em arquivo UTF-8 validou `Preço`, e o smoke ao vivo foi repetido com `Preco`, que tambem e aceito pelo conciliador.
