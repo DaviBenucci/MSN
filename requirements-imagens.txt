@@ -1,5 +1,6 @@
 rembg[cpu]
 pillow
+pytesseract
 requests
 pywin32
 openpyxl

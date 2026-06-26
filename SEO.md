@@ -13,3 +13,17 @@ Requisições:
 5) Palavra-chave principal para SEO e uma Meta Description de até 150 caracteres.
 
 6) REGRAS RIGOROSAS: Não invente especificações técnicas, como rendimento de páginas ou voltagem. Baseie-se apenas em dados reais da fabricante para este modelo exato. Se você não tiver certeza de um dado, omita-o.
+
+
+# Rodar o código 
+
+## Otimizador de imagens
+
+cd "C:\Users\Davi Benucci\Desktop\MSN"
+python otimizador_imagens.py --input "C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos"
+
+## buscador de imagens
+
+cd "C:\Users\Davi Benucci\Desktop\MSN"
+
+python buscador_candidatas_imagens.py --only-missing --limit 30 --local-root "C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos" --web --download --max-queries 2 --max-results 12 --keep-per-product 8
