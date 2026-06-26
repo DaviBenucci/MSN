@@ -3,6 +3,8 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routers.conciliador import router as conciliador_router
+
 
 ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -30,6 +32,8 @@ def create_app() -> FastAPI:
     @app.get("/api/v1/health", tags=["health"])
     def health_check() -> dict[str, str]:
         return {"status": "ok"}
+
+    app.include_router(conciliador_router)
 
     return app
 
