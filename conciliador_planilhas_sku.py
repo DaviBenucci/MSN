@@ -19,6 +19,7 @@ DEFAULT_WORDPRESS_FILE = (
     / "Produtos"
     / "Controle_de_estoque_Com_Filtro.xlsx"
 )
+DEFAULT_CONCILIACAO_FOLDER = Path.home() / "Desktop" / "Conciliacao"
 
 NAME_ALIASES = {
     "nome",
@@ -156,6 +157,7 @@ MODEL_STOP_WORDS = {
 class ProcessResult:
     saida: Path
     relatorio: Path | None = None
+    novos_produtos: Path | None = None
 
 
 def main() -> int:
@@ -170,6 +172,8 @@ def main() -> int:
     print(f"Arquivo gerado: {result.saida}")
     if result.relatorio:
         print(f"Relatorio gerado: {result.relatorio}")
+    if result.novos_produtos:
+        print(f"Novos produtos gerados: {result.novos_produtos}")
     return 0
 
 
@@ -180,23 +184,34 @@ def parse_args() -> argparse.Namespace:
             "como fonte de estoque/preco e gera SKUs para novos produtos."
         )
     )
-    parser.add_argument("cliente", type=Path, help="Caminho da planilha do cliente (.xlsx, .xls ou .csv).")
+    parser.add_argument(
+        "--conciliacao-folder",
+        type=Path,
+        default=DEFAULT_CONCILIACAO_FOLDER,
+        help="Pasta onde ficam os arquivos xlsx de conciliacao: cliente e wordpress.",
+    )
+    parser.add_argument("--cliente", type=Path, nargs="?", help="Caminho da planilha do cliente. Se ausente, procura em --conciliacao-folder.")
     parser.add_argument(
         "--wordpress",
         type=Path,
-        default=DEFAULT_WORDPRESS_FILE,
-        help="Planilha base de importacao do WordPress. Padrao: Desktop/cópia de produtos/Produtos.",
+        nargs="?",
+        help="Caminho da planilha do WordPress. Se ausente, procura em --conciliacao-folder.",
     )
     parser.add_argument("--sem-wordpress", action="store_true", help="Somente gera SKU, sem atualizar WordPress.")
     parser.add_argument(
         "--saida",
         type=Path,
-        help="Arquivo WordPress atualizado. Padrao: [wordpress]_atualizada.xlsx.",
+        help="Arquivo WordPress atualizado. Padrao: [conciliacao_folder]/todos-os-produtos.xlsx.",
     )
     parser.add_argument(
         "--relatorio",
         type=Path,
-        help="Relatorio de conciliacao. Padrao: [saida]_relatorio.xlsx.",
+        help="Relatorio de conciliacao. Padrao: [conciliacao_folder]/relatorio-conciliacao.xlsx.",
+    )
+    parser.add_argument(
+        "--saida-novos-produtos",
+        type=Path,
+        help="Arquivo de novos produtos com apenas ID e SKU. Padrao: [conciliacao_folder]/produtos-novos.xlsx.",
     )
     parser.add_argument("--sheet-cliente", help="Nome da aba da planilha do cliente. Padrao: primeira aba.")
     parser.add_argument("--sheet-wordpress", default="Controle de Estoque", help="Aba da planilha WordPress.")
@@ -213,8 +228,51 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def resolve_input_paths(args: argparse.Namespace) -> dict[str, Path]:
+    if args.cliente and args.wordpress:
+        return {
+            "cliente": args.cliente.expanduser().resolve(),
+            "wordpress": args.wordpress.expanduser().resolve(),
+        }
+
+    if args.cliente or args.wordpress:
+        raise ValueError(
+            "Informe ambos os arquivos --cliente e --wordpress ou nenhum dos dois; caso contrario use --conciliacao-folder."
+        )
+
+    conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
+    if not conciliacao_folder.exists():
+        raise FileNotFoundError(f"Pasta de conciliacao nao encontrada: {conciliacao_folder}")
+
+    cliente_file = find_xlsx_by_keyword(conciliacao_folder, "cliente")
+    wordpress_file = find_xlsx_by_keyword(conciliacao_folder, "wordpress")
+    return {"cliente": cliente_file, "wordpress": wordpress_file}
+
+
+def find_xlsx_by_keyword(folder: Path, keyword: str) -> Path:
+    keyword = keyword.lower()
+    candidates = [
+        path for path in folder.iterdir()
+        if path.is_file()
+        and path.suffix.lower() in {".xlsx", ".xls", ".xlsm"}
+        and keyword in path.stem.lower()
+        and not path.name.startswith("~$")
+    ]
+    if not candidates:
+        raise FileNotFoundError(f"Nenhum arquivo xlsx contendo '{keyword}' encontrado em: {folder}")
+    if len(candidates) > 1:
+        exact = [path for path in candidates if path.stem.lower() == keyword]
+        if len(exact) == 1:
+            return exact[0].resolve()
+        raise ValueError(
+            f"Mais de um arquivo xlsx contendo '{keyword}' encontrado em {folder}: {', '.join(str(path.name) for path in candidates)}"
+        )
+    return candidates[0].resolve()
+
+
 def processar_planilha(args: argparse.Namespace) -> ProcessResult:
-    cliente_path = args.cliente.expanduser().resolve()
+    paths = resolve_input_paths(args)
+    cliente_path = paths["cliente"]
     if not cliente_path.exists():
         raise FileNotFoundError(f"Planilha do cliente nao encontrada: {cliente_path}")
 
@@ -251,7 +309,10 @@ def processar_planilha(args: argparse.Namespace) -> ProcessResult:
         print_summary(resultado)
         return ProcessResult(saida=saida)
 
-    wordpress_path = args.wordpress.expanduser().resolve()
+    if args.wordpress:
+        wordpress_path = args.wordpress.expanduser().resolve()
+    else:
+        wordpress_path = paths["wordpress"]
     if not wordpress_path.exists():
         raise FileNotFoundError(f"Planilha WordPress nao encontrada: {wordpress_path}")
 
@@ -267,12 +328,28 @@ def processar_planilha(args: argparse.Namespace) -> ProcessResult:
     )
 
     marcar_duplicados(resultado)
-    saida = output_path(wordpress_path, args.saida, fallback_suffix="_atualizada")
-    relatorio = report_path(saida, getattr(args, "relatorio", None))
+    if args.saida:
+        saida = output_path(wordpress_path, args.saida, fallback_suffix="_atualizada")
+    else:
+        conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
+        saida = conciliacao_folder / "todos-os-produtos.xlsx"
+    if args.relatorio:
+        relatorio = report_path(saida, getattr(args, "relatorio", None))
+    else:
+        conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
+        relatorio = conciliacao_folder / "relatorio-conciliacao.xlsx"
+    if getattr(args, "saida_novos_produtos", None):
+        saida_novos = output_path(saida, getattr(args, "saida_novos_produtos", None), fallback_suffix="_novos")
+    else:
+        conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
+        saida_novos = conciliacao_folder / "produtos-novos.xlsx"
+
     write_wordpress_output(wordpress_atualizada, saida, sheet_name=args.sheet_wordpress)
     write_report_output(resultado, relatorio)
+    write_new_products_output(resultado, saida_novos)
     print_summary(resultado)
-    return ProcessResult(saida=saida, relatorio=relatorio)
+    print(f"Novos produtos gerados: {saida_novos}")
+    return ProcessResult(saida=saida, relatorio=relatorio, novos_produtos=saida_novos)
 
 
 def atualizar_wordpress_com_cliente(
@@ -512,14 +589,38 @@ def write_wordpress_output(df: pd.DataFrame, path: Path, sheet_name: str) -> Non
 
 def output_path(input_path: Path, output_arg: Path | None, fallback_suffix: str) -> Path:
     if output_arg:
-        return output_arg.expanduser().resolve()
+        output_arg = output_arg.expanduser()
+        if output_arg.exists() and output_arg.is_dir():
+            return output_arg / f"{input_path.stem}{fallback_suffix}.xlsx"
+        if output_arg.suffix:
+            return output_arg.resolve()
+        return output_arg.resolve() / f"{input_path.stem}{fallback_suffix}.xlsx"
     return input_path.with_name(f"{input_path.stem}{fallback_suffix}.xlsx")
 
 
 def report_path(output_file: Path, report_arg: Path | None) -> Path:
     if report_arg:
-        return report_arg.expanduser().resolve()
+        report_arg = report_arg.expanduser()
+        if report_arg.exists() and report_arg.is_dir():
+            return report_arg / f"{output_file.stem}_relatorio.xlsx"
+        if report_arg.suffix:
+            return report_arg.resolve()
+        return report_arg.resolve() / f"{output_file.stem}_relatorio.xlsx"
     return output_file.with_name(f"{output_file.stem}_relatorio.xlsx")
+
+
+def write_new_products_output(df: pd.DataFrame, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    novos = df[df["Status_Conciliacao"] == "adicionado_ao_wordpress"].copy()
+    output = novos[["ID_WordPress", "SKU_Encontrado_WordPress"]].rename(
+        columns={"ID_WordPress": "ID", "SKU_Encontrado_WordPress": "SKU"}
+    )
+    if path.suffix.lower() == ".csv":
+        output.to_csv(path, index=False, encoding="utf-8-sig")
+        return
+
+    with pd.ExcelWriter(path, engine="openpyxl") as writer:
+        output.to_excel(writer, index=False, sheet_name="novos")
 
 
 def resolve_or_create_column(

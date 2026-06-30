@@ -71,11 +71,13 @@ Se a coluna tiver outro nome, informe no comando:
 
 ### Planilha WordPress
 
-Por padrao, o script usa:
+Por padrao, o script usa o modo de conciliacao baseado em `Desktop/Conciliacao`.
+Ele procura dois arquivos:
 
-```text
-C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\Controle_de_estoque_Com_Filtro.xlsx
-```
+- um com `cliente` no nome
+- outro com `wordpress` no nome
+
+Se quiser indicar diretamente os arquivos, use `--cliente` e `--wordpress`.
 
 Colunas esperadas na planilha WordPress:
 

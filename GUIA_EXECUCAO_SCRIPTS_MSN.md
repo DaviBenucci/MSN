@@ -60,8 +60,26 @@ Uso padrao:
 
 ```bash
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
-  "/c/caminho/planilha-do-cliente.xlsx"
+  --conciliacao-folder "/c/Users/Sama Contabilidade/Desktop/Conciliacao"
 ```
+
+Ou, para rodar o fluxo completo em sequencia (conciliacao, buscador e otimizador):
+
+```bash
+./.venv/Scripts/python.exe -B run_all_scripts.py \
+  --desktop-folder-name "Produtos" \
+  --conciliacao-folder "/c/Users/Sama Contabilidade/Desktop/Conciliacao"
+```
+
+Esse comando:
+
+1. procura em `Desktop/Conciliacao` os arquivos xlsx com `cliente` e `wordpress` no nome;
+2. gera `Desktop/Conciliacao/todos-os-produtos.xlsx`;
+3. gera `Desktop/Conciliacao/relatorio-conciliacao.xlsx`;
+4. gera `Desktop/Conciliacao/produtos-novos.xlsx`;
+5. executa o buscador de imagens usando esse workbook;
+6. salva as pastas de imagens no desktop em `Desktop/[NomeDaPasta]/[SKU]`;
+7. executa o otimizador usando essas pastas.
 
 Neste fluxo, a planilha do cliente tem precedencia para `Estoque` e `Preço`.
 
@@ -342,7 +360,6 @@ Use quando a imagem ja estiver boa e voce so quiser padronizar tamanho/formato.
 ```bash
 ./.venv/Scripts/python.exe -B otimizador_imagens.py \
   --input "/c/Users/Sama Contabilidade/Desktop/cópia de produtos/Produtos" \
-  --white-background \
   --skip-rembg
 ```
 
@@ -441,3 +458,27 @@ Rodar todos os testes:
 - O otimizador salva o resultado final em `MSN/products/[SKU]`.
 - Use `--dry-run` antes de otimizar lotes grandes.
 - Use `--overwrite` apenas quando quiser substituir WebPs ja existentes.
+
+### Executar todos os scripts juntos
+
+```bash
+python run_all_scripts.py \
+  --cliente "C:\Users\Sama Contabilidade\Downloads\Lista materiais.xlsx" \
+  --wordpress "C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\Controle_de_estoque_Com_Filtro.backup-preco-div10-20260626-110723.xlsx" \
+  --saida "C:\Users\Sama Contabilidade\Desktop\Produtos" \
+  --relatorio "C:\Users\Sama Contabilidade\Desktop\Produtos" \
+  --saida-novos-produtos "C:\Users\Sama Contabilidade\Downloads" \
+  --all
+```
+
+Esse comando roda em sequencia:
+
+1. `conciliador_planilhas_sku.py`
+2. `buscador_candidatas_imagens.py`
+3. `otimizador_imagens.py`
+
+### Observações
+
+- `--saida`, `--relatorio` e `--saida-novos-produtos` podem ser pastas.
+- Se você passar uma pasta, o nome do arquivo será derivado automaticamente do nome do arquivo WordPress.
+- Se quiser apenas rodar a conciliação, remova `--all`.
