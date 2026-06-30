@@ -6,7 +6,7 @@ import sys
 import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import pandas as pd
 
@@ -553,13 +553,31 @@ def read_csv(path: Path) -> pd.DataFrame:
     raise RuntimeError("Nao foi possivel ler CSV. " + " | ".join(errors))
 
 
-def write_report_output(df: pd.DataFrame, path: Path) -> None:
+def _atomic_excel_write(writer_func: Callable[[Any], None], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    temp_path = path.with_name(f"{path.name}.tmp")
+    try:
+        with pd.ExcelWriter(temp_path, engine="openpyxl") as writer:
+            writer_func(writer)
+        temp_path.replace(path)
+    except PermissionError as exc:
+        if temp_path.exists():
+            try:
+                temp_path.unlink()
+            except Exception:
+                pass
+        raise PermissionError(
+            f"Permissão negada ao gravar {path}. Feche o arquivo se estiver aberto no Excel e tente novamente."
+        ) from exc
+
+
+def write_report_output(df: pd.DataFrame, path: Path) -> None:
     if path.suffix.lower() == ".csv":
+        path.parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(path, index=False, encoding="utf-8-sig")
         return
 
-    with pd.ExcelWriter(path, engine="openpyxl") as writer:
+    def writer_func(writer: Any) -> None:
         df.to_excel(writer, index=False, sheet_name="conciliacao")
         df[df["Status_Conciliacao"].isin(["novo_para_wordpress", "adicionado_ao_wordpress"])].to_excel(
             writer,
@@ -577,14 +595,19 @@ def write_report_output(df: pd.DataFrame, path: Path) -> None:
             sheet_name="atualizados",
         )
 
+    _atomic_excel_write(writer_func, path)
+
 
 def write_wordpress_output(df: pd.DataFrame, path: Path, sheet_name: str) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
     if path.suffix.lower() == ".csv":
+        path.parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(path, index=False, encoding="utf-8-sig")
         return
-    with pd.ExcelWriter(path, engine="openpyxl") as writer:
+
+    def writer_func(writer: Any) -> None:
         df.to_excel(writer, index=False, sheet_name=sheet_name[:31] or "Planilha")
+
+    _atomic_excel_write(writer_func, path)
 
 
 def output_path(input_path: Path, output_arg: Path | None, fallback_suffix: str) -> Path:
@@ -610,17 +633,23 @@ def report_path(output_file: Path, report_arg: Path | None) -> Path:
 
 
 def write_new_products_output(df: pd.DataFrame, path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    novos = df[df["Status_Conciliacao"] == "adicionado_ao_wordpress"].copy()
-    output = novos[["ID_WordPress", "SKU_Encontrado_WordPress"]].rename(
-        columns={"ID_WordPress": "ID", "SKU_Encontrado_WordPress": "SKU"}
-    )
     if path.suffix.lower() == ".csv":
+        path.parent.mkdir(parents=True, exist_ok=True)
+        novos = df[df["Status_Conciliacao"] == "adicionado_ao_wordpress"].copy()
+        output = novos[["ID_WordPress", "SKU_Encontrado_WordPress"]].rename(
+            columns={"ID_WordPress": "ID", "SKU_Encontrado_WordPress": "SKU"}
+        )
         output.to_csv(path, index=False, encoding="utf-8-sig")
         return
 
-    with pd.ExcelWriter(path, engine="openpyxl") as writer:
+    def writer_func(writer: Any) -> None:
+        novos = df[df["Status_Conciliacao"] == "adicionado_ao_wordpress"].copy()
+        output = novos[["ID_WordPress", "SKU_Encontrado_WordPress"]].rename(
+            columns={"ID_WordPress": "ID", "SKU_Encontrado_WordPress": "SKU"}
+        )
         output.to_excel(writer, index=False, sheet_name="novos")
+
+    _atomic_excel_write(writer_func, path)
 
 
 def resolve_or_create_column(
