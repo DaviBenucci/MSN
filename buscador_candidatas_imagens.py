@@ -30,6 +30,8 @@ REPORTS_DIR = PRODUCTS_DIR / "_reports"
 CANDIDATES_CSV = REPORTS_DIR / "candidatas-imagens.csv"
 APPROVAL_TEMPLATE_CSV = REPORTS_DIR / "candidatas-aprovacao.csv"
 SKIPPED_PRODUCTS_CSV = REPORTS_DIR / "skus-pulados-imagens.csv"
+UNRELIABLE_PRODUCTS_CSV = REPORTS_DIR / "skus-sem-candidatas-confiaveis.csv"
+INVALID_PRODUCTS_CSV = REPORTS_DIR / "skus-invalidos.csv"
 REVIEW_HTML = REPORTS_DIR / "revisao-candidatas.html"
 
 DEFAULT_SOURCE_ROOT = Path.home() / "Desktop" / "cópia de produtos" / "Produtos"
@@ -248,6 +250,9 @@ class Candidate:
     ocr_text: str = ""
     visual_tags: str = ""
 
+    def status_rank(self) -> int:
+        return {"forte": 4, "boa": 3, "revisar": 2, "erro": 1, "rejeitada": 0}.get(self.status, 0)
+
     def as_row(self, approved: str = "") -> dict[str, Any]:
         return {
             "approved": approved,
@@ -285,14 +290,17 @@ def main() -> int:
 
     products = load_products(args)
     skipped_existing = getattr(args, "_skipped_existing_products", [])
+    invalid_products = getattr(args, "_skipped_invalid_products", [])
     if skipped_existing:
         write_skipped_products(skipped_existing, args)
         print(f"SKUs pulados: {len(skipped_existing)}")
         print(f"Relatorio de pulados: {SKIPPED_PRODUCTS_CSV}")
     else:
         write_skipped_products([], args)
+    write_invalid_products(invalid_products)
     if not products:
         print("Nenhum produto encontrado.")
+        write_unreliable_products([])
         return 0
 
     print(f"Fonte de SKUs: {args.workbook}")
@@ -303,7 +311,13 @@ def main() -> int:
         print(f"Destino dos downloads: {download_root(args)}\\[SKU]")
     print(f"OCR: {'ativo' if ocr_available() else 'indisponivel'}")
 
+    if args.dry_run:
+        run_dry_run(products, args)
+        write_unreliable_products([])
+        return 0
+
     candidates: list[Candidate] = []
+    unreliable_products: list[Product] = []
     for index, product in enumerate(products, start=1):
         print(f"[{index}/{len(products)}] {product.sku} - {product.name}")
         if args.download:
@@ -317,16 +331,17 @@ def main() -> int:
             product_candidates.extend(collect_duckduckgo_candidates(product, args))
 
         product_candidates = dedupe_candidates(product_candidates)
-        product_candidates.sort(key=lambda item: (item.status_rank(), item.score), reverse=True)  # type: ignore[attr-defined]
+        product_candidates.sort(key=lambda item: (item.status_rank(), item.score), reverse=True)
 
         reliable = [item for item in product_candidates if item.status in {"forte", "boa"}]
         if not reliable:
-            args._skipped_existing_products.append(product)
+            unreliable_products.append(product)
             print(f"  SKIP {product.sku}: sem imagens confiaveis encontradas")
             continue
 
         candidates.extend(product_candidates[: args.keep_per_product])
 
+    write_unreliable_products(unreliable_products)
     write_reports(candidates)
     print(f"CSV gerado: {CANDIDATES_CSV}")
     print(f"CSV para aprovacao manual: {APPROVAL_TEMPLATE_CSV}")
@@ -362,6 +377,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--sheet", default=DEFAULT_SHEET)
     parser.add_argument("--sku", action="append", help="Processa somente um SKU. Pode repetir.")
     parser.add_argument("--limit", type=int, help="Limita a quantidade de produtos.")
+    parser.add_argument("--dry-run", action="store_true", help="Lista produtos e consultas sem buscar ou baixar imagens.")
     parser.add_argument(
         "--only-missing",
         action="store_true",
@@ -507,12 +523,21 @@ def load_products(args: argparse.Namespace) -> list[Product]:
     wanted = {normalize_sku(value) for value in getattr(args, "sku", None) or []}
 
     products: list[Product] = []
+    invalid_products: list[dict[str, Any]] = []
     for row_number in range(2, ws.max_row + 1):
         row = {headers[col - 1]: ws.cell(row_number, col).value for col in range(1, ws.max_column + 1)}
         sku = clean_cell(first_present(row, "sku", "codigo", "codigoproduto"))
         name = clean_cell(first_present(row, "nome", "produto", "descricao"))
         image_status = clean_cell(first_present(row, "imagem", "image"))
         if not sku or not name:
+            invalid_products.append(
+                {
+                    "row_number": row_number,
+                    "sku": sku,
+                    "name": name,
+                    "reason": "sem_sku" if not sku else "sem_nome",
+                }
+            )
             continue
         if wanted and normalize_sku(sku) not in wanted:
             continue
@@ -538,11 +563,12 @@ def load_products(args: argparse.Namespace) -> list[Product]:
         )
 
     wb.close()
+    args._skipped_invalid_products = invalid_products
     if not getattr(args, "include_existing_products", False):
         kept_products: list[Product] = []
         skipped_products: list[Product] = []
         for product in products:
-            if product_has_too_many_images(product, args):
+            if product_has_existing_images(product, args):
                 skipped_products.append(product)
             else:
                 kept_products.append(product)
@@ -559,6 +585,17 @@ def load_products(args: argparse.Namespace) -> list[Product]:
 
 def download_root(args: argparse.Namespace) -> Path:
     return args.download_root.expanduser().resolve()
+
+
+def run_dry_run(products: list[Product], args: argparse.Namespace) -> None:
+    print(f"Dry-run: {len(products)} produto(s) seriam analisados.")
+    for product in products:
+        queries = build_queries(product)[: getattr(args, "max_queries", 2)]
+        print(f"- {product.sku} :: {product.name}")
+        if queries:
+            print(f"  consultas: {' | '.join(queries)}")
+        if getattr(args, "download", False):
+            print(f"  destino: {download_root(args) / safe_folder_name(product.sku)}")
 
 
 def ensure_product_download_folder(product: Product, args: argparse.Namespace) -> Path:
@@ -1386,10 +1423,7 @@ def dedupe_candidates(candidates: list[Candidate]) -> list[Candidate]:
 
 
 def candidate_status_rank(candidate: Candidate) -> int:
-    return {"forte": 4, "boa": 3, "revisar": 2, "erro": 1, "rejeitada": 0}.get(candidate.status, 0)
-
-
-Candidate.status_rank = candidate_status_rank  # type: ignore[attr-defined]
+    return candidate.status_rank()
 
 
 def write_reports(candidates: list[Candidate]) -> None:
@@ -1428,7 +1462,7 @@ def write_reports(candidates: list[Candidate]) -> None:
 
 def write_skipped_products(products: list[Product], args: argparse.Namespace) -> None:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
-    fields = ["sku", "name", "existing_locations", "image_count"]
+    fields = ["sku", "name", "reason", "existing_locations", "image_count"]
     with SKIPPED_PRODUCTS_CSV.open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
@@ -1438,10 +1472,31 @@ def write_skipped_products(products: list[Product], args: argparse.Namespace) ->
                 {
                     "sku": product.sku,
                     "name": product.name,
+                    "reason": "imagem_existente",
                     "existing_locations": " | ".join(str(location) for location in locations),
                     "image_count": sum(product_image_count(location) for location in locations),
                 }
             )
+
+
+def write_unreliable_products(products: list[Product]) -> None:
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    fields = ["sku", "name", "reason"]
+    with UNRELIABLE_PRODUCTS_CSV.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for product in products:
+            writer.writerow({"sku": product.sku, "name": product.name, "reason": "sem_candidata_confiavel"})
+
+
+def write_invalid_products(rows: list[dict[str, Any]]) -> None:
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    fields = ["row_number", "sku", "name", "reason"]
+    with INVALID_PRODUCTS_CSV.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, "") for field in fields})
 
 
 def render_review_html(candidates: list[Candidate]) -> str:

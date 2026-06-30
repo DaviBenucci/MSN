@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+
+products/_reports/
+products/_raw/
+products/_approved_raw/
+products/_candidates/
+
+*.tmp
+*.log

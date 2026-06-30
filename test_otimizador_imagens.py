@@ -8,6 +8,26 @@ import otimizador_imagens as otimizador
 
 
 class OtimizadorLocalInputTest(unittest.TestCase):
+    def test_configure_output_root_updates_product_paths(self) -> None:
+        original_products = otimizador.PRODUCTS_DIR
+        original_raw = otimizador.RAW_DIR
+        original_reports = otimizador.REPORTS_DIR
+        original_report_file = otimizador.REPORT_FILE
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                output_root = Path(temp_dir) / "saida-products"
+                otimizador.configure_output_root(output_root)
+
+                self.assertEqual(otimizador.PRODUCTS_DIR, output_root.resolve())
+                self.assertEqual(otimizador.RAW_DIR, output_root.resolve() / "_raw")
+                self.assertEqual(otimizador.REPORTS_DIR, output_root.resolve() / "_reports")
+                self.assertEqual(otimizador.REPORT_FILE, output_root.resolve() / "_reports" / "resultado-imagens.csv")
+        finally:
+            otimizador.PRODUCTS_DIR = original_products
+            otimizador.RAW_DIR = original_raw
+            otimizador.REPORTS_DIR = original_reports
+            otimizador.REPORT_FILE = original_report_file
+
     def test_input_root_with_sku_subfolders_creates_one_product_per_folder(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir) / "Produtos"

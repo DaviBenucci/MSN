@@ -25,6 +25,7 @@ RAW_DIR = PRODUCTS_DIR / "_raw"
 REPORTS_DIR = PRODUCTS_DIR / "_reports"
 REPORT_FILE = REPORTS_DIR / "resultado-imagens.csv"
 DEFAULT_DOWNLOADS_DIR = Path.home() / "Downloads"
+_REMBG_SESSION: Any | None = None
 
 DEFAULT_WORKBOOK_NAME = "Controle_de_estoque_Com_Filtro.xlsx"
 DEFAULT_WORKSHEET_NAME = "Controle de Estoque"
@@ -126,6 +127,7 @@ class ProductResult:
 
 def main() -> int:
     args = parse_args()
+    configure_output_root(args.output_root)
     PRODUCTS_DIR.mkdir(exist_ok=True)
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     if args.icecat_public:
@@ -243,6 +245,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--overwrite", action="store_true", help="Recria imagens finais existentes.")
     parser.add_argument(
+        "--output-root",
+        type=Path,
+        default=PRODUCTS_DIR,
+        help="Pasta raiz dos WebPs finais e relatorios. Padrao: MSN/products.",
+    )
+    parser.add_argument(
         "--mark-column",
         default="Imagem",
         help="Coluna da planilha que recebe OK quando o SKU em Downloads for tratado com sucesso.",
@@ -255,6 +263,26 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--workbook", default=DEFAULT_WORKBOOK_NAME, help="Nome do workbook aberto no Excel.")
     parser.add_argument("--sheet", default=DEFAULT_WORKSHEET_NAME, help="Nome da aba da planilha.")
     return parser.parse_args()
+
+
+def configure_output_root(output_root: Path) -> None:
+    global PRODUCTS_DIR, RAW_DIR, REPORTS_DIR, REPORT_FILE
+    PRODUCTS_DIR = output_root.expanduser().resolve()
+    RAW_DIR = PRODUCTS_DIR / "_raw"
+    REPORTS_DIR = PRODUCTS_DIR / "_reports"
+    REPORT_FILE = REPORTS_DIR / "resultado-imagens.csv"
+
+
+def resolve_workbook_file(workbook_name: str) -> Path:
+    workbook_path = Path(workbook_name).expanduser()
+    if workbook_path.exists():
+        return workbook_path.resolve()
+    workbook_path = DEFAULT_EXCEL_FILE
+    if workbook_path.name.lower() != str(workbook_name).lower():
+        workbook_path = DEFAULT_EXCEL_FILE.with_name(str(workbook_name))
+    if workbook_path.exists():
+        return workbook_path.resolve()
+    return workbook_path
 
 
 def load_products(args: argparse.Namespace) -> list[Product]:
@@ -507,13 +535,7 @@ $rows | ConvertTo-Json -Depth 4 -Compress
 def read_excel_rows_openpyxl(workbook_name: str, sheet_name: str) -> list[dict[str, Any]]:
     import openpyxl
 
-    workbook_path = Path(workbook_name).expanduser()
-    if workbook_path.exists():
-        workbook_path = workbook_path.resolve()
-    else:
-        workbook_path = DEFAULT_EXCEL_FILE
-        if workbook_path.name.lower() != workbook_name.lower():
-            workbook_path = DEFAULT_EXCEL_FILE.with_name(workbook_name)
+    workbook_path = resolve_workbook_file(workbook_name)
     if not workbook_path.exists():
         raise FileNotFoundError(f"arquivo nao encontrado: {workbook_path}")
 
@@ -659,9 +681,7 @@ def mark_excel_products_ok_openpyxl(
 ) -> int:
     import openpyxl
 
-    workbook_path = DEFAULT_EXCEL_FILE
-    if workbook_path.name.lower() != workbook_name.lower():
-        workbook_path = DEFAULT_EXCEL_FILE.with_name(workbook_name)
+    workbook_path = resolve_workbook_file(workbook_name)
     if not workbook_path.exists():
         raise FileNotFoundError(f"arquivo nao encontrado: {workbook_path}")
 
@@ -990,6 +1010,19 @@ def process_image_paths(
     return processed, failed, "; ".join(output_messages)
 
 
+def get_rembg_session() -> Any | None:
+    global _REMBG_SESSION
+    if _REMBG_SESSION is not None:
+        return _REMBG_SESSION
+    try:
+        from rembg import new_session
+
+        _REMBG_SESSION = new_session()
+    except Exception:
+        _REMBG_SESSION = None
+    return _REMBG_SESSION
+
+
 def optimize_image(image_path: Path, destination: Path, skip_rembg: bool, white_background: bool) -> None:
     from PIL import Image, ImageOps
 
@@ -1000,7 +1033,11 @@ def optimize_image(image_path: Path, destination: Path, skip_rembg: bool, white_
         from rembg import remove
 
         input_bytes = image_path.read_bytes()
-        output_bytes = remove(input_bytes)
+        session = get_rembg_session()
+        try:
+            output_bytes = remove(input_bytes, session=session)
+        except TypeError:
+            output_bytes = remove(input_bytes)
         image = Image.open(io.BytesIO(output_bytes)).convert("RGBA")
 
     image.thumbnail(FINAL_SIZE, Image.Resampling.LANCZOS)
