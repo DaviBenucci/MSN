@@ -3,12 +3,24 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-import unicodedata
 from dataclasses import dataclass
+from difflib import SequenceMatcher
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import pandas as pd
+
+from msn_utils import (
+    ValidationIssue,
+    emit,
+    normalize_header,
+    normalize_price_value,
+    normalize_sku,
+    normalize_stock_value,
+    normalize_words,
+    setup_script_logging,
+    write_json,
+)
 
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -19,6 +31,7 @@ DEFAULT_WORDPRESS_FILE = (
     / "Produtos"
     / "Controle_de_estoque_Com_Filtro.xlsx"
 )
+DEFAULT_CONCILIACAO_FOLDER = Path.home() / "Desktop" / "Conciliacao"
 
 NAME_ALIASES = {
     "nome",
@@ -29,6 +42,7 @@ NAME_ALIASES = {
     "item",
     "itens",
     "mercadoria",
+    "modelo",
 }
 SKU_ALIASES = {
     "sku",
@@ -155,20 +169,49 @@ MODEL_STOP_WORDS = {
 class ProcessResult:
     saida: Path
     relatorio: Path | None = None
+    novos_produtos: Path | None = None
+    summary_json: Path | None = None
+    log_path: Path | None = None
+
+
+class ValidationFailure(RuntimeError):
+    def __init__(self, issues: list[ValidationIssue], report_path: Path | None = None) -> None:
+        self.issues = issues
+        self.report_path = report_path
+        errors = [issue for issue in issues if issue.severity == "erro"]
+        super().__init__(f"{len(errors)} erro(s) de validacao encontrados")
 
 
 def main() -> int:
     args = parse_args()
+    logger, log_path = setup_script_logging("conciliador_planilhas_sku", ROOT_DIR, getattr(args, "log_dir", None))
+    args._logger = logger
+    args._log_path = log_path
 
     try:
         result = processar_planilha(args)
+    except ValidationFailure as exc:
+        logger.error("Erro ao validar: %s", exc)
+        print(f"Erro ao validar: {exc}", file=sys.stderr)
+        for issue in exc.issues[:10]:
+            if issue.severity == "erro":
+                print(f"- linha {issue.row_number or '-'} {issue.field}: {issue.message}", file=sys.stderr)
+        if exc.report_path:
+            print(f"Relatorio de validacao: {exc.report_path}", file=sys.stderr)
+        write_execution_summary(args, None, exit_code=2, issues=exc.issues, error=str(exc))
+        return 2
     except Exception as exc:
+        logger.exception("Erro ao processar")
         print(f"Erro ao processar: {exc}", file=sys.stderr)
+        write_execution_summary(args, None, exit_code=1, error=str(exc))
         return 1
 
-    print(f"Arquivo gerado: {result.saida}")
+    emit(logger, f"Arquivo gerado: {result.saida}")
     if result.relatorio:
-        print(f"Relatorio gerado: {result.relatorio}")
+        emit(logger, f"Relatorio gerado: {result.relatorio}")
+    if result.novos_produtos:
+        emit(logger, f"Novos produtos gerados: {result.novos_produtos}")
+    write_execution_summary(args, result, exit_code=0)
     return 0
 
 
@@ -176,26 +219,38 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Atualiza uma copia da planilha WordPress usando a planilha do cliente "
-            "como fonte de estoque/preco e gera SKUs para novos produtos."
+            "como fonte de estoque/preco e gera SKUs para novos produtos sem predefinir IDs."
         )
     )
-    parser.add_argument("cliente", type=Path, help="Caminho da planilha do cliente (.xlsx, .xls ou .csv).")
+    parser.add_argument(
+        "--conciliacao-folder",
+        type=Path,
+        default=DEFAULT_CONCILIACAO_FOLDER,
+        help="Pasta onde ficam os arquivos xlsx de conciliacao: cliente e wordpress.",
+    )
+    parser.add_argument("--cliente", type=Path, nargs="?", help="Caminho da planilha do cliente. Se ausente, procura em --conciliacao-folder.")
     parser.add_argument(
         "--wordpress",
         type=Path,
-        default=DEFAULT_WORDPRESS_FILE,
-        help="Planilha base de importacao do WordPress. Padrao: Desktop/cópia de produtos/Produtos.",
+        nargs="?",
+        help="Caminho da planilha do WordPress. Se ausente, procura em --conciliacao-folder.",
     )
     parser.add_argument("--sem-wordpress", action="store_true", help="Somente gera SKU, sem atualizar WordPress.")
+    parser.add_argument("--dry-run", action="store_true", help="Processa e valida sem gravar arquivos finais.")
     parser.add_argument(
         "--saida",
         type=Path,
-        help="Arquivo WordPress atualizado. Padrao: [wordpress]_atualizada.xlsx.",
+        help="Arquivo WordPress atualizado. Padrao: [conciliacao_folder]/todos-os-produtos.xlsx.",
     )
     parser.add_argument(
         "--relatorio",
         type=Path,
-        help="Relatorio de conciliacao. Padrao: [saida]_relatorio.xlsx.",
+        help="Relatorio de conciliacao. Padrao: [conciliacao_folder]/relatorio-conciliacao.xlsx.",
+    )
+    parser.add_argument(
+        "--saida-novos-produtos",
+        type=Path,
+        help="Arquivo de novos produtos com apenas SKU, sem ID. Padrao: [conciliacao_folder]/produtos-novos.xlsx.",
     )
     parser.add_argument("--sheet-cliente", help="Nome da aba da planilha do cliente. Padrao: primeira aba.")
     parser.add_argument("--sheet-wordpress", default="Controle de Estoque", help="Aba da planilha WordPress.")
@@ -208,12 +263,65 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--wordpress-sku-coluna", help="Coluna de SKU/codigo na planilha WordPress.")
     parser.add_argument("--wordpress-estoque-coluna", help="Coluna de estoque na planilha WordPress.")
     parser.add_argument("--wordpress-preco-coluna", help="Coluna de preco na planilha WordPress.")
-    parser.add_argument("--proximo-id", type=int, help="ID inicial para novos produtos. Padrao: maior ID + 1.")
+    parser.add_argument("--log-dir", type=Path, help="Pasta para gravar logs da execucao. Padrao: MSN/logs.")
+    parser.add_argument(
+        "--summary-json",
+        type=Path,
+        help="Arquivo JSON de resumo final. Padrao: arquivo ao lado do log da execucao.",
+    )
+    parser.add_argument(
+        "--proximo-id",
+        type=int,
+        help="Opcao legada. Novos produtos ficam sem ID para o WooCommerce gerar IDs seguros pelo SKU.",
+    )
     return parser.parse_args()
 
 
+def resolve_input_paths(args: argparse.Namespace) -> dict[str, Path]:
+    if args.cliente and args.wordpress:
+        return {
+            "cliente": args.cliente.expanduser().resolve(),
+            "wordpress": args.wordpress.expanduser().resolve(),
+        }
+
+    if args.cliente or args.wordpress:
+        raise ValueError(
+            "Informe ambos os arquivos --cliente e --wordpress ou nenhum dos dois; caso contrario use --conciliacao-folder."
+        )
+
+    conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
+    if not conciliacao_folder.exists():
+        raise FileNotFoundError(f"Pasta de conciliacao nao encontrada: {conciliacao_folder}")
+
+    cliente_file = find_xlsx_by_keyword(conciliacao_folder, "cliente")
+    wordpress_file = find_xlsx_by_keyword(conciliacao_folder, "wordpress")
+    return {"cliente": cliente_file, "wordpress": wordpress_file}
+
+
+def find_xlsx_by_keyword(folder: Path, keyword: str) -> Path:
+    keyword = keyword.lower()
+    candidates = [
+        path for path in folder.iterdir()
+        if path.is_file()
+        and path.suffix.lower() in {".xlsx", ".xls", ".xlsm"}
+        and keyword in path.stem.lower()
+        and not path.name.startswith("~$")
+    ]
+    if not candidates:
+        raise FileNotFoundError(f"Nenhum arquivo xlsx contendo '{keyword}' encontrado em: {folder}")
+    if len(candidates) > 1:
+        exact = [path for path in candidates if path.stem.lower() == keyword]
+        if len(exact) == 1:
+            return exact[0].resolve()
+        raise ValueError(
+            f"Mais de um arquivo xlsx contendo '{keyword}' encontrado em {folder}: {', '.join(str(path.name) for path in candidates)}"
+        )
+    return candidates[0].resolve()
+
+
 def processar_planilha(args: argparse.Namespace) -> ProcessResult:
-    cliente_path = args.cliente.expanduser().resolve()
+    paths = resolve_input_paths(args)
+    cliente_path = paths["cliente"]
     if not cliente_path.exists():
         raise FileNotFoundError(f"Planilha do cliente nao encontrada: {cliente_path}")
 
@@ -245,17 +353,26 @@ def processar_planilha(args: argparse.Namespace) -> ProcessResult:
 
     if args.sem_wordpress:
         marcar_duplicados(resultado)
+        args._last_status_counts = status_counts(resultado)
+        args._last_validation_issues = []
         saida = output_path(cliente_path, args.saida, fallback_suffix="_conciliada")
+        if getattr(args, "dry_run", False):
+            print_summary(resultado, getattr(args, "_logger", None))
+            emit(getattr(args, "_logger", None), "Dry-run: nenhum arquivo gravado.")
+            return ProcessResult(saida=saida)
         write_report_output(resultado, saida)
-        print_summary(resultado)
+        print_summary(resultado, getattr(args, "_logger", None))
         return ProcessResult(saida=saida)
 
-    wordpress_path = args.wordpress.expanduser().resolve()
+    if args.wordpress:
+        wordpress_path = args.wordpress.expanduser().resolve()
+    else:
+        wordpress_path = paths["wordpress"]
     if not wordpress_path.exists():
         raise FileNotFoundError(f"Planilha WordPress nao encontrada: {wordpress_path}")
 
     wordpress_df = read_table(wordpress_path, sheet_name=args.sheet_wordpress)
-    wordpress_atualizada = atualizar_wordpress_com_cliente(
+    wordpress_atualizada, validation_issues = atualizar_wordpress_com_cliente(
         resultado,
         wordpress_df,
         nome_col=nome_col,
@@ -266,12 +383,51 @@ def processar_planilha(args: argparse.Namespace) -> ProcessResult:
     )
 
     marcar_duplicados(resultado)
-    saida = output_path(wordpress_path, args.saida, fallback_suffix="_atualizada")
-    relatorio = report_path(saida, getattr(args, "relatorio", None))
+    if args.saida:
+        saida = output_path(wordpress_path, args.saida, fallback_suffix="_atualizada")
+    else:
+        conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
+        saida = conciliacao_folder / "todos-os-produtos.xlsx"
+    if args.relatorio:
+        relatorio = report_path(saida, getattr(args, "relatorio", None))
+    else:
+        conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
+        relatorio = conciliacao_folder / "relatorio-conciliacao.xlsx"
+    if getattr(args, "saida_novos_produtos", None):
+        saida_novos = output_path(saida, getattr(args, "saida_novos_produtos", None), fallback_suffix="_novos")
+    else:
+        conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
+        saida_novos = conciliacao_folder / "produtos-novos.xlsx"
+
+    validation_issues.extend(validate_import_outputs(resultado, wordpress_atualizada))
+    if getattr(args, "proximo_id", None) is not None:
+        validation_issues.append(
+            ValidationIssue(
+                "aviso",
+                None,
+                "proximo_id",
+                "parametro_legado",
+                "--proximo-id foi ignorado; novos produtos ficam sem ID para o WooCommerce criar.",
+            )
+        )
+    args._last_status_counts = status_counts(resultado)
+    args._last_validation_issues = validation_issues
+
+    if has_validation_errors(validation_issues):
+        write_report_output(resultado, relatorio, validation_issues)
+        raise ValidationFailure(validation_issues, report_path=relatorio)
+
+    if getattr(args, "dry_run", False):
+        print_summary(resultado, getattr(args, "_logger", None))
+        emit(getattr(args, "_logger", None), "Dry-run: nenhum arquivo gravado.")
+        return ProcessResult(saida=saida, relatorio=relatorio, novos_produtos=saida_novos)
+
     write_wordpress_output(wordpress_atualizada, saida, sheet_name=args.sheet_wordpress)
-    write_report_output(resultado, relatorio)
-    print_summary(resultado)
-    return ProcessResult(saida=saida, relatorio=relatorio)
+    write_report_output(resultado, relatorio, validation_issues)
+    write_new_products_output(resultado, wordpress_atualizada, saida_novos)
+    print_summary(resultado, getattr(args, "_logger", None))
+    emit(getattr(args, "_logger", None), f"Novos produtos gerados: {saida_novos}")
+    return ProcessResult(saida=saida, relatorio=relatorio, novos_produtos=saida_novos)
 
 
 def atualizar_wordpress_com_cliente(
@@ -283,8 +439,9 @@ def atualizar_wordpress_com_cliente(
     estoque_col: str | None,
     preco_col: str | None,
     args: argparse.Namespace,
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, list[ValidationIssue]]:
     wordpress_atualizada = wordpress_df.copy()
+    validation_issues: list[ValidationIssue] = []
     wp_id_col = resolve_or_create_column(
         wordpress_atualizada,
         getattr(args, "wordpress_id_coluna", None),
@@ -319,87 +476,139 @@ def atualizar_wordpress_com_cliente(
     )
 
     wp_by_name: dict[str, int] = {}
+    wp_by_sku: dict[str, int] = {}
     used_skus: set[str] = set()
     for wp_index, row in wordpress_atualizada.iterrows():
         sku = clean_cell(row.get(wp_sku_col))
         name = clean_cell(row.get(wp_nome_col))
         if sku:
-            used_skus.add(normalize_sku(sku))
+            normalized_sku = normalize_sku(sku)
+            used_skus.add(normalized_sku)
+            wp_by_sku.setdefault(normalized_sku, wp_index)
         if name:
             wp_by_name.setdefault(normalize_name(name), wp_index)
 
-    proximo_id = getattr(args, "proximo_id", None)
-    next_id = proximo_id if proximo_id is not None else next_numeric_id(wordpress_atualizada[wp_id_col])
     for index, row in resultado.iterrows():
+        row_number = index + 2
         generated_sku = clean_cell(row.get("SKU_Gerado"))
         client_sku = clean_cell(row.get(sku_col)) if sku_col else ""
         client_name = clean_cell(row.get(nome_col))
         obs = []
+        added_new_product = False
 
         if not client_name:
             resultado.at[index, "Status_Conciliacao"] = "ignorado_sem_nome"
             resultado.at[index, "Observacao_Conciliacao"] = "Linha sem nome/produto na planilha do cliente."
             continue
 
+        stock_value, stock_issue = normalize_stock_value(row.get(estoque_col) if estoque_col else None, row_number, estoque_col)
+        price_value, price_issue = normalize_price_value(row.get(preco_col) if preco_col else None, row_number, preco_col)
+        row_issues = [issue for issue in (stock_issue, price_issue) if issue is not None]
+        if row_issues:
+            validation_issues.extend(row_issues)
+            resultado.at[index, "Status_Conciliacao"] = "erro_validacao"
+            resultado.at[index, "Observacao_Conciliacao"] = " ".join(issue.message for issue in row_issues)
+            continue
+
         normalized_name = normalize_name(client_name)
-        if normalized_name in wp_by_name:
+        normalized_client_sku = normalize_sku(client_sku) if client_sku else ""
+        match_status = ""
+        wp_index: int | None = None
+        if normalized_client_sku and normalized_client_sku in wp_by_sku:
+            wp_index = wp_by_sku[normalized_client_sku]
+            match_status = "atualizado_por_sku"
+        elif normalized_name in wp_by_name:
             wp_index = wp_by_name[normalized_name]
+            match_status = "atualizado_por_nome"
+
+        if wp_index is not None:
             update_existing_wordpress_row(
                 wordpress_atualizada,
                 wp_index,
-                row,
-                estoque_col=estoque_col,
-                preco_col=preco_col,
+                stock_value=stock_value,
+                price_value=price_value,
                 wp_estoque_col=wp_estoque_col,
                 wp_preco_col=wp_preco_col,
             )
-            resultado.at[index, "Status_Conciliacao"] = "atualizado_por_nome"
+            resultado.at[index, "Status_Conciliacao"] = match_status
             resultado.at[index, "ID_WordPress"] = clean_cell(wordpress_atualizada.at[wp_index, wp_id_col])
             resultado.at[index, "SKU_Encontrado_WordPress"] = clean_cell(wordpress_atualizada.at[wp_index, wp_sku_col])
             resultado.at[index, "Nome_WordPress"] = clean_cell(wordpress_atualizada.at[wp_index, wp_nome_col])
         else:
-            sku = unique_sku(generated_sku or client_sku or "SKU-MOD", used_skus)
-            new_row = {column: "" for column in wordpress_atualizada.columns}
-            new_row[wp_id_col] = next_id
-            new_row[wp_sku_col] = sku
-            new_row[wp_nome_col] = client_name
-            if estoque_col and wp_estoque_col:
-                new_row[wp_estoque_col] = row.get(estoque_col)
-            if preco_col and wp_preco_col:
-                new_row[wp_preco_col] = row.get(preco_col)
+            possible_index, possible_score = find_possible_name_match(normalized_name, wp_by_name)
+            if possible_index is not None:
+                resultado.at[index, "Status_Conciliacao"] = "revisar_possivel_match"
+                resultado.at[index, "ID_WordPress"] = clean_cell(wordpress_atualizada.at[possible_index, wp_id_col])
+                resultado.at[index, "SKU_Encontrado_WordPress"] = clean_cell(wordpress_atualizada.at[possible_index, wp_sku_col])
+                resultado.at[index, "Nome_WordPress"] = clean_cell(wordpress_atualizada.at[possible_index, wp_nome_col])
+                obs.append(f"Possivel produto existente por nome similar ({possible_score:.0%}); revisar manualmente.")
+                validation_issues.append(
+                    ValidationIssue(
+                        "aviso",
+                        row_number,
+                        "Nome",
+                        "possivel_match",
+                        "Produto nao foi criado por existir possivel match por nome.",
+                    )
+                )
+            else:
+                sku = unique_sku(generated_sku or client_sku or "SKU-MOD", used_skus)
+                new_row = {column: "" for column in wordpress_atualizada.columns}
+                # WooCommerce cria o ID quando a linha nova chega sem ID; SKU atua como chave estavel.
+                new_row[wp_sku_col] = sku
+                new_row[wp_nome_col] = client_name
+                if estoque_col and wp_estoque_col:
+                    new_row[wp_estoque_col] = stock_value
+                if preco_col and wp_preco_col:
+                    new_row[wp_preco_col] = price_value
 
-            wordpress_atualizada.loc[len(wordpress_atualizada)] = new_row
-            wp_by_name[normalized_name] = len(wordpress_atualizada) - 1
-            used_skus.add(normalize_sku(sku))
-            resultado.at[index, "Status_Conciliacao"] = "adicionado_ao_wordpress"
-            resultado.at[index, "ID_WordPress"] = str(next_id)
-            resultado.at[index, "SKU_Encontrado_WordPress"] = sku
-            resultado.at[index, "Nome_WordPress"] = client_name
-            next_id += 1
+                wordpress_atualizada.loc[len(wordpress_atualizada)] = new_row
+                new_wp_index = len(wordpress_atualizada) - 1
+                wp_by_name[normalized_name] = new_wp_index
+                wp_by_sku[normalize_sku(sku)] = new_wp_index
+                used_skus.add(normalize_sku(sku))
+                resultado.at[index, "Status_Conciliacao"] = "adicionado_ao_wordpress"
+                resultado.at[index, "SKU_Encontrado_WordPress"] = sku
+                resultado.at[index, "Nome_WordPress"] = client_name
+                added_new_product = True
 
+        if added_new_product:
+            obs.append("ID deixado em branco; WooCommerce criara o ID usando o SKU.")
         if not estoque_col:
             obs.append("Coluna de estoque do cliente nao encontrada.")
         if not preco_col:
             obs.append("Coluna de preco do cliente nao encontrada.")
         resultado.at[index, "Observacao_Conciliacao"] = " ".join(obs)
 
-    return wordpress_atualizada
+    return wordpress_atualizada, validation_issues
+
+
+def find_possible_name_match(normalized_name: str, wp_by_name: dict[str, int]) -> tuple[int | None, float]:
+    best_index: int | None = None
+    best_score = 0.0
+    for candidate_name, wp_index in wp_by_name.items():
+        score = SequenceMatcher(None, normalized_name, candidate_name).ratio()
+        if score > best_score:
+            best_score = score
+            best_index = wp_index
+    if best_index is not None and best_score >= 0.92:
+        return best_index, best_score
+    return None, best_score
 
 
 def update_existing_wordpress_row(
     wordpress_df: pd.DataFrame,
     wp_index: int,
-    client_row: pd.Series,
     *,
-    estoque_col: str | None,
-    preco_col: str | None,
+    stock_value: Any,
+    price_value: Any,
     wp_estoque_col: str | None,
     wp_preco_col: str | None,
 ) -> None:
-    if estoque_col and wp_estoque_col and has_value(client_row.get(estoque_col)):
-        wordpress_df.at[wp_index, wp_estoque_col] = client_row.get(estoque_col)
-    if preco_col and wp_preco_col and has_value(client_row.get(preco_col)):
-        wordpress_df.at[wp_index, wp_preco_col] = client_row.get(preco_col)
+    if wp_estoque_col and has_value(stock_value):
+        wordpress_df.at[wp_index, wp_estoque_col] = stock_value
+    if wp_preco_col and has_value(price_value):
+        wordpress_df.at[wp_index, wp_preco_col] = price_value
 
 
 def marcar_duplicados(resultado: pd.DataFrame) -> None:
@@ -475,13 +684,38 @@ def read_csv(path: Path) -> pd.DataFrame:
     raise RuntimeError("Nao foi possivel ler CSV. " + " | ".join(errors))
 
 
-def write_report_output(df: pd.DataFrame, path: Path) -> None:
+def _atomic_excel_write(writer_func: Callable[[Any], None], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    temp_path = path.with_name(f"{path.name}.tmp")
+    try:
+        with pd.ExcelWriter(temp_path, engine="openpyxl") as writer:
+            writer_func(writer)
+        temp_path.replace(path)
+    except PermissionError as exc:
+        if temp_path.exists():
+            try:
+                temp_path.unlink()
+            except Exception:
+                pass
+        raise PermissionError(
+            f"Permissão negada ao gravar {path}. Feche o arquivo se estiver aberto no Excel e tente novamente."
+        ) from exc
+
+
+def write_report_output(
+    df: pd.DataFrame,
+    path: Path,
+    validation_issues: list[ValidationIssue] | None = None,
+) -> None:
     if path.suffix.lower() == ".csv":
+        path.parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(path, index=False, encoding="utf-8-sig")
+        if validation_issues:
+            issues_path = path.with_name(f"{path.stem}-validacao.csv")
+            validation_issues_frame(validation_issues).to_csv(issues_path, index=False, encoding="utf-8-sig")
         return
 
-    with pd.ExcelWriter(path, engine="openpyxl") as writer:
+    def writer_func(writer: Any) -> None:
         df.to_excel(writer, index=False, sheet_name="conciliacao")
         df[df["Status_Conciliacao"].isin(["novo_para_wordpress", "adicionado_ao_wordpress"])].to_excel(
             writer,
@@ -493,32 +727,174 @@ def write_report_output(df: pd.DataFrame, path: Path) -> None:
             index=False,
             sheet_name="adicionados",
         )
-        df[df["Status_Conciliacao"] == "atualizado_por_nome"].to_excel(
+        df[df["Status_Conciliacao"].isin(["atualizado_por_nome", "atualizado_por_sku"])].to_excel(
             writer,
             index=False,
             sheet_name="atualizados",
         )
+        validation_issues_frame(validation_issues or []).to_excel(
+            writer,
+            index=False,
+            sheet_name="validacao",
+        )
+
+    _atomic_excel_write(writer_func, path)
+
+
+def validation_issues_frame(issues: list[ValidationIssue]) -> pd.DataFrame:
+    fields = ["severity", "row_number", "field", "code", "message"]
+    if not issues:
+        return pd.DataFrame(columns=fields)
+    return pd.DataFrame([issue.as_row() for issue in issues], columns=fields)
 
 
 def write_wordpress_output(df: pd.DataFrame, path: Path, sheet_name: str) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
     if path.suffix.lower() == ".csv":
+        path.parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(path, index=False, encoding="utf-8-sig")
         return
-    with pd.ExcelWriter(path, engine="openpyxl") as writer:
+
+    def writer_func(writer: Any) -> None:
         df.to_excel(writer, index=False, sheet_name=sheet_name[:31] or "Planilha")
+
+    _atomic_excel_write(writer_func, path)
 
 
 def output_path(input_path: Path, output_arg: Path | None, fallback_suffix: str) -> Path:
     if output_arg:
-        return output_arg.expanduser().resolve()
+        output_arg = output_arg.expanduser()
+        if output_arg.exists() and output_arg.is_dir():
+            return output_arg / f"{input_path.stem}{fallback_suffix}.xlsx"
+        if output_arg.suffix:
+            return output_arg.resolve()
+        return output_arg.resolve() / f"{input_path.stem}{fallback_suffix}.xlsx"
     return input_path.with_name(f"{input_path.stem}{fallback_suffix}.xlsx")
 
 
 def report_path(output_file: Path, report_arg: Path | None) -> Path:
     if report_arg:
-        return report_arg.expanduser().resolve()
+        report_arg = report_arg.expanduser()
+        if report_arg.exists() and report_arg.is_dir():
+            return report_arg / f"{output_file.stem}_relatorio.xlsx"
+        if report_arg.suffix:
+            return report_arg.resolve()
+        return report_arg.resolve() / f"{output_file.stem}_relatorio.xlsx"
     return output_file.with_name(f"{output_file.stem}_relatorio.xlsx")
+
+
+def validate_import_outputs(resultado: pd.DataFrame, wordpress_df: pd.DataFrame) -> list[ValidationIssue]:
+    issues: list[ValidationIssue] = []
+    novos_import = new_products_import_frame(resultado, wordpress_df)
+    if "ID" in novos_import.columns:
+        issues.append(ValidationIssue("erro", None, "ID", "id_em_novos", "produtos-novos nao pode conter coluna ID."))
+    if "SKU" not in novos_import.columns:
+        issues.append(ValidationIssue("erro", None, "SKU", "sku_ausente", "produtos-novos precisa conter coluna SKU."))
+    else:
+        normalized_skus = novos_import["SKU"].map(normalize_sku)
+        for index, sku in normalized_skus.items():
+            if not sku:
+                issues.append(ValidationIssue("erro", index + 2, "SKU", "sku_vazio", "SKU vazio em produtos novos."))
+        duplicated = normalized_skus[normalized_skus != ""].duplicated(keep=False)
+        for index, is_duplicated in duplicated.items():
+            if is_duplicated:
+                issues.append(
+                    ValidationIssue(
+                        "erro",
+                        index + 2,
+                        "SKU",
+                        "sku_duplicado",
+                        f"SKU duplicado em produtos novos: {novos_import.at[index, 'SKU']}",
+                    )
+                )
+
+    wp_id_col = resolve_column(wordpress_df, None, ID_ALIASES, "ID WordPress", required=False)
+    wp_sku_col = resolve_column(wordpress_df, None, SKU_ALIASES, "SKU WordPress", required=False)
+    wp_id_by_sku: dict[str, Any] = {}
+    if wp_id_col and wp_sku_col:
+        for _, row in wordpress_df.iterrows():
+            sku = normalize_sku(row.get(wp_sku_col))
+            if sku:
+                wp_id_by_sku[sku] = row.get(wp_id_col)
+
+    for index, row in resultado.iterrows():
+        row_number = index + 2
+        status = clean_cell(row.get("Status_Conciliacao"))
+        result_sku = clean_cell(row.get("SKU_Encontrado_WordPress"))
+        result_id = clean_cell(row.get("ID_WordPress"))
+        if status == "adicionado_ao_wordpress":
+            if result_id:
+                issues.append(ValidationIssue("erro", row_number, "ID_WordPress", "id_novo_preenchido", "Produto novo deve ficar sem ID."))
+            wp_id = wp_id_by_sku.get(normalize_sku(result_sku))
+            if has_value(wp_id):
+                issues.append(
+                    ValidationIssue(
+                        "erro",
+                        row_number,
+                        "ID",
+                        "id_novo_na_planilha",
+                        f"Produto novo {result_sku} foi gravado com ID na planilha WordPress.",
+                    )
+                )
+        if status in {"atualizado_por_nome", "atualizado_por_sku"} and not result_id:
+            if result_sku:
+                issues.append(
+                    ValidationIssue(
+                        "aviso",
+                        row_number,
+                        "ID_WordPress",
+                        "id_existente_ausente_com_sku",
+                        "Produto existente sem ID; importacao deve usar SKU como chave.",
+                    )
+                )
+            else:
+                issues.append(
+                    ValidationIssue(
+                        "erro",
+                        row_number,
+                        "ID_WordPress",
+                        "id_existente_e_sku_ausentes",
+                        "Produto existente atualizado sem ID e sem SKU.",
+                    )
+                )
+
+    return issues
+
+
+def has_validation_errors(issues: list[ValidationIssue]) -> bool:
+    return any(issue.severity == "erro" for issue in issues)
+
+
+def write_new_products_output(resultado: pd.DataFrame, wordpress_df: pd.DataFrame, path: Path) -> None:
+    output = new_products_import_frame(resultado, wordpress_df)
+    if path.suffix.lower() == ".csv":
+        path.parent.mkdir(parents=True, exist_ok=True)
+        output.to_csv(path, index=False, encoding="utf-8-sig")
+        return
+
+    def writer_func(writer: Any) -> None:
+        output.to_excel(writer, index=False, sheet_name="novos")
+
+    _atomic_excel_write(writer_func, path)
+
+
+def new_products_import_frame(resultado: pd.DataFrame, wordpress_df: pd.DataFrame | None = None) -> pd.DataFrame:
+    novos = resultado[resultado["Status_Conciliacao"] == "adicionado_ao_wordpress"].copy()
+    new_skus = {normalize_sku(value) for value in novos["SKU_Encontrado_WordPress"].tolist() if normalize_sku(value)}
+    if wordpress_df is None:
+        return novos[["SKU_Encontrado_WordPress"]].rename(
+            columns={"SKU_Encontrado_WordPress": "SKU"}
+        ).reset_index(drop=True)
+
+    wp_sku_col = resolve_column(wordpress_df, None, SKU_ALIASES, "SKU WordPress", required=False)
+    if not wp_sku_col or not new_skus:
+        return pd.DataFrame(columns=[column for column in wordpress_df.columns if normalize_header(column) != "id"])
+
+    mask = wordpress_df[wp_sku_col].map(lambda value: normalize_sku(value) in new_skus)
+    output = wordpress_df.loc[mask].copy().reset_index(drop=True)
+    id_columns = [column for column in output.columns if normalize_header(column) in ID_ALIASES]
+    if id_columns:
+        output = output.drop(columns=id_columns)
+    return output
 
 
 def resolve_or_create_column(
@@ -566,24 +942,66 @@ def resolve_column(
     return None
 
 
-def print_summary(df: pd.DataFrame) -> None:
+def print_summary(df: pd.DataFrame, logger: Any | None = None) -> None:
+    emit(logger, "Resumo:")
+    for status, count in status_counts(df).items():
+        emit(logger, f"- {status}: {count}")
+
+
+def status_counts(df: pd.DataFrame) -> dict[str, int]:
+    if "Status_Conciliacao" not in df.columns:
+        return {}
     counts = df["Status_Conciliacao"].value_counts(dropna=False)
-    print("Resumo:")
-    for status, count in counts.items():
-        print(f"- {status}: {count}")
+    return {str(status): int(count) for status, count in counts.items()}
 
 
-def next_numeric_id(values: pd.Series) -> int:
-    max_id = 0
-    for value in values:
-        try:
-            if pd.isna(value):
-                continue
-            number = int(float(str(value).strip()))
-        except (TypeError, ValueError):
-            continue
-        max_id = max(max_id, number)
-    return max_id + 1
+def validation_counts(issues: list[ValidationIssue] | None) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for issue in issues or []:
+        key = f"{issue.severity}:{issue.code}"
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
+def default_summary_path(args: argparse.Namespace) -> Path:
+    explicit = getattr(args, "summary_json", None)
+    if explicit:
+        return explicit.expanduser().resolve()
+    log_path = getattr(args, "_log_path", None)
+    if log_path:
+        return Path(log_path).with_suffix(".json")
+    return (ROOT_DIR / "logs" / "conciliador_planilhas_sku-summary.json").resolve()
+
+
+def write_execution_summary(
+    args: argparse.Namespace,
+    result: ProcessResult | None,
+    *,
+    exit_code: int,
+    issues: list[ValidationIssue] | None = None,
+    error: str | None = None,
+) -> None:
+    summary_path = default_summary_path(args)
+    payload = {
+        "script": "conciliador_planilhas_sku.py",
+        "exit_code": exit_code,
+        "dry_run": bool(getattr(args, "dry_run", False)),
+        "inputs": {
+            "cliente": str(getattr(args, "cliente", "") or ""),
+            "wordpress": str(getattr(args, "wordpress", "") or ""),
+            "conciliacao_folder": str(getattr(args, "conciliacao_folder", "") or ""),
+        },
+        "outputs": {
+            "todos_os_produtos": str(result.saida) if result else "",
+            "relatorio": str(result.relatorio) if result and result.relatorio else "",
+            "produtos_novos": str(result.novos_produtos) if result and result.novos_produtos else "",
+            "log": str(getattr(args, "_log_path", "") or ""),
+        },
+        "status_counts": getattr(args, "_last_status_counts", {}),
+        "validation_counts": validation_counts(issues or getattr(args, "_last_validation_issues", [])),
+        "error": error or "",
+    }
+    write_json(summary_path, payload)
 
 
 def unique_sku(base_sku: str, used_skus: set[str]) -> str:
@@ -612,28 +1030,8 @@ def text_has_any(text: str, values: list[str]) -> bool:
     return False
 
 
-def normalize_header(value: Any) -> str:
-    text = strip_accents(str(value or "")).lower()
-    return re.sub(r"[^a-z0-9]+", "", text)
-
-
-def normalize_words(value: Any) -> str:
-    text = strip_accents(str(value or "")).upper()
-    text = re.sub(r"[^A-Z0-9]+", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
-
-
 def normalize_name(value: Any) -> str:
     return normalize_words(value)
-
-
-def normalize_sku(value: Any) -> str:
-    return re.sub(r"[^A-Z0-9]+", "", normalize_words(value))
-
-
-def strip_accents(value: str) -> str:
-    normalized = unicodedata.normalize("NFKD", value)
-    return "".join(char for char in normalized if not unicodedata.combining(char))
 
 
 def clean_cell(value: Any) -> str:

@@ -1,2 +1,11 @@
-.venv
-__pycache__
+__pycache__/
+*.py[cod]
+
+products/_reports/
+products/_raw/
+products/_approved_raw/
+products/_candidates/
+
+logs/
+*.tmp
+*.log

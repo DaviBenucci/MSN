@@ -11,7 +11,7 @@ O script faz quatro coisas:
 1. Le a planilha do cliente.
 2. Localiza produtos existentes na planilha WordPress pelo nome do produto.
 3. Atualiza estoque e preco dos produtos existentes.
-4. Adiciona produtos novos ao final da planilha WordPress com novo ID e novo SKU.
+4. Adiciona produtos novos ao final da planilha WordPress com ID vazio e novo SKU.
 
 A planilha WordPress original nao e sobrescrita por padrao. O script gera uma copia atualizada.
 
@@ -71,11 +71,13 @@ Se a coluna tiver outro nome, informe no comando:
 
 ### Planilha WordPress
 
-Por padrao, o script usa:
+Por padrao, o script usa o modo de conciliacao baseado em `Desktop/Conciliacao`.
+Ele procura dois arquivos:
 
-```text
-C:\Users\Sama Contabilidade\Desktop\cópia de produtos\Produtos\Controle_de_estoque_Com_Filtro.xlsx
-```
+- um com `cliente` no nome
+- outro com `wordpress` no nome
+
+Se quiser indicar diretamente os arquivos, use `--cliente` e `--wordpress`.
 
 Colunas esperadas na planilha WordPress:
 
@@ -118,7 +120,7 @@ Se o mesmo nome ja existe na planilha WordPress:
 Se o nome nao existe na planilha WordPress:
 
 - O produto e adicionado ao final da planilha WordPress.
-- O novo `ID` sera o maior ID existente + 1.
+- O campo `ID` fica vazio para o WooCommerce criar o ID real na importacao.
 - O novo `SKU` sera gerado pelo script.
 - `Nome`, `Estoque` e `Preço` virao da planilha do cliente.
 - Outras colunas da planilha WordPress ficam vazias, salvo preenchimento posterior.
@@ -195,7 +197,7 @@ Variacoes reconhecidas:
 
 ## Arquivos gerados
 
-Em modo normal, o script gera dois arquivos:
+Em modo normal, o script gera tres arquivos:
 
 1. Planilha WordPress atualizada:
 
@@ -209,20 +211,34 @@ Controle_de_estoque_Com_Filtro_atualizada.xlsx
 Controle_de_estoque_Com_Filtro_atualizada_relatorio.xlsx
 ```
 
+3. Recorte de novos produtos para importacao por SKU:
+
+```text
+produtos-novos.xlsx
+```
+
+Esse arquivo exporta somente a coluna `SKU`; ele nao leva coluna `ID` para evitar conflito com IDs ja existentes no WooCommerce.
+
 O relatorio tem abas:
 
 - `conciliacao`: todas as linhas da planilha do cliente analisadas.
 - `novos`: produtos adicionados ao WordPress.
 - `adicionados`: mesmo recorte dos produtos adicionados.
 - `atualizados`: produtos ja existentes que tiveram estoque/preco atualizados.
+- `validacao`: erros e avisos encontrados antes da importacao.
+
+Se houver erro de validacao, o script retorna codigo `2`, grava o relatorio com a aba `validacao` e nao grava os arquivos finais de importacao.
 
 ## Status de conciliacao
 
 Principais status:
 
 - `atualizado_por_nome`: produto ja existia na planilha WordPress e foi atualizado pelo nome.
+- `atualizado_por_sku`: produto ja existia na planilha WordPress e foi atualizado pelo SKU informado pelo cliente.
 - `adicionado_ao_wordpress`: produto nao existia e foi anexado ao final da planilha WordPress.
+- `revisar_possivel_match`: produto tem nome parecido com um item existente e nao foi criado automaticamente.
 - `ignorado_sem_nome`: linha sem nome/produto na planilha do cliente.
+- `erro_validacao`: linha bloqueada por dado invalido, como preco ou estoque.
 - `sem_wordpress`: usado quando o comando roda com `--sem-wordpress`.
 
 Colunas adicionadas ao relatorio:
@@ -271,14 +287,24 @@ cd "$env:USERPROFILE\Desktop\MSN"
   --relatorio "/c/caminho/relatorio_conciliacao.xlsx"
 ```
 
-## Definir ID inicial manualmente
+## Parametro legado de ID
 
-Use `--proximo-id` quando quiser forcar o ID inicial dos novos produtos.
+O parametro `--proximo-id` ficou legado. No fluxo atual, produtos novos ficam com `ID` vazio para o WooCommerce criar IDs seguros usando o `SKU` como chave.
 
 ```bash
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
   "/c/caminho/cliente.xlsx" \
   --proximo-id 2000
+```
+
+## Validar sem gravar
+
+Use `--dry-run` para processar e validar sem gravar os arquivos finais.
+
+```bash
+./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
+  "/c/caminho/cliente.xlsx" \
+  --dry-run
 ```
 
 ## Modo somente gerar SKU

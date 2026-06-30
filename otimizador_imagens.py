@@ -18,6 +18,8 @@ from urllib.parse import quote_plus, unquote, urljoin, urlparse
 
 import requests
 
+from msn_utils import emit, retry_call, setup_script_logging, write_json
+
 
 ROOT_DIR = Path(__file__).resolve().parent
 PRODUCTS_DIR = ROOT_DIR / "products"
@@ -25,6 +27,7 @@ RAW_DIR = PRODUCTS_DIR / "_raw"
 REPORTS_DIR = PRODUCTS_DIR / "_reports"
 REPORT_FILE = REPORTS_DIR / "resultado-imagens.csv"
 DEFAULT_DOWNLOADS_DIR = Path.home() / "Downloads"
+_REMBG_SESSION: Any | None = None
 
 DEFAULT_WORKBOOK_NAME = "Controle_de_estoque_Com_Filtro.xlsx"
 DEFAULT_WORKSHEET_NAME = "Controle de Estoque"
@@ -126,6 +129,10 @@ class ProductResult:
 
 def main() -> int:
     args = parse_args()
+    configure_output_root(args.output_root)
+    logger, log_path = setup_script_logging("otimizador_imagens", ROOT_DIR, getattr(args, "log_dir", None))
+    args._logger = logger
+    args._log_path = log_path
     PRODUCTS_DIR.mkdir(exist_ok=True)
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     if args.icecat_public:
@@ -134,30 +141,47 @@ def main() -> int:
     try:
         products = load_products(args)
     except Exception as exc:
+        logger.exception("Erro ao carregar produtos")
         print(f"Erro ao carregar produtos: {exc}", file=sys.stderr)
+        write_execution_summary(args, [], exit_code=2, error=str(exc))
         return 2
 
     if not products:
         if should_use_download_folders(args):
-            print(
+            emit(
+                logger,
                 "Nenhum arquivo ou pasta em Downloads com SKU correspondente na planilha. "
                 f"Use nomes como: {args.downloads_dir.expanduser().resolve()}\\TON-HP-CE313AB-MAG "
                 "ou TON-HP-CE313AB-MAG.zip"
             )
         else:
-            print("Nenhum produto encontrado para processar.")
+            emit(logger, "Nenhum produto encontrado para processar.")
         write_report([])
+        write_execution_summary(args, [], exit_code=0)
         return 0
 
     if args.dry_run:
-        return run_dry_run(products, args)
+        exit_code = run_dry_run(products, args)
+        write_execution_summary(args, getattr(args, "_last_results", []), exit_code=exit_code)
+        return exit_code
 
-    client = PublicIcecatClient(args.search_delay) if args.icecat_public else None
+    client = (
+        PublicIcecatClient(
+            args.search_delay,
+            timeout=args.timeout,
+            download_timeout=args.download_timeout,
+            retries=args.retries,
+            retry_backoff=args.retry_backoff,
+            logger=logger,
+        )
+        if args.icecat_public
+        else None
+    )
     results: list[ProductResult] = []
     products_to_mark: list[Product] = []
 
     for index, product in enumerate(products, start=1):
-        print(f"[{index}/{len(products)}] Produto {product.sku}: {product.name}")
+        emit(logger, f"[{index}/{len(products)}] Produto {product.sku}: {product.name}")
         if args.input:
             result = process_local_product(product, args)
         elif args.manual_downloads:
@@ -168,12 +192,13 @@ def main() -> int:
         else:
             result = process_downloads_product(product, args)
         results.append(result)
-        print(
+        emit(
+            logger,
             f"  status={result.status} baixadas={result.downloaded} "
             f"processadas={result.processed} falhas={result.failed_images}"
         )
         if result.message:
-            print(f"  detalhe={result.message}")
+            emit(logger, f"  detalhe={result.message}")
         if should_mark_excel_product(args, result):
             products_to_mark.append(product)
 
@@ -181,18 +206,20 @@ def main() -> int:
         try:
             marked = mark_excel_products_ok(products_to_mark, args)
             if marked:
-                print(f"Planilha marcada: {marked} linha(s) com OK na coluna {args.mark_column}.")
+                emit(logger, f"Planilha marcada: {marked} linha(s) com OK na coluna {args.mark_column}.")
         except Exception as exc:
+            logger.warning("Nao foi possivel marcar OK na planilha: %s", exc)
             print(f"Aviso: nao foi possivel marcar OK na planilha: {exc}", file=sys.stderr)
 
     write_report(results)
-    print(f"Relatorio gerado em: {REPORT_FILE}")
+    emit(logger, f"Relatorio gerado em: {REPORT_FILE}")
 
     failures = [item for item in results if item.status not in {"ok", "skipped_existing"}]
     if failures:
-        print(f"Concluido com {len(failures)} produto(s) pendente(s).")
+        emit(logger, f"Concluido com {len(failures)} produto(s) pendente(s).")
     else:
-        print("Processamento concluido com sucesso.")
+        emit(logger, "Processamento concluido com sucesso.")
+    write_execution_summary(args, results, exit_code=0)
     return 0
 
 
@@ -234,6 +261,10 @@ def parse_args() -> argparse.Namespace:
         default=4.0,
         help="Espera entre requisicoes publicas ao Icecat, em segundos.",
     )
+    parser.add_argument("--timeout", type=float, default=30.0, help="Timeout de buscas HTTP, em segundos.")
+    parser.add_argument("--download-timeout", type=float, default=60.0, help="Timeout de downloads HTTP, em segundos.")
+    parser.add_argument("--retries", type=int, default=1, help="Quantidade de retentativas em erro de rede/429.")
+    parser.add_argument("--retry-backoff", type=float, default=3.0, help="Backoff progressivo entre retentativas, em segundos.")
     parser.add_argument("--max-images", type=int, help="Limita a quantidade de imagens baixadas por produto.")
     parser.add_argument("--skip-rembg", action="store_true", help="Nao remove fundo; apenas redimensiona e centraliza.")
     parser.add_argument(
@@ -242,6 +273,12 @@ def parse_args() -> argparse.Namespace:
         help="Usa fundo branco 800x800. Por padrao, o WebP final fica com fundo transparente.",
     )
     parser.add_argument("--overwrite", action="store_true", help="Recria imagens finais existentes.")
+    parser.add_argument(
+        "--output-root",
+        type=Path,
+        default=PRODUCTS_DIR,
+        help="Pasta raiz dos WebPs finais e relatorios. Padrao: MSN/products.",
+    )
     parser.add_argument(
         "--mark-column",
         default="Imagem",
@@ -254,7 +291,33 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--workbook", default=DEFAULT_WORKBOOK_NAME, help="Nome do workbook aberto no Excel.")
     parser.add_argument("--sheet", default=DEFAULT_WORKSHEET_NAME, help="Nome da aba da planilha.")
+    parser.add_argument("--log-dir", type=Path, help="Pasta para gravar logs da execucao. Padrao: MSN/logs.")
+    parser.add_argument(
+        "--summary-json",
+        type=Path,
+        help="Arquivo JSON de resumo final. Padrao: arquivo ao lado do log da execucao.",
+    )
     return parser.parse_args()
+
+
+def configure_output_root(output_root: Path) -> None:
+    global PRODUCTS_DIR, RAW_DIR, REPORTS_DIR, REPORT_FILE
+    PRODUCTS_DIR = output_root.expanduser().resolve()
+    RAW_DIR = PRODUCTS_DIR / "_raw"
+    REPORTS_DIR = PRODUCTS_DIR / "_reports"
+    REPORT_FILE = REPORTS_DIR / "resultado-imagens.csv"
+
+
+def resolve_workbook_file(workbook_name: str) -> Path:
+    workbook_path = Path(workbook_name).expanduser()
+    if workbook_path.exists():
+        return workbook_path.resolve()
+    workbook_path = DEFAULT_EXCEL_FILE
+    if workbook_path.name.lower() != str(workbook_name).lower():
+        workbook_path = DEFAULT_EXCEL_FILE.with_name(str(workbook_name))
+    if workbook_path.exists():
+        return workbook_path.resolve()
+    return workbook_path
 
 
 def load_products(args: argparse.Namespace) -> list[Product]:
@@ -507,9 +570,7 @@ $rows | ConvertTo-Json -Depth 4 -Compress
 def read_excel_rows_openpyxl(workbook_name: str, sheet_name: str) -> list[dict[str, Any]]:
     import openpyxl
 
-    workbook_path = DEFAULT_EXCEL_FILE
-    if workbook_path.name.lower() != workbook_name.lower():
-        workbook_path = DEFAULT_EXCEL_FILE.with_name(workbook_name)
+    workbook_path = resolve_workbook_file(workbook_name)
     if not workbook_path.exists():
         raise FileNotFoundError(f"arquivo nao encontrado: {workbook_path}")
 
@@ -655,9 +716,7 @@ def mark_excel_products_ok_openpyxl(
 ) -> int:
     import openpyxl
 
-    workbook_path = DEFAULT_EXCEL_FILE
-    if workbook_path.name.lower() != workbook_name.lower():
-        workbook_path = DEFAULT_EXCEL_FILE.with_name(workbook_name)
+    workbook_path = resolve_workbook_file(workbook_name)
     if not workbook_path.exists():
         raise FileNotFoundError(f"arquivo nao encontrado: {workbook_path}")
 
@@ -682,8 +741,22 @@ def mark_excel_products_ok_openpyxl(
 
 
 class PublicIcecatClient:
-    def __init__(self, search_delay: float) -> None:
+    def __init__(
+        self,
+        search_delay: float,
+        *,
+        timeout: float = 30.0,
+        download_timeout: float = 60.0,
+        retries: int = 1,
+        retry_backoff: float = 3.0,
+        logger: Any | None = None,
+    ) -> None:
         self.search_delay = max(0.0, search_delay)
+        self.timeout = max(1.0, timeout)
+        self.download_timeout = max(1.0, download_timeout)
+        self.retries = max(0, retries)
+        self.retry_backoff = max(0.0, retry_backoff)
+        self.logger = logger
         self.session = requests.Session()
         self.last_request_at = 0.0
 
@@ -724,23 +797,35 @@ class PublicIcecatClient:
 
     def download(self, url: str, destination: Path) -> None:
         destination.parent.mkdir(parents=True, exist_ok=True)
-        response = self.get_response(url, stream=True, timeout=60)
+        response = self.get_response(url, stream=True, timeout=self.download_timeout)
         with destination.open("wb") as output:
             for chunk in response.iter_content(chunk_size=1024 * 256):
                 if chunk:
                     output.write(chunk)
 
     def get_text(self, url: str) -> str:
-        return self.get_response(url, timeout=30).text
+        return self.get_response(url, timeout=self.timeout).text
 
     def get_response(self, url: str, **kwargs: Any) -> requests.Response:
-        self.wait_before_request()
-        response = self.session.get(url, headers=PUBLIC_REQUEST_HEADERS, **kwargs)
-        self.last_request_at = time.monotonic()
-        if response.status_code == 429:
-            raise RateLimitedError("Icecat retornou 429 Too Many Requests")
-        response.raise_for_status()
-        return response
+        kwargs.setdefault("timeout", self.timeout)
+
+        def operation() -> requests.Response:
+            self.wait_before_request()
+            response = self.session.get(url, headers=PUBLIC_REQUEST_HEADERS, **kwargs)
+            self.last_request_at = time.monotonic()
+            if response.status_code == 429:
+                raise RateLimitedError("Icecat retornou 429 Too Many Requests")
+            response.raise_for_status()
+            return response
+
+        return retry_call(
+            operation,
+            attempts=max(1, self.retries + 1),
+            backoff_seconds=self.retry_backoff,
+            retry_exceptions=(RateLimitedError, requests.RequestException),
+            logger=self.logger,
+            label=f"Icecat GET {url}",
+        )
 
     def wait_before_request(self) -> None:
         elapsed = time.monotonic() - self.last_request_at
@@ -986,6 +1071,19 @@ def process_image_paths(
     return processed, failed, "; ".join(output_messages)
 
 
+def get_rembg_session() -> Any | None:
+    global _REMBG_SESSION
+    if _REMBG_SESSION is not None:
+        return _REMBG_SESSION
+    try:
+        from rembg import new_session
+
+        _REMBG_SESSION = new_session()
+    except Exception:
+        _REMBG_SESSION = None
+    return _REMBG_SESSION
+
+
 def optimize_image(image_path: Path, destination: Path, skip_rembg: bool, white_background: bool) -> None:
     from PIL import Image, ImageOps
 
@@ -996,7 +1094,11 @@ def optimize_image(image_path: Path, destination: Path, skip_rembg: bool, white_
         from rembg import remove
 
         input_bytes = image_path.read_bytes()
-        output_bytes = remove(input_bytes)
+        session = get_rembg_session()
+        try:
+            output_bytes = remove(input_bytes, session=session)
+        except TypeError:
+            output_bytes = remove(input_bytes)
         image = Image.open(io.BytesIO(output_bytes)).convert("RGBA")
 
     image.thumbnail(FINAL_SIZE, Image.Resampling.LANCZOS)
@@ -1304,7 +1406,8 @@ def should_mark_excel_product(args: argparse.Namespace, result: ProductResult) -
 
 
 def run_dry_run(products: list[Product], args: argparse.Namespace) -> int:
-    print(f"Dry-run: {len(products)} produto(s) seriam processados.")
+    logger = getattr(args, "_logger", None)
+    emit(logger, f"Dry-run: {len(products)} produto(s) seriam processados.")
     rows: list[ProductResult] = []
     for product in products:
         attempts = build_public_search_attempts(product)
@@ -1319,11 +1422,11 @@ def run_dry_run(products: list[Product], args: argparse.Namespace) -> int:
         else:
             raw_dir = str(args.downloads_dir.expanduser().resolve() / safe_folder_name(product.sku))
         output_dir = str(PRODUCTS_DIR / safe_folder_name(product.sku))
-        print(f"- {product.sku} :: {product.name} :: {attempt_text}")
-        print(f"  origem: {raw_dir}")
-        print(f"  destino: {output_dir}")
+        emit(logger, f"- {product.sku} :: {product.name} :: {attempt_text}")
+        emit(logger, f"  origem: {raw_dir}")
+        emit(logger, f"  destino: {output_dir}")
         if search_url:
-            print(f"  busca: {search_url}")
+            emit(logger, f"  busca: {search_url}")
         rows.append(
             ProductResult(
                 sku=product.sku,
@@ -1337,7 +1440,8 @@ def run_dry_run(products: list[Product], args: argparse.Namespace) -> int:
             )
         )
     write_report(rows)
-    print(f"Relatorio dry-run gerado em: {REPORT_FILE}")
+    args._last_results = rows
+    emit(logger, f"Relatorio dry-run gerado em: {REPORT_FILE}")
     return 0
 
 
@@ -1362,6 +1466,59 @@ def write_report(results: list[ProductResult]) -> None:
         writer.writeheader()
         for result in results:
             writer.writerow({field: getattr(result, field) for field in fields})
+
+
+def default_summary_path(args: argparse.Namespace) -> Path:
+    explicit = getattr(args, "summary_json", None)
+    if explicit:
+        return explicit.expanduser().resolve()
+    log_path = getattr(args, "_log_path", None)
+    if log_path:
+        return Path(log_path).with_suffix(".json")
+    return (ROOT_DIR / "logs" / "otimizador_imagens-summary.json").resolve()
+
+
+def write_execution_summary(
+    args: argparse.Namespace,
+    results: list[ProductResult],
+    *,
+    exit_code: int,
+    error: str | None = None,
+) -> None:
+    status_counts: dict[str, int] = {}
+    for result in results:
+        status_counts[result.status] = status_counts.get(result.status, 0) + 1
+    payload = {
+        "script": "otimizador_imagens.py",
+        "exit_code": exit_code,
+        "dry_run": bool(getattr(args, "dry_run", False)),
+        "inputs": {
+            "workbook": str(getattr(args, "workbook", "") or ""),
+            "input": str(getattr(args, "input", "") or ""),
+            "downloads_dir": str(getattr(args, "downloads_dir", "") or ""),
+        },
+        "outputs": {
+            "products_root": str(PRODUCTS_DIR),
+            "raw_root": str(RAW_DIR),
+            "report": str(REPORT_FILE),
+            "log": str(getattr(args, "_log_path", "") or ""),
+        },
+        "totals": {
+            "products": len(results),
+            "downloaded": sum(result.downloaded for result in results),
+            "processed": sum(result.processed for result in results),
+            "failed_images": sum(result.failed_images for result in results),
+        },
+        "status_counts": status_counts,
+        "network": {
+            "timeout": getattr(args, "timeout", None),
+            "download_timeout": getattr(args, "download_timeout", None),
+            "retries": getattr(args, "retries", None),
+            "retry_backoff": getattr(args, "retry_backoff", None),
+        },
+        "error": error or "",
+    }
+    write_json(default_summary_path(args), payload)
 
 
 def normalize_row_keys(row: dict[str, Any]) -> dict[str, Any]:

@@ -21,6 +21,8 @@ from urllib.request import Request, urlopen
 
 from openpyxl import load_workbook
 
+from msn_utils import emit, retry_call, setup_script_logging, write_json
+
 
 ROOT_DIR = Path(__file__).resolve().parent
 PRODUCTS_DIR = ROOT_DIR / "products"
@@ -30,6 +32,9 @@ REPORTS_DIR = PRODUCTS_DIR / "_reports"
 CANDIDATES_CSV = REPORTS_DIR / "candidatas-imagens.csv"
 APPROVAL_TEMPLATE_CSV = REPORTS_DIR / "candidatas-aprovacao.csv"
 SKIPPED_PRODUCTS_CSV = REPORTS_DIR / "skus-pulados-imagens.csv"
+UNRELIABLE_PRODUCTS_CSV = REPORTS_DIR / "skus-sem-candidatas-confiaveis.csv"
+INVALID_PRODUCTS_CSV = REPORTS_DIR / "skus-invalidos.csv"
+FAILURES_BY_SOURCE_CSV = REPORTS_DIR / "falhas-imagens-por-fonte.csv"
 REVIEW_HTML = REPORTS_DIR / "revisao-candidatas.html"
 
 DEFAULT_SOURCE_ROOT = Path.home() / "Desktop" / "cópia de produtos" / "Produtos"
@@ -248,6 +253,9 @@ class Candidate:
     ocr_text: str = ""
     visual_tags: str = ""
 
+    def status_rank(self) -> int:
+        return {"forte": 4, "boa": 3, "revisar": 2, "erro": 1, "rejeitada": 0}.get(self.status, 0)
+
     def as_row(self, approved: str = "") -> dict[str, Any]:
         return {
             "approved": approved,
@@ -275,37 +283,54 @@ class Candidate:
 
 def main() -> int:
     args = parse_args()
+    logger, log_path = setup_script_logging("buscador_candidatas_imagens", ROOT_DIR, getattr(args, "log_dir", None))
+    args._logger = logger
+    args._log_path = log_path
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
     if args.apply_approvals:
         copied = apply_approvals(args.apply_approvals)
-        print(f"Aprovadas copiadas para {APPROVED_RAW_DIR}: {copied} arquivo(s).")
-        print("Depois rode: python otimizador_imagens.py --input products/_approved_raw --white-background")
+        emit(logger, f"Aprovadas copiadas para {APPROVED_RAW_DIR}: {copied} arquivo(s).")
+        emit(logger, "Depois rode: python otimizador_imagens.py --input products/_approved_raw --white-background")
+        write_execution_summary(args, [], [], [], [], exit_code=0, extra={"aprovadas_copiadas": copied})
         return 0
 
     products = load_products(args)
     skipped_existing = getattr(args, "_skipped_existing_products", [])
+    invalid_products = getattr(args, "_skipped_invalid_products", [])
     if skipped_existing:
         write_skipped_products(skipped_existing, args)
-        print(f"SKUs pulados por ja terem imagens prontas/localizadas: {len(skipped_existing)}")
-        print(f"Relatorio de pulados: {SKIPPED_PRODUCTS_CSV}")
+        emit(logger, f"SKUs pulados: {len(skipped_existing)}")
+        emit(logger, f"Relatorio de pulados: {SKIPPED_PRODUCTS_CSV}")
     else:
         write_skipped_products([], args)
+    write_invalid_products(invalid_products)
     if not products:
-        print("Nenhum produto encontrado.")
+        emit(logger, "Nenhum produto encontrado.")
+        write_unreliable_products([])
+        write_failure_summary([])
+        write_execution_summary(args, [], skipped_existing, invalid_products, [], exit_code=0)
         return 0
 
-    print(f"Fonte de SKUs: {args.workbook}")
+    emit(logger, f"Fonte de SKUs: {args.workbook}")
     if args.local_root:
-        print(f"Fonte local de imagens candidatas: {args.local_root}")
-    print(f"Produtos selecionados: {len(products)}")
+        emit(logger, f"Fonte local de imagens candidatas: {args.local_root}")
+    emit(logger, f"Produtos selecionados: {len(products)}")
     if args.download:
-        print(f"Destino dos downloads: {download_root(args)}\\[SKU]")
-    print(f"OCR: {'ativo' if ocr_available() else 'indisponivel'}")
+        emit(logger, f"Destino dos downloads: {download_root(args)}\\[SKU]")
+    emit(logger, f"OCR: {'ativo' if ocr_available() else 'indisponivel'}")
+
+    if args.dry_run:
+        run_dry_run(products, args)
+        write_unreliable_products([])
+        write_failure_summary([])
+        write_execution_summary(args, [], skipped_existing, invalid_products, [], exit_code=0)
+        return 0
 
     candidates: list[Candidate] = []
+    unreliable_products: list[Product] = []
     for index, product in enumerate(products, start=1):
-        print(f"[{index}/{len(products)}] {product.sku} - {product.name}")
+        emit(logger, f"[{index}/{len(products)}] {product.sku} - {product.name}")
         if args.download:
             ensure_product_download_folder(product, args)
         product_candidates: list[Candidate] = []
@@ -317,13 +342,24 @@ def main() -> int:
             product_candidates.extend(collect_duckduckgo_candidates(product, args))
 
         product_candidates = dedupe_candidates(product_candidates)
-        product_candidates.sort(key=lambda item: (item.status_rank(), item.score), reverse=True)  # type: ignore[attr-defined]
+        product_candidates.sort(key=lambda item: (item.status_rank(), item.score), reverse=True)
+
+        reliable = [item for item in product_candidates if item.status in {"forte", "boa"}]
+        if not reliable:
+            unreliable_products.append(product)
+            emit(logger, f"  SKIP {product.sku}: sem imagens confiaveis encontradas")
+            continue
+
         candidates.extend(product_candidates[: args.keep_per_product])
 
+    write_unreliable_products(unreliable_products)
+    write_failure_summary(candidates)
     write_reports(candidates)
-    print(f"CSV gerado: {CANDIDATES_CSV}")
-    print(f"CSV para aprovacao manual: {APPROVAL_TEMPLATE_CSV}")
-    print(f"HTML de revisao: {REVIEW_HTML}")
+    emit(logger, f"CSV gerado: {CANDIDATES_CSV}")
+    emit(logger, f"CSV para aprovacao manual: {APPROVAL_TEMPLATE_CSV}")
+    emit(logger, f"HTML de revisao: {REVIEW_HTML}")
+    emit(logger, f"Resumo JSON: {default_summary_path(args)}")
+    write_execution_summary(args, candidates, skipped_existing, invalid_products, unreliable_products, exit_code=0)
     return 0
 
 
@@ -355,6 +391,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--sheet", default=DEFAULT_SHEET)
     parser.add_argument("--sku", action="append", help="Processa somente um SKU. Pode repetir.")
     parser.add_argument("--limit", type=int, help="Limita a quantidade de produtos.")
+    parser.add_argument("--dry-run", action="store_true", help="Lista produtos e consultas sem buscar ou baixar imagens.")
     parser.add_argument(
         "--only-missing",
         action="store_true",
@@ -416,6 +453,15 @@ def parse_args() -> argparse.Namespace:
         help="Quantidade maxima de candidatas rejeitadas baixadas em _review por produto.",
     )
     parser.add_argument("--delay", type=float, default=1.2, help="Pausa entre consultas web.")
+    parser.add_argument("--timeout", type=float, default=25.0, help="Timeout das buscas/downloads web, em segundos.")
+    parser.add_argument("--retries", type=int, default=1, help="Quantidade de retentativas em erro de rede/429.")
+    parser.add_argument("--retry-backoff", type=float, default=2.0, help="Backoff progressivo entre retentativas, em segundos.")
+    parser.add_argument("--log-dir", type=Path, help="Pasta para gravar logs da execucao. Padrao: MSN/logs.")
+    parser.add_argument(
+        "--summary-json",
+        type=Path,
+        help="Arquivo JSON de resumo final. Padrao: arquivo ao lado do log da execucao.",
+    )
     parser.add_argument("--apply-approvals", type=Path, help="CSV de aprovacao preenchido com approved=1/sim/ok.")
     args = parser.parse_args()
     normalize_runtime_paths(args)
@@ -433,6 +479,10 @@ def normalize_runtime_paths(args: argparse.Namespace) -> None:
         args.download_root = args.source_root
     else:
         args.download_root = args.download_root.expanduser().resolve()
+
+
+def total_attempts(retries: int) -> int:
+    return max(1, int(retries) + 1)
 
 
 def resolve_source_root(source_root: Path | None) -> Path:
@@ -500,12 +550,21 @@ def load_products(args: argparse.Namespace) -> list[Product]:
     wanted = {normalize_sku(value) for value in getattr(args, "sku", None) or []}
 
     products: list[Product] = []
+    invalid_products: list[dict[str, Any]] = []
     for row_number in range(2, ws.max_row + 1):
         row = {headers[col - 1]: ws.cell(row_number, col).value for col in range(1, ws.max_column + 1)}
         sku = clean_cell(first_present(row, "sku", "codigo", "codigoproduto"))
         name = clean_cell(first_present(row, "nome", "produto", "descricao"))
         image_status = clean_cell(first_present(row, "imagem", "image"))
         if not sku or not name:
+            invalid_products.append(
+                {
+                    "row_number": row_number,
+                    "sku": sku,
+                    "name": name,
+                    "reason": "sem_sku" if not sku else "sem_nome",
+                }
+            )
             continue
         if wanted and normalize_sku(sku) not in wanted:
             continue
@@ -531,6 +590,7 @@ def load_products(args: argparse.Namespace) -> list[Product]:
         )
 
     wb.close()
+    args._skipped_invalid_products = invalid_products
     if not getattr(args, "include_existing_products", False):
         kept_products: list[Product] = []
         skipped_products: list[Product] = []
@@ -554,6 +614,17 @@ def download_root(args: argparse.Namespace) -> Path:
     return args.download_root.expanduser().resolve()
 
 
+def run_dry_run(products: list[Product], args: argparse.Namespace) -> None:
+    print(f"Dry-run: {len(products)} produto(s) seriam analisados.")
+    for product in products:
+        queries = build_queries(product)[: getattr(args, "max_queries", 2)]
+        print(f"- {product.sku} :: {product.name}")
+        if queries:
+            print(f"  consultas: {' | '.join(queries)}")
+        if getattr(args, "download", False):
+            print(f"  destino: {download_root(args) / safe_folder_name(product.sku)}")
+
+
 def ensure_product_download_folder(product: Product, args: argparse.Namespace) -> Path:
     target_dir = download_root(args) / safe_folder_name(product.sku)
     target_dir.mkdir(parents=True, exist_ok=True)
@@ -562,6 +633,10 @@ def ensure_product_download_folder(product: Product, args: argparse.Namespace) -
 
 def final_product_dir(product: Product) -> Path:
     return PRODUCTS_DIR / safe_folder_name(product.sku)
+
+
+def product_has_too_many_images(product: Product, args: argparse.Namespace) -> bool:
+    return any(product_image_count(folder) > 3 for folder in product_existing_dirs(product, args))
 
 
 def product_has_existing_images(product: Product, args: argparse.Namespace) -> bool:
@@ -657,7 +732,14 @@ def collect_duckduckgo_candidates(product: Product, args: argparse.Namespace) ->
 
     for query_index, query in enumerate(queries, start=1):
         try:
-            results = duckduckgo_image_search(query, args.max_results)
+            results = duckduckgo_image_search(
+                query,
+                args.max_results,
+                timeout=getattr(args, "timeout", 25.0),
+                retries=getattr(args, "retries", 1),
+                retry_backoff=getattr(args, "retry_backoff", 2.0),
+                logger=getattr(args, "_logger", None),
+            )
         except Exception as exc:
             candidates.append(
                 Candidate(
@@ -740,9 +822,17 @@ def collect_duckduckgo_candidates(product: Product, args: argparse.Namespace) ->
     return candidates
 
 
-def duckduckgo_image_search(query: str, max_results: int) -> list[dict[str, Any]]:
+def duckduckgo_image_search(
+    query: str,
+    max_results: int,
+    *,
+    timeout: float = 25.0,
+    retries: int = 1,
+    retry_backoff: float = 2.0,
+    logger: Any | None = None,
+) -> list[dict[str, Any]]:
     search_url = "https://duckduckgo.com/?" + urlencode({"q": query, "iax": "images", "ia": "images"})
-    html_text = fetch_text(search_url)
+    html_text = fetch_text(search_url, timeout=timeout, retries=retries, retry_backoff=retry_backoff, logger=logger)
     token_match = re.search(r"vqd=([\d-]+)&", html_text) or re.search(r"vqd=['\"]([\d-]+)['\"]", html_text)
     if not token_match:
         raise RuntimeError("token vqd nao encontrado")
@@ -757,12 +847,27 @@ def duckduckgo_image_search(query: str, max_results: int) -> list[dict[str, Any]
             "p": "1",
         }
     )
-    payload = fetch_text(api_url, referer=search_url)
+    payload = fetch_text(
+        api_url,
+        referer=search_url,
+        timeout=timeout,
+        retries=retries,
+        retry_backoff=retry_backoff,
+        logger=logger,
+    )
     data = json.loads(payload)
     return list(data.get("results", []))[:max_results]
 
 
-def fetch_text(url: str, referer: str | None = None) -> str:
+def fetch_text(
+    url: str,
+    referer: str | None = None,
+    *,
+    timeout: float = 25.0,
+    retries: int = 1,
+    retry_backoff: float = 2.0,
+    logger: Any | None = None,
+) -> str:
     headers = {
         "User-Agent": USER_AGENT,
         "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
@@ -770,8 +875,19 @@ def fetch_text(url: str, referer: str | None = None) -> str:
     if referer:
         headers["Referer"] = referer
     request = Request(url, headers=headers)
-    with urlopen(request, timeout=25) as response:
-        return response.read().decode("utf-8", errors="replace")
+
+    def operation() -> str:
+        with urlopen(request, timeout=timeout) as response:
+            return response.read().decode("utf-8", errors="replace")
+
+    return retry_call(
+        operation,
+        attempts=total_attempts(retries),
+        backoff_seconds=retry_backoff,
+        retry_exceptions=(HTTPError, URLError, TimeoutError, OSError),
+        logger=logger,
+        label=f"GET {url}",
+    )
 
 
 def download_candidate(
@@ -799,12 +915,22 @@ def download_candidate(
 
     try:
         request = Request(candidate.image_url, headers={"User-Agent": USER_AGENT})
-        with urlopen(request, timeout=35) as response:
-            content_type = response.headers.get("Content-Type", "")
-            guessed = mimetypes.guess_extension(content_type.split(";")[0].strip())
-            if guessed and guessed.lower() in IMAGE_EXTENSIONS and target.suffix == ".jpg":
-                target = target.with_suffix(guessed.lower())
-            data = response.read()
+
+        def operation() -> tuple[bytes, str]:
+            with urlopen(request, timeout=getattr(args, "timeout", 35.0)) as response:
+                return response.read(), response.headers.get("Content-Type", "")
+
+        data, content_type = retry_call(
+            operation,
+            attempts=total_attempts(getattr(args, "retries", 1)),
+            backoff_seconds=getattr(args, "retry_backoff", 2.0),
+            retry_exceptions=(HTTPError, URLError, TimeoutError, OSError),
+            logger=getattr(args, "_logger", None),
+            label=f"download {candidate.image_url}",
+        )
+        guessed = mimetypes.guess_extension(content_type.split(";")[0].strip())
+        if guessed and guessed.lower() in IMAGE_EXTENSIONS and target.suffix == ".jpg":
+            target = target.with_suffix(guessed.lower())
         target.write_bytes(data)
         candidate.local_path = str(target.resolve())
     except (HTTPError, URLError, TimeoutError, OSError) as exc:
@@ -1375,10 +1501,7 @@ def dedupe_candidates(candidates: list[Candidate]) -> list[Candidate]:
 
 
 def candidate_status_rank(candidate: Candidate) -> int:
-    return {"forte": 4, "boa": 3, "revisar": 2, "erro": 1, "rejeitada": 0}.get(candidate.status, 0)
-
-
-Candidate.status_rank = candidate_status_rank  # type: ignore[attr-defined]
+    return candidate.status_rank()
 
 
 def write_reports(candidates: list[Candidate]) -> None:
@@ -1417,7 +1540,7 @@ def write_reports(candidates: list[Candidate]) -> None:
 
 def write_skipped_products(products: list[Product], args: argparse.Namespace) -> None:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
-    fields = ["sku", "name", "existing_locations", "image_count"]
+    fields = ["sku", "name", "reason", "existing_locations", "image_count"]
     with SKIPPED_PRODUCTS_CSV.open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
@@ -1427,10 +1550,121 @@ def write_skipped_products(products: list[Product], args: argparse.Namespace) ->
                 {
                     "sku": product.sku,
                     "name": product.name,
+                    "reason": "imagem_existente",
                     "existing_locations": " | ".join(str(location) for location in locations),
                     "image_count": sum(product_image_count(location) for location in locations),
                 }
             )
+
+
+def write_unreliable_products(products: list[Product]) -> None:
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    fields = ["sku", "name", "reason"]
+    with UNRELIABLE_PRODUCTS_CSV.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for product in products:
+            writer.writerow({"sku": product.sku, "name": product.name, "reason": "sem_candidata_confiavel"})
+
+
+def write_invalid_products(rows: list[dict[str, Any]]) -> None:
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    fields = ["row_number", "sku", "name", "reason"]
+    with INVALID_PRODUCTS_CSV.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, "") for field in fields})
+
+
+def write_failure_summary(candidates: list[Candidate]) -> None:
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    summary: dict[tuple[str, str], dict[str, Any]] = {}
+    for candidate in candidates:
+        if candidate.status not in {"erro", "rejeitada"} and not any("falhou" in reason for reason in candidate.reasons):
+            continue
+        key = (candidate.source or "desconhecida", candidate.status or "sem_status")
+        row = summary.setdefault(
+            key,
+            {
+                "source": key[0],
+                "status": key[1],
+                "total": 0,
+                "sample_reason": "",
+            },
+        )
+        row["total"] += 1
+        if not row["sample_reason"]:
+            row["sample_reason"] = " | ".join(candidate.reasons[:3])
+
+    fields = ["source", "status", "total", "sample_reason"]
+    with FAILURES_BY_SOURCE_CSV.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for row in sorted(summary.values(), key=lambda item: (str(item["source"]), str(item["status"]))):
+            writer.writerow(row)
+
+
+def default_summary_path(args: argparse.Namespace) -> Path:
+    explicit = getattr(args, "summary_json", None)
+    if explicit:
+        return explicit.expanduser().resolve()
+    log_path = getattr(args, "_log_path", None)
+    if log_path:
+        return Path(log_path).with_suffix(".json")
+    return (ROOT_DIR / "logs" / "buscador_candidatas_imagens-summary.json").resolve()
+
+
+def write_execution_summary(
+    args: argparse.Namespace,
+    candidates: list[Candidate],
+    skipped_existing: list[Product],
+    invalid_products: list[dict[str, Any]],
+    unreliable_products: list[Product],
+    *,
+    exit_code: int,
+    extra: dict[str, Any] | None = None,
+) -> None:
+    status_counts: dict[str, int] = {}
+    source_counts: dict[str, int] = {}
+    for candidate in candidates:
+        status_counts[candidate.status] = status_counts.get(candidate.status, 0) + 1
+        source_counts[candidate.source] = source_counts.get(candidate.source, 0) + 1
+    payload = {
+        "script": "buscador_candidatas_imagens.py",
+        "exit_code": exit_code,
+        "dry_run": bool(getattr(args, "dry_run", False)),
+        "inputs": {
+            "workbook": str(getattr(args, "workbook", "") or ""),
+            "source_root": str(getattr(args, "source_root", "") or ""),
+            "local_root": str(getattr(args, "local_root", "") or ""),
+        },
+        "outputs": {
+            "candidatas": str(CANDIDATES_CSV),
+            "aprovacao": str(APPROVAL_TEMPLATE_CSV),
+            "revisao_html": str(REVIEW_HTML),
+            "pulados": str(SKIPPED_PRODUCTS_CSV),
+            "sem_confiaveis": str(UNRELIABLE_PRODUCTS_CSV),
+            "invalidos": str(INVALID_PRODUCTS_CSV),
+            "falhas_por_fonte": str(FAILURES_BY_SOURCE_CSV),
+            "log": str(getattr(args, "_log_path", "") or ""),
+        },
+        "totals": {
+            "candidates": len(candidates),
+            "skipped_existing": len(skipped_existing),
+            "invalid_products": len(invalid_products),
+            "unreliable_products": len(unreliable_products),
+        },
+        "status_counts": status_counts,
+        "source_counts": source_counts,
+        "network": {
+            "timeout": getattr(args, "timeout", None),
+            "retries": getattr(args, "retries", None),
+            "retry_backoff": getattr(args, "retry_backoff", None),
+        },
+        "extra": extra or {},
+    }
+    write_json(default_summary_path(args), payload)
 
 
 def render_review_html(candidates: list[Candidate]) -> str:
