@@ -49,6 +49,11 @@ def main() -> int:
     parser.add_argument("--sheet-wordpress", help="Aba da planilha WordPress.")
     parser.add_argument("--proximo-id", type=int, help="ID inicial para novos produtos.")
     parser.add_argument("--search-sheet", help="Aba da planilha para busca de imagens.")
+    parser.add_argument(
+        "--include-existing-products",
+        action="store_true",
+        help="Faz o buscador processar todos os produtos, mesmo os que já têm imagens locais.",
+    )
     parser.add_argument("--overwrite", action="store_true", help="Força reprocessar imagens existentes no otimizador.")
     parser.add_argument("--white-background", action="store_true", help="Gera WebP com fundo branco no otimizador.")
     parser.add_argument("--no-download", action="store_true", help="Nao baixa imagens durante a busca de candidatas.")
@@ -107,6 +112,8 @@ def main() -> int:
         buscador_command.extend(["--download", "--download-root", str(candidate_root)])
     if args.search_sheet:
         buscador_command.extend(["--sheet", args.search_sheet])
+    if args.include_existing_products:
+        buscador_command.append("--include-existing-products")
 
     code = run_script(buscador_command)
     if code != 0:

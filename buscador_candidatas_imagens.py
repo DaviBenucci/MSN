@@ -287,7 +287,7 @@ def main() -> int:
     skipped_existing = getattr(args, "_skipped_existing_products", [])
     if skipped_existing:
         write_skipped_products(skipped_existing, args)
-        print(f"SKUs pulados por ja terem imagens prontas/localizadas: {len(skipped_existing)}")
+        print(f"SKUs pulados: {len(skipped_existing)}")
         print(f"Relatorio de pulados: {SKIPPED_PRODUCTS_CSV}")
     else:
         write_skipped_products([], args)
@@ -318,6 +318,13 @@ def main() -> int:
 
         product_candidates = dedupe_candidates(product_candidates)
         product_candidates.sort(key=lambda item: (item.status_rank(), item.score), reverse=True)  # type: ignore[attr-defined]
+
+        reliable = [item for item in product_candidates if item.status in {"forte", "boa"}]
+        if not reliable:
+            args._skipped_existing_products.append(product)
+            print(f"  SKIP {product.sku}: sem imagens confiaveis encontradas")
+            continue
+
         candidates.extend(product_candidates[: args.keep_per_product])
 
     write_reports(candidates)
@@ -535,7 +542,7 @@ def load_products(args: argparse.Namespace) -> list[Product]:
         kept_products: list[Product] = []
         skipped_products: list[Product] = []
         for product in products:
-            if product_has_existing_images(product, args):
+            if product_has_too_many_images(product, args):
                 skipped_products.append(product)
             else:
                 kept_products.append(product)
@@ -562,6 +569,10 @@ def ensure_product_download_folder(product: Product, args: argparse.Namespace) -
 
 def final_product_dir(product: Product) -> Path:
     return PRODUCTS_DIR / safe_folder_name(product.sku)
+
+
+def product_has_too_many_images(product: Product, args: argparse.Namespace) -> bool:
+    return any(product_image_count(folder) > 3 for folder in product_existing_dirs(product, args))
 
 
 def product_has_existing_images(product: Product, args: argparse.Namespace) -> bool:

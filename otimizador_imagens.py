@@ -507,9 +507,13 @@ $rows | ConvertTo-Json -Depth 4 -Compress
 def read_excel_rows_openpyxl(workbook_name: str, sheet_name: str) -> list[dict[str, Any]]:
     import openpyxl
 
-    workbook_path = DEFAULT_EXCEL_FILE
-    if workbook_path.name.lower() != workbook_name.lower():
-        workbook_path = DEFAULT_EXCEL_FILE.with_name(workbook_name)
+    workbook_path = Path(workbook_name).expanduser()
+    if workbook_path.exists():
+        workbook_path = workbook_path.resolve()
+    else:
+        workbook_path = DEFAULT_EXCEL_FILE
+        if workbook_path.name.lower() != workbook_name.lower():
+            workbook_path = DEFAULT_EXCEL_FILE.with_name(workbook_name)
     if not workbook_path.exists():
         raise FileNotFoundError(f"arquivo nao encontrado: {workbook_path}")
 

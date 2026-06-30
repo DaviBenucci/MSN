@@ -470,7 +470,7 @@ python run_all_scripts.py \
   --saida-novos-produtos "C:\Users\Sama Contabilidade\Downloads" \
   --all
 ```
-
+  
 Esse comando roda em sequencia:
 
 1. `conciliador_planilhas_sku.py`
