@@ -29,6 +29,7 @@ NAME_ALIASES = {
     "item",
     "itens",
     "mercadoria",
+    "modelo",
 }
 SKU_ALIASES = {
     "sku",

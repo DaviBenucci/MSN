@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import asyncio
 import shutil
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
+import pandas as pd
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
@@ -89,6 +91,7 @@ async def conciliar_planilhas(
             ),
             "relatorio": serialize_artifact(job_id, "relatorio", relatorio_path),
         },
+        "summary": extract_product_summary(relatorio_path),
         "logs": {
             "stdout": result.stdout,
             "stderr": result.stderr,
@@ -128,20 +131,69 @@ async def run_conciliador_subprocess(
         str(relatorio_path),
     ]
 
-    process = await asyncio.create_subprocess_exec(
-        *command,
-        cwd=str(PROJECT_ROOT),
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
-    stdout_bytes, stderr_bytes = await process.communicate()
+    return await asyncio.to_thread(run_conciliador_command, command, str(PROJECT_ROOT))
 
+
+def run_conciliador_command(command: list[str], cwd: str) -> SubprocessResult:
+    completed = subprocess.run(
+        command,
+        cwd=cwd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
     return SubprocessResult(
-        returncode=process.returncode or 0,
-        stdout=stdout_bytes.decode("utf-8", errors="replace"),
-        stderr=stderr_bytes.decode("utf-8", errors="replace"),
+        returncode=completed.returncode or 0,
+        stdout=completed.stdout,
+        stderr=completed.stderr,
         command=command,
     )
+
+
+def extract_product_summary(relatorio_path: Path) -> list[dict[str, Any]]:
+    try:
+        df = pd.read_excel(relatorio_path, sheet_name='conciliacao', dtype=object)
+    except Exception:
+        return []
+
+    def find_column(keys: list[str]) -> str | None:
+        for column in df.columns:
+            normalized = str(column).strip().lower()
+            for key in keys:
+                if key in normalized:
+                    return column
+        return None
+
+    sku_col = find_column(['sku', 'codigo'])
+    quantity_col = find_column(['estoque', 'quantidade', 'qtd', 'valor'])
+    status_col = find_column(['status'])
+    product_col = find_column(['nome', 'modelo', 'produto'])
+
+    def clean_value(value: Any) -> str:
+        if pd.isna(value):
+            return ''
+        return str(value).strip()
+
+    summary: list[dict[str, Any]] = []
+    for row in df.to_dict(orient='records'):
+        sku = clean_value(row.get(sku_col)) if sku_col else ''
+        quantity = clean_value(row.get(quantity_col)) if quantity_col else ''
+        status_value = clean_value(row.get(status_col)) if status_col else ''
+        product_name = clean_value(row.get(product_col)) if product_col else ''
+
+        if not sku and not product_name:
+            continue
+
+        summary.append(
+            {
+                'sku': sku or product_name,
+                'product_name': product_name,
+                'quantity': quantity,
+                'status': status_value,
+            }
+        )
+
+    return summary[:30]
 
 
 def serialize_upload(upload: SavedUpload) -> dict[str, Any]:
