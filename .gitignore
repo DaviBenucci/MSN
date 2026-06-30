@@ -6,5 +6,6 @@ products/_raw/
 products/_approved_raw/
 products/_candidates/
 
+logs/
 *.tmp
 *.log

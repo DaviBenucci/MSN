@@ -120,8 +120,9 @@ class ConciliadorPlanilhasSkuTest(unittest.TestCase):
             self.assertEqual(novos["SKU_Gerado"].tolist(), ["TON-LEX-64018HB"])
 
             novos_importacao = pd.read_excel(result.novos_produtos, sheet_name="novos")
-            self.assertEqual(novos_importacao.columns.tolist(), ["SKU"])
+            self.assertNotIn("ID", novos_importacao.columns.tolist())
             self.assertEqual(novos_importacao["SKU"].tolist(), ["TON-LEX-64018HB"])
+            self.assertEqual(novos_importacao["Nome"].tolist(), ["Toner Lexmark 64018HB"])
 
     def test_new_products_receive_unique_sku_when_generated_sku_already_exists(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -240,6 +241,28 @@ class ConciliadorPlanilhasSkuTest(unittest.TestCase):
             self.assertFalse(saida.exists())
             validation = pd.read_excel(root / "relatorio.xlsx", sheet_name="validacao")
             self.assertIn("preco_invalido", validation["code"].tolist())
+
+    def test_existing_product_without_id_is_warning_when_sku_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            cliente = root / "cliente.xlsx"
+            wordpress = root / "wordpress.xlsx"
+            saida = root / "saida.xlsx"
+
+            pd.DataFrame([{"Nome": "Toner HP CE253AZ Magenta", "Estoque": 2, "Preco": 100}]).to_excel(
+                cliente,
+                index=False,
+            )
+            pd.DataFrame(
+                [{"ID": "", "SKU": "TON-HP-CE253AZ-MAG", "Nome": "Toner HP CE253AZ Magenta", "Estoque": 1, "Preço": 99}]
+            ).to_excel(wordpress, index=False, sheet_name="Controle de Estoque")
+
+            result = conciliador.processar_planilha(make_args(root, cliente, wordpress, saida))
+            validation = pd.read_excel(result.relatorio, sheet_name="validacao")
+
+            self.assertTrue(result.saida.exists())
+            self.assertIn("id_existente_ausente_com_sku", validation["code"].tolist())
+            self.assertNotIn("id_existente_e_sku_ausentes", validation["code"].tolist())
 
     def test_possible_name_match_goes_to_review_without_creating_product(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

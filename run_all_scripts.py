@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import argparse
-import json
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 
 import conciliador_planilhas_sku as conciliador
+from msn_utils import emit, json_safe, setup_script_logging, write_json
 
 DEFAULT_CONCILIACAO_FOLDER = Path.home() / "Desktop" / "Conciliacao"
 DEFAULT_DESKTOP = Path.home() / "Desktop"
@@ -18,11 +18,11 @@ BUSCADOR = SCRIPT_ROOT / "buscador_candidatas_imagens.py"
 OTIMIZADOR = SCRIPT_ROOT / "otimizador_imagens.py"
 
 
-def run_script(command: list[str]) -> int:
-    print("\n=> Executando:", " ".join(command))
+def run_script(command: list[str], logger: object | None = None) -> int:
+    emit(logger, "\n=> Executando: " + " ".join(command))
     completed = subprocess.run(command, text=True)
     if completed.returncode != 0:
-        print(f"Erro: comando retornou {completed.returncode}")
+        emit(logger, f"Erro: comando retornou {completed.returncode}", error=True)
     return completed.returncode
 
 
@@ -49,22 +49,10 @@ def expected_novos_output(args: argparse.Namespace, todos_workbook: Path, concil
     return conciliacao_folder / "produtos-novos.xlsx"
 
 
-def json_safe(value: object) -> object:
-    if isinstance(value, Path):
-        return str(value)
-    if isinstance(value, dict):
-        return {str(key): json_safe(item) for key, item in value.items()}
-    if isinstance(value, (list, tuple)):
-        return [json_safe(item) for item in value]
-    return value
-
-
 def write_manifest(path: Path | None, manifest: dict[str, object]) -> None:
     if path is None:
         return
-    target = path.expanduser().resolve()
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_json(path, manifest)
 
 
 def summarize_conciliacao_report(path: Path) -> dict[str, object]:
@@ -136,9 +124,15 @@ def main() -> int:
     parser.add_argument("--overwrite", action="store_true", help="Força reprocessar imagens existentes no otimizador.")
     parser.add_argument("--white-background", action="store_true", help="Gera WebP com fundo branco no otimizador.")
     parser.add_argument("--no-download", action="store_true", help="Nao baixa imagens durante a busca de candidatas.")
+    parser.add_argument("--timeout", type=float, help="Timeout HTTP repassado ao buscador/otimizador.")
+    parser.add_argument("--download-timeout", type=float, help="Timeout HTTP de downloads repassado ao otimizador.")
+    parser.add_argument("--retries", type=int, help="Retentativas HTTP repassadas ao buscador/otimizador.")
+    parser.add_argument("--retry-backoff", type=float, help="Backoff HTTP repassado ao buscador/otimizador.")
     parser.add_argument("--skip-images", action="store_true", help="Roda apenas o conciliador e para antes do buscador/otimizador.")
     parser.add_argument("--manifesto", type=Path, help="Arquivo JSON com resumo dos comandos, artefatos e exit codes.")
+    parser.add_argument("--log-dir", type=Path, help="Pasta para gravar logs da execucao. Padrao: MSN/logs.")
     args = parser.parse_args()
+    logger, log_path = setup_script_logging("run_all_scripts", SCRIPT_ROOT, args.log_dir)
 
     conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
     candidate_root = DEFAULT_DESKTOP / args.desktop_folder_name
@@ -161,6 +155,7 @@ def main() -> int:
             "conciliacao_folder": str(conciliacao_folder),
             "desktop_folder_name": args.desktop_folder_name,
             "manifesto": str(manifesto_path),
+            "log": str(log_path),
         }),
     }
 
@@ -187,7 +182,7 @@ def main() -> int:
     if args.saida_novos_produtos:
         conciliador_command.extend(["--saida-novos-produtos", str(args.saida_novos_produtos)])
 
-    code = run_script(conciliador_command)
+    code = run_script(conciliador_command, logger)
     manifest["steps"].append({"name": "conciliador", "command": conciliador_command, "exit_code": code})  # type: ignore[index]
     if code != 0:
         manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
@@ -203,7 +198,7 @@ def main() -> int:
         return 0
 
     if not todos_workbook.exists():
-        print(f"Erro: arquivo de conciliacao esperado nao encontrado: {todos_workbook}")
+        emit(logger, f"Erro: arquivo de conciliacao esperado nao encontrado: {todos_workbook}", error=True)
         manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
         manifest["exit_code"] = 1
         write_manifest(manifesto_path, manifest)
@@ -224,8 +219,14 @@ def main() -> int:
         buscador_command.extend(["--sheet", args.search_sheet])
     if args.include_existing_products:
         buscador_command.append("--include-existing-products")
+    if args.timeout is not None:
+        buscador_command.extend(["--timeout", str(args.timeout)])
+    if args.retries is not None:
+        buscador_command.extend(["--retries", str(args.retries)])
+    if args.retry_backoff is not None:
+        buscador_command.extend(["--retry-backoff", str(args.retry_backoff)])
 
-    code = run_script(buscador_command)
+    code = run_script(buscador_command, logger)
     manifest["steps"].append({"name": "buscador", "command": buscador_command, "exit_code": code})  # type: ignore[index]
     if code != 0:
         manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
@@ -245,8 +246,16 @@ def main() -> int:
         otimizador_command.append("--white-background")
     if args.overwrite:
         otimizador_command.append("--overwrite")
+    if args.timeout is not None:
+        otimizador_command.extend(["--timeout", str(args.timeout)])
+    if args.download_timeout is not None:
+        otimizador_command.extend(["--download-timeout", str(args.download_timeout)])
+    if args.retries is not None:
+        otimizador_command.extend(["--retries", str(args.retries)])
+    if args.retry_backoff is not None:
+        otimizador_command.extend(["--retry-backoff", str(args.retry_backoff)])
 
-    code = run_script(otimizador_command)
+    code = run_script(otimizador_command, logger)
     manifest["steps"].append({"name": "otimizador", "command": otimizador_command, "exit_code": code})  # type: ignore[index]
     if code != 0:
         manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")

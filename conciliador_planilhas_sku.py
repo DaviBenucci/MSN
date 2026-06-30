@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-import unicodedata
 from dataclasses import dataclass
 from difflib import SequenceMatcher
 from pathlib import Path
@@ -11,7 +10,17 @@ from typing import Any, Callable
 
 import pandas as pd
 
-from msn_utils import ValidationIssue
+from msn_utils import (
+    ValidationIssue,
+    emit,
+    normalize_header,
+    normalize_price_value,
+    normalize_sku,
+    normalize_stock_value,
+    normalize_words,
+    setup_script_logging,
+    write_json,
+)
 
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -161,6 +170,8 @@ class ProcessResult:
     saida: Path
     relatorio: Path | None = None
     novos_produtos: Path | None = None
+    summary_json: Path | None = None
+    log_path: Path | None = None
 
 
 class ValidationFailure(RuntimeError):
@@ -173,26 +184,34 @@ class ValidationFailure(RuntimeError):
 
 def main() -> int:
     args = parse_args()
+    logger, log_path = setup_script_logging("conciliador_planilhas_sku", ROOT_DIR, getattr(args, "log_dir", None))
+    args._logger = logger
+    args._log_path = log_path
 
     try:
         result = processar_planilha(args)
     except ValidationFailure as exc:
+        logger.error("Erro ao validar: %s", exc)
         print(f"Erro ao validar: {exc}", file=sys.stderr)
         for issue in exc.issues[:10]:
             if issue.severity == "erro":
                 print(f"- linha {issue.row_number or '-'} {issue.field}: {issue.message}", file=sys.stderr)
         if exc.report_path:
             print(f"Relatorio de validacao: {exc.report_path}", file=sys.stderr)
+        write_execution_summary(args, None, exit_code=2, issues=exc.issues, error=str(exc))
         return 2
     except Exception as exc:
+        logger.exception("Erro ao processar")
         print(f"Erro ao processar: {exc}", file=sys.stderr)
+        write_execution_summary(args, None, exit_code=1, error=str(exc))
         return 1
 
-    print(f"Arquivo gerado: {result.saida}")
+    emit(logger, f"Arquivo gerado: {result.saida}")
     if result.relatorio:
-        print(f"Relatorio gerado: {result.relatorio}")
+        emit(logger, f"Relatorio gerado: {result.relatorio}")
     if result.novos_produtos:
-        print(f"Novos produtos gerados: {result.novos_produtos}")
+        emit(logger, f"Novos produtos gerados: {result.novos_produtos}")
+    write_execution_summary(args, result, exit_code=0)
     return 0
 
 
@@ -244,6 +263,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--wordpress-sku-coluna", help="Coluna de SKU/codigo na planilha WordPress.")
     parser.add_argument("--wordpress-estoque-coluna", help="Coluna de estoque na planilha WordPress.")
     parser.add_argument("--wordpress-preco-coluna", help="Coluna de preco na planilha WordPress.")
+    parser.add_argument("--log-dir", type=Path, help="Pasta para gravar logs da execucao. Padrao: MSN/logs.")
+    parser.add_argument(
+        "--summary-json",
+        type=Path,
+        help="Arquivo JSON de resumo final. Padrao: arquivo ao lado do log da execucao.",
+    )
     parser.add_argument(
         "--proximo-id",
         type=int,
@@ -328,13 +353,15 @@ def processar_planilha(args: argparse.Namespace) -> ProcessResult:
 
     if args.sem_wordpress:
         marcar_duplicados(resultado)
+        args._last_status_counts = status_counts(resultado)
+        args._last_validation_issues = []
         saida = output_path(cliente_path, args.saida, fallback_suffix="_conciliada")
         if getattr(args, "dry_run", False):
-            print_summary(resultado)
-            print("Dry-run: nenhum arquivo gravado.")
+            print_summary(resultado, getattr(args, "_logger", None))
+            emit(getattr(args, "_logger", None), "Dry-run: nenhum arquivo gravado.")
             return ProcessResult(saida=saida)
         write_report_output(resultado, saida)
-        print_summary(resultado)
+        print_summary(resultado, getattr(args, "_logger", None))
         return ProcessResult(saida=saida)
 
     if args.wordpress:
@@ -383,21 +410,23 @@ def processar_planilha(args: argparse.Namespace) -> ProcessResult:
                 "--proximo-id foi ignorado; novos produtos ficam sem ID para o WooCommerce criar.",
             )
         )
+    args._last_status_counts = status_counts(resultado)
+    args._last_validation_issues = validation_issues
 
     if has_validation_errors(validation_issues):
         write_report_output(resultado, relatorio, validation_issues)
         raise ValidationFailure(validation_issues, report_path=relatorio)
 
     if getattr(args, "dry_run", False):
-        print_summary(resultado)
-        print("Dry-run: nenhum arquivo gravado.")
+        print_summary(resultado, getattr(args, "_logger", None))
+        emit(getattr(args, "_logger", None), "Dry-run: nenhum arquivo gravado.")
         return ProcessResult(saida=saida, relatorio=relatorio, novos_produtos=saida_novos)
 
     write_wordpress_output(wordpress_atualizada, saida, sheet_name=args.sheet_wordpress)
     write_report_output(resultado, relatorio, validation_issues)
-    write_new_products_output(resultado, saida_novos)
-    print_summary(resultado)
-    print(f"Novos produtos gerados: {saida_novos}")
+    write_new_products_output(resultado, wordpress_atualizada, saida_novos)
+    print_summary(resultado, getattr(args, "_logger", None))
+    emit(getattr(args, "_logger", None), f"Novos produtos gerados: {saida_novos}")
     return ProcessResult(saida=saida, relatorio=relatorio, novos_produtos=saida_novos)
 
 
@@ -565,62 +594,6 @@ def find_possible_name_match(normalized_name: str, wp_by_name: dict[str, int]) -
     if best_index is not None and best_score >= 0.92:
         return best_index, best_score
     return None, best_score
-
-
-def normalize_stock_value(
-    value: Any,
-    row_number: int,
-    column_name: str | None,
-) -> tuple[Any, ValidationIssue | None]:
-    if not has_value(value):
-        return "", None
-    try:
-        number = float(normalize_numeric_text(value))
-    except ValueError:
-        return "", ValidationIssue("erro", row_number, column_name or "Estoque", "estoque_invalido", f"Estoque invalido: {value}")
-    if not number.is_integer():
-        return "", ValidationIssue(
-            "erro",
-            row_number,
-            column_name or "Estoque",
-            "estoque_decimal",
-            f"Estoque deve ser inteiro: {value}",
-        )
-    return int(number), None
-
-
-def normalize_price_value(
-    value: Any,
-    row_number: int,
-    column_name: str | None,
-) -> tuple[Any, ValidationIssue | None]:
-    if not has_value(value):
-        return "", None
-    try:
-        return float(normalize_numeric_text(value)), None
-    except ValueError:
-        return "", ValidationIssue("erro", row_number, column_name or "Preco", "preco_invalido", f"Preco invalido: {value}")
-
-
-def normalize_numeric_text(value: Any) -> str:
-    if isinstance(value, (int, float)) and not isinstance(value, bool):
-        return str(value)
-    text = str(value).strip()
-    text = re.sub(r"[R$\s]", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"[^0-9,.-]", "", text)
-    if not text:
-        raise ValueError("numero vazio")
-    if "," in text and "." in text:
-        if text.rfind(",") > text.rfind("."):
-            text = text.replace(".", "").replace(",", ".")
-        else:
-            text = text.replace(",", "")
-    elif "," in text:
-        text = text.replace(".", "").replace(",", ".")
-    if text in {"", "-", ".", "-."}:
-        raise ValueError("numero vazio")
-    float(text)
-    return text
 
 
 def update_existing_wordpress_row(
@@ -811,7 +784,7 @@ def report_path(output_file: Path, report_arg: Path | None) -> Path:
 
 def validate_import_outputs(resultado: pd.DataFrame, wordpress_df: pd.DataFrame) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
-    novos_import = new_products_import_frame(resultado)
+    novos_import = new_products_import_frame(resultado, wordpress_df)
     if "ID" in novos_import.columns:
         issues.append(ValidationIssue("erro", None, "ID", "id_em_novos", "produtos-novos nao pode conter coluna ID."))
     if "SKU" not in novos_import.columns:
@@ -863,15 +836,26 @@ def validate_import_outputs(resultado: pd.DataFrame, wordpress_df: pd.DataFrame)
                     )
                 )
         if status in {"atualizado_por_nome", "atualizado_por_sku"} and not result_id:
-            issues.append(
-                ValidationIssue(
-                    "erro",
-                    row_number,
-                    "ID_WordPress",
-                    "id_existente_ausente",
-                    "Produto existente atualizado sem ID encontrado.",
+            if result_sku:
+                issues.append(
+                    ValidationIssue(
+                        "aviso",
+                        row_number,
+                        "ID_WordPress",
+                        "id_existente_ausente_com_sku",
+                        "Produto existente sem ID; importacao deve usar SKU como chave.",
+                    )
                 )
-            )
+            else:
+                issues.append(
+                    ValidationIssue(
+                        "erro",
+                        row_number,
+                        "ID_WordPress",
+                        "id_existente_e_sku_ausentes",
+                        "Produto existente atualizado sem ID e sem SKU.",
+                    )
+                )
 
     return issues
 
@@ -880,8 +864,8 @@ def has_validation_errors(issues: list[ValidationIssue]) -> bool:
     return any(issue.severity == "erro" for issue in issues)
 
 
-def write_new_products_output(df: pd.DataFrame, path: Path) -> None:
-    output = new_products_import_frame(df)
+def write_new_products_output(resultado: pd.DataFrame, wordpress_df: pd.DataFrame, path: Path) -> None:
+    output = new_products_import_frame(resultado, wordpress_df)
     if path.suffix.lower() == ".csv":
         path.parent.mkdir(parents=True, exist_ok=True)
         output.to_csv(path, index=False, encoding="utf-8-sig")
@@ -893,11 +877,24 @@ def write_new_products_output(df: pd.DataFrame, path: Path) -> None:
     _atomic_excel_write(writer_func, path)
 
 
-def new_products_import_frame(df: pd.DataFrame) -> pd.DataFrame:
-    novos = df[df["Status_Conciliacao"] == "adicionado_ao_wordpress"].copy()
-    return novos[["SKU_Encontrado_WordPress"]].rename(
-        columns={"SKU_Encontrado_WordPress": "SKU"}
-    ).reset_index(drop=True)
+def new_products_import_frame(resultado: pd.DataFrame, wordpress_df: pd.DataFrame | None = None) -> pd.DataFrame:
+    novos = resultado[resultado["Status_Conciliacao"] == "adicionado_ao_wordpress"].copy()
+    new_skus = {normalize_sku(value) for value in novos["SKU_Encontrado_WordPress"].tolist() if normalize_sku(value)}
+    if wordpress_df is None:
+        return novos[["SKU_Encontrado_WordPress"]].rename(
+            columns={"SKU_Encontrado_WordPress": "SKU"}
+        ).reset_index(drop=True)
+
+    wp_sku_col = resolve_column(wordpress_df, None, SKU_ALIASES, "SKU WordPress", required=False)
+    if not wp_sku_col or not new_skus:
+        return pd.DataFrame(columns=[column for column in wordpress_df.columns if normalize_header(column) != "id"])
+
+    mask = wordpress_df[wp_sku_col].map(lambda value: normalize_sku(value) in new_skus)
+    output = wordpress_df.loc[mask].copy().reset_index(drop=True)
+    id_columns = [column for column in output.columns if normalize_header(column) in ID_ALIASES]
+    if id_columns:
+        output = output.drop(columns=id_columns)
+    return output
 
 
 def resolve_or_create_column(
@@ -945,11 +942,66 @@ def resolve_column(
     return None
 
 
-def print_summary(df: pd.DataFrame) -> None:
+def print_summary(df: pd.DataFrame, logger: Any | None = None) -> None:
+    emit(logger, "Resumo:")
+    for status, count in status_counts(df).items():
+        emit(logger, f"- {status}: {count}")
+
+
+def status_counts(df: pd.DataFrame) -> dict[str, int]:
+    if "Status_Conciliacao" not in df.columns:
+        return {}
     counts = df["Status_Conciliacao"].value_counts(dropna=False)
-    print("Resumo:")
-    for status, count in counts.items():
-        print(f"- {status}: {count}")
+    return {str(status): int(count) for status, count in counts.items()}
+
+
+def validation_counts(issues: list[ValidationIssue] | None) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for issue in issues or []:
+        key = f"{issue.severity}:{issue.code}"
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
+def default_summary_path(args: argparse.Namespace) -> Path:
+    explicit = getattr(args, "summary_json", None)
+    if explicit:
+        return explicit.expanduser().resolve()
+    log_path = getattr(args, "_log_path", None)
+    if log_path:
+        return Path(log_path).with_suffix(".json")
+    return (ROOT_DIR / "logs" / "conciliador_planilhas_sku-summary.json").resolve()
+
+
+def write_execution_summary(
+    args: argparse.Namespace,
+    result: ProcessResult | None,
+    *,
+    exit_code: int,
+    issues: list[ValidationIssue] | None = None,
+    error: str | None = None,
+) -> None:
+    summary_path = default_summary_path(args)
+    payload = {
+        "script": "conciliador_planilhas_sku.py",
+        "exit_code": exit_code,
+        "dry_run": bool(getattr(args, "dry_run", False)),
+        "inputs": {
+            "cliente": str(getattr(args, "cliente", "") or ""),
+            "wordpress": str(getattr(args, "wordpress", "") or ""),
+            "conciliacao_folder": str(getattr(args, "conciliacao_folder", "") or ""),
+        },
+        "outputs": {
+            "todos_os_produtos": str(result.saida) if result else "",
+            "relatorio": str(result.relatorio) if result and result.relatorio else "",
+            "produtos_novos": str(result.novos_produtos) if result and result.novos_produtos else "",
+            "log": str(getattr(args, "_log_path", "") or ""),
+        },
+        "status_counts": getattr(args, "_last_status_counts", {}),
+        "validation_counts": validation_counts(issues or getattr(args, "_last_validation_issues", [])),
+        "error": error or "",
+    }
+    write_json(summary_path, payload)
 
 
 def unique_sku(base_sku: str, used_skus: set[str]) -> str:
@@ -978,28 +1030,8 @@ def text_has_any(text: str, values: list[str]) -> bool:
     return False
 
 
-def normalize_header(value: Any) -> str:
-    text = strip_accents(str(value or "")).lower()
-    return re.sub(r"[^a-z0-9]+", "", text)
-
-
-def normalize_words(value: Any) -> str:
-    text = strip_accents(str(value or "")).upper()
-    text = re.sub(r"[^A-Z0-9]+", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
-
-
 def normalize_name(value: Any) -> str:
     return normalize_words(value)
-
-
-def normalize_sku(value: Any) -> str:
-    return re.sub(r"[^A-Z0-9]+", "", normalize_words(value))
-
-
-def strip_accents(value: str) -> str:
-    normalized = unicodedata.normalize("NFKD", value)
-    return "".join(char for char in normalized if not unicodedata.combining(char))
 
 
 def clean_cell(value: Any) -> str:
