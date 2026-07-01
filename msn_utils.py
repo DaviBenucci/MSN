@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import sys
 import time
 import unicodedata
 from dataclasses import dataclass
@@ -51,6 +52,13 @@ def normalize_words(value: Any) -> str:
 
 def normalize_sku(value: Any) -> str:
     return re.sub(r"[^A-Z0-9]+", "", normalize_words(value))
+
+
+def column_by_normalized_name(frame: Any, normalized_name: str) -> str | None:
+    for column in frame.columns:
+        if normalize_header(column) == normalized_name:
+            return column
+    return None
 
 
 def has_cell_value(value: Any) -> bool:
@@ -122,6 +130,51 @@ def normalize_price_value(
         return "", ValidationIssue("erro", row_number, column_name or "Preco", "preco_invalido", f"Preco invalido: {value}")
 
 
+def excel_row_number(index: Any) -> int | None:
+    try:
+        return int(index) + 2
+    except (TypeError, ValueError):
+        return None
+
+
+def validate_new_products_dataframe(
+    frame: Any,
+    *,
+    id_error_code: str = "id_em_produtos_novos",
+    id_error_message: str = "Arquivo de novos produtos nao pode conter ID.",
+    missing_sku_code: str = "sku_ausente",
+    missing_sku_message: str = "Arquivo de novos produtos precisa conter SKU.",
+    empty_sku_message: str = "SKU vazio em produto novo.",
+    duplicated_sku_message_prefix: str = "SKU duplicado",
+) -> list[ValidationIssue]:
+    issues: list[ValidationIssue] = []
+    id_col = column_by_normalized_name(frame, "id")
+    if id_col:
+        issues.append(ValidationIssue("erro", None, "ID", id_error_code, id_error_message))
+    sku_col = column_by_normalized_name(frame, "sku")
+    if not sku_col:
+        return issues + [ValidationIssue("erro", None, "SKU", missing_sku_code, missing_sku_message)]
+
+    normalized_skus = frame[sku_col].map(normalize_sku)
+    for index, sku in normalized_skus.items():
+        if not sku:
+            issues.append(ValidationIssue("erro", excel_row_number(index), "SKU", "sku_vazio", empty_sku_message))
+
+    duplicated = normalized_skus[normalized_skus != ""].duplicated(keep=False)
+    for index, is_duplicated in duplicated.items():
+        if is_duplicated:
+            issues.append(
+                ValidationIssue(
+                    "erro",
+                    excel_row_number(index),
+                    "SKU",
+                    "sku_duplicado",
+                    f"{duplicated_sku_message_prefix}: {frame.at[index, sku_col]}",
+                )
+            )
+    return issues
+
+
 def safe_folder_name(value: str) -> str:
     text = strip_accents(str(value)).strip()
     text = re.sub(r"[<>:\"/\\|?*\x00-\x1F]", "-", text)
@@ -149,17 +202,24 @@ def setup_script_logging(script_name: str, root_dir: Path, log_dir: Path | None 
     file_handler = logging.FileHandler(log_path, encoding="utf-8")
     file_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
     logger.addHandler(file_handler)
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(logging.Formatter("%(message)s"))
+    logger.addHandler(console_handler)
     return logger, log_path
 
 
 def emit(logger: logging.Logger | None, message: str, *, error: bool = False) -> None:
-    print(message)
     if logger is None:
+        stream = sys.stderr if error else sys.stdout
+        stream.write(f"{message}\n")
+        stream.flush()
         return
-    if error:
-        logger.error(message)
-    else:
-        logger.info(message)
+    log_method = logger.error if error else logger.info
+    log_method(message)
+
+
+def emit_error(logger: logging.Logger | None, message: str) -> None:
+    emit(logger, message, error=True)
 
 
 def json_safe(value: object) -> object:

@@ -286,6 +286,10 @@ def main() -> int:
     logger, log_path = setup_script_logging("buscador_candidatas_imagens", ROOT_DIR, getattr(args, "log_dir", None))
     args._logger = logger
     args._log_path = log_path
+    return run_search(args, logger)
+
+
+def run_search(args: argparse.Namespace, logger: Any) -> int:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
     if args.apply_approvals:
@@ -298,6 +302,29 @@ def main() -> int:
     products = load_products(args)
     skipped_existing = getattr(args, "_skipped_existing_products", [])
     invalid_products = getattr(args, "_skipped_invalid_products", [])
+    write_skip_reports(skipped_existing, invalid_products, args, logger)
+    if not products:
+        return finish_empty_search(args, skipped_existing, invalid_products, logger)
+
+    log_search_context(args, products, logger)
+    if args.dry_run:
+        run_dry_run(products, args)
+        write_unreliable_products([])
+        write_failure_summary([])
+        write_execution_summary(args, [], skipped_existing, invalid_products, [], exit_code=0)
+        return 0
+
+    candidates, unreliable_products = collect_candidates_for_products(products, args, logger)
+    finish_search_reports(args, candidates, skipped_existing, invalid_products, unreliable_products, logger)
+    return 0
+
+
+def write_skip_reports(
+    skipped_existing: list[Product],
+    invalid_products: list[dict[str, str]],
+    args: argparse.Namespace,
+    logger: Any,
+) -> None:
     if skipped_existing:
         write_skipped_products(skipped_existing, args)
         emit(logger, f"SKUs pulados: {len(skipped_existing)}")
@@ -305,13 +332,22 @@ def main() -> int:
     else:
         write_skipped_products([], args)
     write_invalid_products(invalid_products)
-    if not products:
-        emit(logger, "Nenhum produto encontrado.")
-        write_unreliable_products([])
-        write_failure_summary([])
-        write_execution_summary(args, [], skipped_existing, invalid_products, [], exit_code=0)
-        return 0
 
+
+def finish_empty_search(
+    args: argparse.Namespace,
+    skipped_existing: list[Product],
+    invalid_products: list[dict[str, str]],
+    logger: Any,
+) -> int:
+    emit(logger, "Nenhum produto encontrado.")
+    write_unreliable_products([])
+    write_failure_summary([])
+    write_execution_summary(args, [], skipped_existing, invalid_products, [], exit_code=0)
+    return 0
+
+
+def log_search_context(args: argparse.Namespace, products: list[Product], logger: Any) -> None:
     emit(logger, f"Fonte de SKUs: {args.workbook}")
     if args.local_root:
         emit(logger, f"Fonte local de imagens candidatas: {args.local_root}")
@@ -320,13 +356,12 @@ def main() -> int:
         emit(logger, f"Destino dos downloads: {download_root(args)}\\[SKU]")
     emit(logger, f"OCR: {'ativo' if ocr_available() else 'indisponivel'}")
 
-    if args.dry_run:
-        run_dry_run(products, args)
-        write_unreliable_products([])
-        write_failure_summary([])
-        write_execution_summary(args, [], skipped_existing, invalid_products, [], exit_code=0)
-        return 0
 
+def collect_candidates_for_products(
+    products: list[Product],
+    args: argparse.Namespace,
+    logger: Any,
+) -> tuple[list[Candidate], list[Product]]:
     candidates: list[Candidate] = []
     unreliable_products: list[Product] = []
     for index, product in enumerate(products, start=1):
@@ -352,6 +387,17 @@ def main() -> int:
 
         candidates.extend(product_candidates[: args.keep_per_product])
 
+    return candidates, unreliable_products
+
+
+def finish_search_reports(
+    args: argparse.Namespace,
+    candidates: list[Candidate],
+    skipped_existing: list[Product],
+    invalid_products: list[dict[str, str]],
+    unreliable_products: list[Product],
+    logger: Any,
+) -> None:
     write_unreliable_products(unreliable_products)
     write_failure_summary(candidates)
     write_reports(candidates)
@@ -360,7 +406,6 @@ def main() -> int:
     emit(logger, f"HTML de revisao: {REVIEW_HTML}")
     emit(logger, f"Resumo JSON: {default_summary_path(args)}")
     write_execution_summary(args, candidates, skipped_existing, invalid_products, unreliable_products, exit_code=0)
-    return 0
 
 
 def parse_args() -> argparse.Namespace:
@@ -615,14 +660,15 @@ def download_root(args: argparse.Namespace) -> Path:
 
 
 def run_dry_run(products: list[Product], args: argparse.Namespace) -> None:
-    print(f"Dry-run: {len(products)} produto(s) seriam analisados.")
+    logger = getattr(args, "_logger", None)
+    emit(logger, f"Dry-run: {len(products)} produto(s) seriam analisados.")
     for product in products:
         queries = build_queries(product)[: getattr(args, "max_queries", 2)]
-        print(f"- {product.sku} :: {product.name}")
+        emit(logger, f"- {product.sku} :: {product.name}")
         if queries:
-            print(f"  consultas: {' | '.join(queries)}")
+            emit(logger, f"  consultas: {' | '.join(queries)}")
         if getattr(args, "download", False):
-            print(f"  destino: {download_root(args) / safe_folder_name(product.sku)}")
+            emit(logger, f"  destino: {download_root(args) / safe_folder_name(product.sku)}")
 
 
 def ensure_product_download_folder(product: Product, args: argparse.Namespace) -> Path:

@@ -242,6 +242,34 @@ class ConciliadorPlanilhasSkuTest(unittest.TestCase):
             validation = pd.read_excel(root / "relatorio.xlsx", sheet_name="validacao")
             self.assertIn("preco_invalido", validation["code"].tolist())
 
+    def test_dry_run_writes_validation_report_without_final_import_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            cliente = root / "cliente.xlsx"
+            wordpress = root / "wordpress.xlsx"
+            saida = root / "saida.xlsx"
+            novos = root / "produtos-novos.xlsx"
+
+            pd.DataFrame([{"Nome": "Toner HP CE253AZ Magenta", "Estoque": 2, "Preco": 100}]).to_excel(
+                cliente,
+                index=False,
+            )
+            pd.DataFrame([{"ID": 10, "SKU": "OLD", "Nome": "Toner HP CE253AZ Magenta", "Estoque": 1}]).to_excel(
+                wordpress,
+                index=False,
+                sheet_name="Controle de Estoque",
+            )
+
+            result = conciliador.processar_planilha(
+                make_args(root, cliente, wordpress, saida, dry_run=True, saida_novos_produtos=novos)
+            )
+
+            self.assertFalse(saida.exists())
+            self.assertFalse(novos.exists())
+            self.assertTrue(result.relatorio.exists())
+            validation = pd.read_excel(result.relatorio, sheet_name="validacao")
+            self.assertIn("severity", validation.columns.tolist())
+
     def test_existing_product_without_id_is_warning_when_sku_exists(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)

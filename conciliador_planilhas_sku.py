@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import re
-import sys
 from dataclasses import dataclass
 from difflib import SequenceMatcher
 from pathlib import Path
@@ -13,12 +12,14 @@ import pandas as pd
 from msn_utils import (
     ValidationIssue,
     emit,
+    emit_error,
     normalize_header,
     normalize_price_value,
     normalize_sku,
     normalize_stock_value,
     normalize_words,
     setup_script_logging,
+    validate_new_products_dataframe,
     write_json,
 )
 
@@ -174,6 +175,15 @@ class ProcessResult:
     log_path: Path | None = None
 
 
+@dataclass(frozen=True)
+class WordPressColumns:
+    id: str
+    sku: str
+    nome: str
+    estoque: str | None
+    preco: str | None
+
+
 class ValidationFailure(RuntimeError):
     def __init__(self, issues: list[ValidationIssue], report_path: Path | None = None) -> None:
         self.issues = issues
@@ -192,25 +202,32 @@ def main() -> int:
         result = processar_planilha(args)
     except ValidationFailure as exc:
         logger.error("Erro ao validar: %s", exc)
-        print(f"Erro ao validar: {exc}", file=sys.stderr)
+        emit_error(logger, f"Erro ao validar: {exc}")
         for issue in exc.issues[:10]:
             if issue.severity == "erro":
-                print(f"- linha {issue.row_number or '-'} {issue.field}: {issue.message}", file=sys.stderr)
+                emit_error(logger, f"- linha {issue.row_number or '-'} {issue.field}: {issue.message}")
         if exc.report_path:
-            print(f"Relatorio de validacao: {exc.report_path}", file=sys.stderr)
+            emit_error(logger, f"Relatorio de validacao: {exc.report_path}")
         write_execution_summary(args, None, exit_code=2, issues=exc.issues, error=str(exc))
         return 2
     except Exception as exc:
         logger.exception("Erro ao processar")
-        print(f"Erro ao processar: {exc}", file=sys.stderr)
+        emit_error(logger, f"Erro ao processar: {exc}")
         write_execution_summary(args, None, exit_code=1, error=str(exc))
         return 1
 
-    emit(logger, f"Arquivo gerado: {result.saida}")
-    if result.relatorio:
-        emit(logger, f"Relatorio gerado: {result.relatorio}")
-    if result.novos_produtos:
-        emit(logger, f"Novos produtos gerados: {result.novos_produtos}")
+    if args.dry_run:
+        emit(logger, f"Arquivo final planejado (nao gravado): {result.saida}")
+        if result.relatorio:
+            emit(logger, f"Relatorio de dry-run gerado: {result.relatorio}")
+        if result.novos_produtos:
+            emit(logger, f"Novos produtos planejados (nao gravado): {result.novos_produtos}")
+    else:
+        emit(logger, f"Arquivo gerado: {result.saida}")
+        if result.relatorio:
+            emit(logger, f"Relatorio gerado: {result.relatorio}")
+        if result.novos_produtos:
+            emit(logger, f"Novos produtos gerados: {result.novos_produtos}")
     write_execution_summary(args, result, exit_code=0)
     return 0
 
@@ -418,8 +435,10 @@ def processar_planilha(args: argparse.Namespace) -> ProcessResult:
         raise ValidationFailure(validation_issues, report_path=relatorio)
 
     if getattr(args, "dry_run", False):
+        write_report_output(resultado, relatorio, validation_issues)
         print_summary(resultado, getattr(args, "_logger", None))
-        emit(getattr(args, "_logger", None), "Dry-run: nenhum arquivo gravado.")
+        emit(getattr(args, "_logger", None), f"Dry-run: relatorio de validacao gerado em {relatorio}.")
+        emit(getattr(args, "_logger", None), "Dry-run: arquivos finais de importacao nao foram gravados.")
         return ProcessResult(saida=saida, relatorio=relatorio, novos_produtos=saida_novos)
 
     write_wordpress_output(wordpress_atualizada, saida, sheet_name=args.sheet_wordpress)
@@ -475,18 +494,14 @@ def atualizar_wordpress_com_cliente(
         create=preco_col is not None,
     )
 
-    wp_by_name: dict[str, int] = {}
-    wp_by_sku: dict[str, int] = {}
-    used_skus: set[str] = set()
-    for wp_index, row in wordpress_atualizada.iterrows():
-        sku = clean_cell(row.get(wp_sku_col))
-        name = clean_cell(row.get(wp_nome_col))
-        if sku:
-            normalized_sku = normalize_sku(sku)
-            used_skus.add(normalized_sku)
-            wp_by_sku.setdefault(normalized_sku, wp_index)
-        if name:
-            wp_by_name.setdefault(normalize_name(name), wp_index)
+    wp_columns = WordPressColumns(
+        id=wp_id_col,
+        sku=wp_sku_col,
+        nome=wp_nome_col,
+        estoque=wp_estoque_col,
+        preco=wp_preco_col,
+    )
+    wp_by_name, wp_by_sku, used_skus = build_wordpress_indexes(wordpress_atualizada, wp_columns)
 
     for index, row in resultado.iterrows():
         row_number = index + 2
@@ -527,20 +542,16 @@ def atualizar_wordpress_com_cliente(
                 wp_index,
                 stock_value=stock_value,
                 price_value=price_value,
-                wp_estoque_col=wp_estoque_col,
-                wp_preco_col=wp_preco_col,
+                wp_estoque_col=wp_columns.estoque,
+                wp_preco_col=wp_columns.preco,
             )
             resultado.at[index, "Status_Conciliacao"] = match_status
-            resultado.at[index, "ID_WordPress"] = clean_cell(wordpress_atualizada.at[wp_index, wp_id_col])
-            resultado.at[index, "SKU_Encontrado_WordPress"] = clean_cell(wordpress_atualizada.at[wp_index, wp_sku_col])
-            resultado.at[index, "Nome_WordPress"] = clean_cell(wordpress_atualizada.at[wp_index, wp_nome_col])
+            fill_result_from_wordpress_row(resultado, index, wordpress_atualizada, wp_index, wp_columns)
         else:
             possible_index, possible_score = find_possible_name_match(normalized_name, wp_by_name)
             if possible_index is not None:
                 resultado.at[index, "Status_Conciliacao"] = "revisar_possivel_match"
-                resultado.at[index, "ID_WordPress"] = clean_cell(wordpress_atualizada.at[possible_index, wp_id_col])
-                resultado.at[index, "SKU_Encontrado_WordPress"] = clean_cell(wordpress_atualizada.at[possible_index, wp_sku_col])
-                resultado.at[index, "Nome_WordPress"] = clean_cell(wordpress_atualizada.at[possible_index, wp_nome_col])
+                fill_result_from_wordpress_row(resultado, index, wordpress_atualizada, possible_index, wp_columns)
                 obs.append(f"Possivel produto existente por nome similar ({possible_score:.0%}); revisar manualmente.")
                 validation_issues.append(
                     ValidationIssue(
@@ -553,17 +564,14 @@ def atualizar_wordpress_com_cliente(
                 )
             else:
                 sku = unique_sku(generated_sku or client_sku or "SKU-MOD", used_skus)
-                new_row = {column: "" for column in wordpress_atualizada.columns}
-                # WooCommerce cria o ID quando a linha nova chega sem ID; SKU atua como chave estavel.
-                new_row[wp_sku_col] = sku
-                new_row[wp_nome_col] = client_name
-                if estoque_col and wp_estoque_col:
-                    new_row[wp_estoque_col] = stock_value
-                if preco_col and wp_preco_col:
-                    new_row[wp_preco_col] = price_value
-
-                wordpress_atualizada.loc[len(wordpress_atualizada)] = new_row
-                new_wp_index = len(wordpress_atualizada) - 1
+                new_wp_index = append_new_wordpress_product(
+                    wordpress_atualizada,
+                    wp_columns,
+                    sku=sku,
+                    name=client_name,
+                    stock_value=stock_value if estoque_col else "",
+                    price_value=price_value if preco_col else "",
+                )
                 wp_by_name[normalized_name] = new_wp_index
                 wp_by_sku[normalize_sku(sku)] = new_wp_index
                 used_skus.add(normalize_sku(sku))
@@ -581,6 +589,58 @@ def atualizar_wordpress_com_cliente(
         resultado.at[index, "Observacao_Conciliacao"] = " ".join(obs)
 
     return wordpress_atualizada, validation_issues
+
+
+def build_wordpress_indexes(
+    wordpress_df: pd.DataFrame,
+    columns: WordPressColumns,
+) -> tuple[dict[str, int], dict[str, int], set[str]]:
+    by_name: dict[str, int] = {}
+    by_sku: dict[str, int] = {}
+    used_skus: set[str] = set()
+    for wp_index, row in wordpress_df.iterrows():
+        sku = clean_cell(row.get(columns.sku))
+        name = clean_cell(row.get(columns.nome))
+        if sku:
+            normalized_sku = normalize_sku(sku)
+            used_skus.add(normalized_sku)
+            by_sku.setdefault(normalized_sku, wp_index)
+        if name:
+            by_name.setdefault(normalize_name(name), wp_index)
+    return by_name, by_sku, used_skus
+
+
+def fill_result_from_wordpress_row(
+    resultado: pd.DataFrame,
+    result_index: int,
+    wordpress_df: pd.DataFrame,
+    wordpress_index: int,
+    columns: WordPressColumns,
+) -> None:
+    resultado.at[result_index, "ID_WordPress"] = clean_cell(wordpress_df.at[wordpress_index, columns.id])
+    resultado.at[result_index, "SKU_Encontrado_WordPress"] = clean_cell(wordpress_df.at[wordpress_index, columns.sku])
+    resultado.at[result_index, "Nome_WordPress"] = clean_cell(wordpress_df.at[wordpress_index, columns.nome])
+
+
+def append_new_wordpress_product(
+    wordpress_df: pd.DataFrame,
+    columns: WordPressColumns,
+    *,
+    sku: str,
+    name: str,
+    stock_value: Any,
+    price_value: Any,
+) -> int:
+    new_row = {column: "" for column in wordpress_df.columns}
+    # WooCommerce cria o ID quando a linha nova chega sem ID; SKU atua como chave estavel.
+    new_row[columns.sku] = sku
+    new_row[columns.nome] = name
+    if columns.estoque and has_value(stock_value):
+        new_row[columns.estoque] = stock_value
+    if columns.preco and has_value(price_value):
+        new_row[columns.preco] = price_value
+    wordpress_df.loc[len(wordpress_df)] = new_row
+    return len(wordpress_df) - 1
 
 
 def find_possible_name_match(normalized_name: str, wp_by_name: dict[str, int]) -> tuple[int | None, float]:
@@ -783,29 +843,15 @@ def report_path(output_file: Path, report_arg: Path | None) -> Path:
 
 
 def validate_import_outputs(resultado: pd.DataFrame, wordpress_df: pd.DataFrame) -> list[ValidationIssue]:
-    issues: list[ValidationIssue] = []
     novos_import = new_products_import_frame(resultado, wordpress_df)
-    if "ID" in novos_import.columns:
-        issues.append(ValidationIssue("erro", None, "ID", "id_em_novos", "produtos-novos nao pode conter coluna ID."))
-    if "SKU" not in novos_import.columns:
-        issues.append(ValidationIssue("erro", None, "SKU", "sku_ausente", "produtos-novos precisa conter coluna SKU."))
-    else:
-        normalized_skus = novos_import["SKU"].map(normalize_sku)
-        for index, sku in normalized_skus.items():
-            if not sku:
-                issues.append(ValidationIssue("erro", index + 2, "SKU", "sku_vazio", "SKU vazio em produtos novos."))
-        duplicated = normalized_skus[normalized_skus != ""].duplicated(keep=False)
-        for index, is_duplicated in duplicated.items():
-            if is_duplicated:
-                issues.append(
-                    ValidationIssue(
-                        "erro",
-                        index + 2,
-                        "SKU",
-                        "sku_duplicado",
-                        f"SKU duplicado em produtos novos: {novos_import.at[index, 'SKU']}",
-                    )
-                )
+    issues = validate_new_products_dataframe(
+        novos_import,
+        id_error_code="id_em_novos",
+        id_error_message="produtos-novos nao pode conter coluna ID.",
+        missing_sku_message="produtos-novos precisa conter coluna SKU.",
+        empty_sku_message="SKU vazio em produtos novos.",
+        duplicated_sku_message_prefix="SKU duplicado em produtos novos",
+    )
 
     wp_id_col = resolve_column(wordpress_df, None, ID_ALIASES, "ID WordPress", required=False)
     wp_sku_col = resolve_column(wordpress_df, None, SKU_ALIASES, "SKU WordPress", required=False)
@@ -910,7 +956,7 @@ def resolve_or_create_column(
         return column
     if not create:
         return None
-    df[default_name] = ""
+    df[default_name] = pd.Series([""] * len(df), index=df.index, dtype=object)
     return default_name
 
 

@@ -71,15 +71,30 @@ Ou, para rodar o fluxo completo em sequencia (conciliacao, buscador e otimizador
   --conciliacao-folder "/c/Users/Sama Contabilidade/Desktop/Conciliacao"
 ```
 
+Para incluir a validacao piloto WooCommerce logo apos a conciliacao, ainda sem criar produtos:
+
+```bash
+./.venv/Scripts/python.exe -B run_all_scripts.py \
+  --desktop-folder-name "Produtos" \
+  --conciliacao-folder "/c/Users/Sama Contabilidade/Desktop/Conciliacao" \
+  --woo-pilot \
+  --skip-images
+```
+
+Para criar o piloto real no WooCommerce, copie `woocommerce.env.example` para `woocommerce.env`, preencha as credenciais reais da API REST e use `--woo-env-file woocommerce.env` com `--woo-pilot --woo-apply`.
+
 Esse comando:
 
 1. procura em `Desktop/Conciliacao` os arquivos xlsx com `cliente` e `wordpress` no nome;
 2. gera `Desktop/Conciliacao/todos-os-produtos.xlsx`;
 3. gera `Desktop/Conciliacao/relatorio-conciliacao.xlsx`;
 4. gera `Desktop/Conciliacao/produtos-novos.xlsx`;
-5. executa o buscador de imagens usando esse workbook;
-6. salva as pastas de imagens no desktop em `Desktop/[NomeDaPasta]/[SKU]`;
-7. executa o otimizador usando essas pastas.
+5. executa `verificador_fluxo_msn.py` e grava `verificacao-fluxo-msn.json`;
+6. executa o buscador de imagens usando esse workbook;
+7. salva as pastas de imagens no desktop em `Desktop/[NomeDaPasta]/[SKU]`;
+8. executa o otimizador usando essas pastas.
+
+Use `--skip-verify` apenas se precisar pular temporariamente essa verificacao local.
 
 Neste fluxo, a planilha do cliente tem precedencia para `Estoque` e `Preço`.
 
@@ -97,7 +112,7 @@ Controle_de_estoque_Com_Filtro_atualizada_relatorio.xlsx
 produtos-novos.xlsx
 ```
 
-O arquivo `produtos-novos.xlsx` exporta somente a coluna `SKU`, sem `ID`, para que o WooCommerce crie IDs seguros durante a importacao.
+O arquivo `produtos-novos.xlsx` exporta os dados dos produtos novos no formato da planilha WordPress, mas sempre sem coluna `ID`, para que o WooCommerce crie IDs seguros durante a importacao usando o `SKU`.
 
 Antes de gravar os arquivos finais, o conciliador valida SKU, ID, estoque e preco. Se encontrar erro critico, ele retorna codigo `2`, grava a aba `validacao` no relatorio e bloqueia a geracao dos arquivos de importacao.
 
@@ -189,6 +204,70 @@ O `--proximo-id` foi mantido apenas por compatibilidade. No fluxo atual, produto
 ./.venv/Scripts/python.exe -B conciliador_planilhas_sku.py \
   "/c/caminho/cliente.xlsx" \
   --dry-run
+```
+
+### Importacao piloto no WooCommerce
+
+Antes de importar todos os novos produtos, gere e confira a amostra:
+
+```powershell
+.\.venv\Scripts\python.exe -B verificador_fluxo_msn.py `
+  --conciliacao-folder "$env:USERPROFILE\Desktop\Conciliacao"
+
+.\.venv\Scripts\python.exe -B importador_piloto_woocommerce.py `
+  --workbook "$env:USERPROFILE\Desktop\Conciliacao\produtos-novos-amostra-5.xlsx" `
+  --limit 5
+```
+
+O verificador grava `verificacao-fluxo-msn.json` na pasta de conciliacao e retorna `2` se houver erro critico nos arquivos de importacao.
+
+Sem `--apply`, o comando apenas valida a planilha e grava log/JSON de planejamento. Para executar a criacao real no WooCommerce, copie o exemplo de credenciais:
+
+```powershell
+Copy-Item .\woocommerce.env.example .\woocommerce.env
+notepad .\woocommerce.env
+```
+
+Depois rode com `--apply`:
+
+```powershell
+.\.venv\Scripts\python.exe -B importador_piloto_woocommerce.py `
+  --workbook "$env:USERPROFILE\Desktop\Conciliacao\produtos-novos-amostra-5.xlsx" `
+  --limit 5 `
+  --env-file .\woocommerce.env `
+  --preflight-only
+
+.\.venv\Scripts\python.exe -B importador_piloto_woocommerce.py `
+  --workbook "$env:USERPROFILE\Desktop\Conciliacao\produtos-novos-amostra-5.xlsx" `
+  --limit 5 `
+  --env-file .\woocommerce.env `
+  --apply
+```
+
+O importador consulta primeiro por `SKU`; se o produto ja existir, ele pula por padrao. Produtos criados entram como `draft`, a menos que `--status publish` seja informado.
+
+O fluxo completo tambem aceita o mesmo arquivo:
+
+```powershell
+.\.venv\Scripts\python.exe -B run_all_scripts.py `
+  --desktop-folder-name "Produtos" `
+  --conciliacao-folder "$env:USERPROFILE\Desktop\Conciliacao" `
+  --woo-pilot `
+  --woo-preflight-only `
+  --woo-env-file .\woocommerce.env `
+  --skip-images
+```
+
+Se o preflight passar, execute a criacao piloto:
+
+```powershell
+.\.venv\Scripts\python.exe -B run_all_scripts.py `
+  --desktop-folder-name "Produtos" `
+  --conciliacao-folder "$env:USERPROFILE\Desktop\Conciliacao" `
+  --woo-pilot `
+  --woo-apply `
+  --woo-env-file .\woocommerce.env `
+  --skip-images
 ```
 
 ## 2. Buscar candidatas de imagens

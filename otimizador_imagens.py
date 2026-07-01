@@ -5,9 +5,9 @@ import csv
 import html
 import io
 import json
+import logging
 import re
 import subprocess
-import sys
 import time
 import unicodedata
 import zipfile
@@ -18,7 +18,7 @@ from urllib.parse import quote_plus, unquote, urljoin, urlparse
 
 import requests
 
-from msn_utils import emit, retry_call, setup_script_logging, write_json
+from msn_utils import emit, emit_error, retry_call, setup_script_logging, write_json
 
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -133,53 +133,52 @@ def main() -> int:
     logger, log_path = setup_script_logging("otimizador_imagens", ROOT_DIR, getattr(args, "log_dir", None))
     args._logger = logger
     args._log_path = log_path
+    return run_optimizer(args, logger)
+
+
+def prepare_output_dirs(args: argparse.Namespace) -> None:
     PRODUCTS_DIR.mkdir(exist_ok=True)
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     if args.icecat_public:
         RAW_DIR.mkdir(parents=True, exist_ok=True)
 
-    try:
-        products = load_products(args)
-    except Exception as exc:
-        logger.exception("Erro ao carregar produtos")
-        print(f"Erro ao carregar produtos: {exc}", file=sys.stderr)
-        write_execution_summary(args, [], exit_code=2, error=str(exc))
-        return 2
 
-    if not products:
-        if should_use_download_folders(args):
-            emit(
-                logger,
-                "Nenhum arquivo ou pasta em Downloads com SKU correspondente na planilha. "
-                f"Use nomes como: {args.downloads_dir.expanduser().resolve()}\\TON-HP-CE313AB-MAG "
-                "ou TON-HP-CE313AB-MAG.zip"
-            )
-        else:
-            emit(logger, "Nenhum produto encontrado para processar.")
-        write_report([])
-        write_execution_summary(args, [], exit_code=0)
-        return 0
-
-    if args.dry_run:
-        exit_code = run_dry_run(products, args)
-        write_execution_summary(args, getattr(args, "_last_results", []), exit_code=exit_code)
-        return exit_code
-
-    client = (
-        PublicIcecatClient(
-            args.search_delay,
-            timeout=args.timeout,
-            download_timeout=args.download_timeout,
-            retries=args.retries,
-            retry_backoff=args.retry_backoff,
-            logger=logger,
+def handle_no_products(args: argparse.Namespace, logger: logging.Logger) -> int:
+    if should_use_download_folders(args):
+        emit(
+            logger,
+            "Nenhum arquivo ou pasta em Downloads com SKU correspondente na planilha. "
+            f"Use nomes como: {args.downloads_dir.expanduser().resolve()}\\TON-HP-CE313AB-MAG "
+            "ou TON-HP-CE313AB-MAG.zip"
         )
-        if args.icecat_public
-        else None
+    else:
+        emit(logger, "Nenhum produto encontrado para processar.")
+    write_report([])
+    write_execution_summary(args, [], exit_code=0)
+    return 0
+
+
+def build_public_icecat_client(args: argparse.Namespace, logger: logging.Logger) -> PublicIcecatClient | None:
+    if not args.icecat_public:
+        return None
+    return PublicIcecatClient(
+        args.search_delay,
+        timeout=args.timeout,
+        download_timeout=args.download_timeout,
+        retries=args.retries,
+        retry_backoff=args.retry_backoff,
+        logger=logger,
     )
+
+
+def process_products(
+    products: list[Product],
+    args: argparse.Namespace,
+    logger: logging.Logger,
+    client: PublicIcecatClient | None,
+) -> tuple[list[ProductResult], list[Product]]:
     results: list[ProductResult] = []
     products_to_mark: list[Product] = []
-
     for index, product in enumerate(products, start=1):
         emit(logger, f"[{index}/{len(products)}] Produto {product.sku}: {product.name}")
         if args.input:
@@ -201,16 +200,22 @@ def main() -> int:
             emit(logger, f"  detalhe={result.message}")
         if should_mark_excel_product(args, result):
             products_to_mark.append(product)
+    return results, products_to_mark
 
-    if products_to_mark:
-        try:
-            marked = mark_excel_products_ok(products_to_mark, args)
-            if marked:
-                emit(logger, f"Planilha marcada: {marked} linha(s) com OK na coluna {args.mark_column}.")
-        except Exception as exc:
-            logger.warning("Nao foi possivel marcar OK na planilha: %s", exc)
-            print(f"Aviso: nao foi possivel marcar OK na planilha: {exc}", file=sys.stderr)
 
+def mark_products_if_needed(products_to_mark: list[Product], args: argparse.Namespace, logger: logging.Logger) -> None:
+    if not products_to_mark:
+        return
+    try:
+        marked = mark_excel_products_ok(products_to_mark, args)
+        if marked:
+            emit(logger, f"Planilha marcada: {marked} linha(s) com OK na coluna {args.mark_column}.")
+    except Exception as exc:
+        logger.warning("Nao foi possivel marcar OK na planilha: %s", exc)
+        emit_error(logger, f"Aviso: nao foi possivel marcar OK na planilha: {exc}")
+
+
+def finish_optimizer_run(args: argparse.Namespace, results: list[ProductResult], logger: logging.Logger) -> int:
     write_report(results)
     emit(logger, f"Relatorio gerado em: {REPORT_FILE}")
 
@@ -221,6 +226,30 @@ def main() -> int:
         emit(logger, "Processamento concluido com sucesso.")
     write_execution_summary(args, results, exit_code=0)
     return 0
+
+
+def run_optimizer(args: argparse.Namespace, logger: logging.Logger) -> int:
+    prepare_output_dirs(args)
+    try:
+        products = load_products(args)
+    except Exception as exc:
+        logger.exception("Erro ao carregar produtos")
+        emit_error(logger, f"Erro ao carregar produtos: {exc}")
+        write_execution_summary(args, [], exit_code=2, error=str(exc))
+        return 2
+
+    if not products:
+        return handle_no_products(args, logger)
+
+    if args.dry_run:
+        exit_code = run_dry_run(products, args)
+        write_execution_summary(args, getattr(args, "_last_results", []), exit_code=exit_code)
+        return exit_code
+
+    client = build_public_icecat_client(args, logger)
+    results, products_to_mark = process_products(products, args, logger, client)
+    mark_products_if_needed(products_to_mark, args, logger)
+    return finish_optimizer_run(args, results, logger)
 
 
 def parse_args() -> argparse.Namespace:
@@ -466,10 +495,11 @@ def read_visible_excel_rows(workbook_name: str, sheet_name: str) -> list[dict[st
     try:
         rows = read_excel_rows_openpyxl(workbook_name, sheet_name)
         if rows:
-            print(
+            logger = logging.getLogger("otimizador_imagens")
+            emit_error(
+                logger,
                 "Aviso: lendo a planilha salva no disco; filtros abertos no Excel "
                 "podem nao ser refletidos sem pywin32/COM.",
-                file=sys.stderr,
             )
             return rows
     except Exception as exc:

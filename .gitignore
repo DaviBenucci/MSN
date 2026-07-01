@@ -7,5 +7,7 @@ products/_approved_raw/
 products/_candidates/
 
 logs/
+.env
+*.env
 *.tmp
 *.log

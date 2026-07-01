@@ -16,10 +16,12 @@ SCRIPT_ROOT = Path(__file__).resolve().parent
 CONCILIADOR = SCRIPT_ROOT / "conciliador_planilhas_sku.py"
 BUSCADOR = SCRIPT_ROOT / "buscador_candidatas_imagens.py"
 OTIMIZADOR = SCRIPT_ROOT / "otimizador_imagens.py"
+IMPORTADOR_WOO = SCRIPT_ROOT / "importador_piloto_woocommerce.py"
+VERIFICADOR = SCRIPT_ROOT / "verificador_fluxo_msn.py"
 
 
-def run_script(command: list[str], logger: object | None = None) -> int:
-    emit(logger, "\n=> Executando: " + " ".join(command))
+def run_script(command: list[str], logger: object | None = None, display_command: list[str] | None = None) -> int:
+    emit(logger, "\n=> Executando: " + " ".join(display_command or command))
     completed = subprocess.run(command, text=True)
     if completed.returncode != 0:
         emit(logger, f"Erro: comando retornou {completed.returncode}", error=True)
@@ -47,6 +49,19 @@ def expected_novos_output(args: argparse.Namespace, todos_workbook: Path, concil
     if args.saida_novos_produtos:
         return conciliador.output_path(todos_workbook, args.saida_novos_produtos, fallback_suffix="_novos")
     return conciliacao_folder / "produtos-novos.xlsx"
+
+
+def expected_woo_pilot_workbook(args: argparse.Namespace, novos_workbook: Path, conciliacao_folder: Path) -> Path:
+    if args.woo_workbook:
+        return args.woo_workbook.expanduser().resolve()
+    sample = conciliacao_folder / "produtos-novos-amostra-5.xlsx"
+    if sample.exists():
+        return sample
+    return novos_workbook
+
+
+def expected_verification_output(conciliacao_folder: Path) -> Path:
+    return conciliacao_folder / "verificacao-fluxo-msn.json"
 
 
 def write_manifest(path: Path | None, manifest: dict[str, object]) -> None:
@@ -85,7 +100,166 @@ def summarize_conciliacao_report(path: Path) -> dict[str, object]:
         return {"summary_error": str(exc)}
 
 
-def main() -> int:
+def manifest_args(args: argparse.Namespace, conciliacao_folder: Path, manifesto_path: Path, log_path: Path) -> dict[str, object]:
+    raw_args = vars(args).copy()
+    for secret_key in ("woo_consumer_key", "woo_consumer_secret"):
+        if raw_args.get(secret_key):
+            raw_args[secret_key] = "***"
+    raw_args.update(
+        {
+            "conciliacao_folder": str(conciliacao_folder),
+            "desktop_folder_name": args.desktop_folder_name,
+            "manifesto": str(manifesto_path),
+            "log": str(log_path),
+        }
+    )
+    return json_safe(raw_args)  # type: ignore[return-value]
+
+
+def build_conciliador_command(args: argparse.Namespace, conciliacao_folder: Path) -> list[str]:
+    command = [
+        sys.executable,
+        str(CONCILIADOR),
+        "--conciliacao-folder",
+        str(conciliacao_folder),
+    ]
+    optional_pairs = [
+        ("--sheet-cliente", args.sheet_cliente),
+        ("--sheet-wordpress", args.sheet_wordpress),
+        ("--cliente", args.cliente),
+        ("--wordpress", args.wordpress),
+        ("--saida", args.saida),
+        ("--relatorio", args.relatorio),
+        ("--saida-novos-produtos", args.saida_novos_produtos),
+    ]
+    if args.proximo_id is not None:
+        command.extend(["--proximo-id", str(args.proximo_id)])
+    append_optional_pairs(command, optional_pairs)
+    return command
+
+
+def build_verifier_command(args: argparse.Namespace, conciliacao_folder: Path, verification_output: Path) -> list[str]:
+    command = [
+        sys.executable,
+        str(VERIFICADOR),
+        "--conciliacao-folder",
+        str(conciliacao_folder),
+        "--summary-json",
+        str(verification_output),
+    ]
+    if args.log_dir:
+        command.extend(["--log-dir", str(args.log_dir)])
+    return command
+
+
+def build_woo_command(args: argparse.Namespace, woo_pilot_workbook: Path) -> tuple[list[str], list[str]]:
+    command = [
+        sys.executable,
+        str(IMPORTADOR_WOO),
+        "--workbook",
+        str(woo_pilot_workbook),
+        "--limit",
+        str(args.woo_limit),
+        "--status",
+        args.woo_status,
+    ]
+    flags = [
+        ("--apply", args.woo_apply),
+        ("--preflight-only", args.woo_preflight_only),
+        ("--update-existing", args.woo_update_existing),
+    ]
+    for flag, enabled in flags:
+        if enabled:
+            command.append(flag)
+    append_optional_pairs(
+        command,
+        [
+            ("--env-file", args.woo_env_file),
+            ("--site-url", args.woo_site_url),
+            ("--consumer-key", args.woo_consumer_key),
+            ("--consumer-secret", args.woo_consumer_secret),
+            ("--timeout", args.timeout),
+            ("--retries", args.retries),
+            ("--retry-backoff", args.retry_backoff),
+            ("--log-dir", args.log_dir),
+        ],
+    )
+    return command, redact_command(command, {"--consumer-key", "--consumer-secret"})
+
+
+def build_buscador_command(args: argparse.Namespace, conciliacao_folder: Path, todos_workbook: Path, candidate_root: Path) -> list[str]:
+    command = [
+        sys.executable,
+        str(BUSCADOR),
+        "--source-root",
+        str(conciliacao_folder),
+        "--workbook",
+        str(todos_workbook),
+        "--web",
+    ]
+    if not args.no_download:
+        command.extend(["--download", "--download-root", str(candidate_root)])
+    if args.include_existing_products:
+        command.append("--include-existing-products")
+    append_optional_pairs(
+        command,
+        [
+            ("--sheet", args.search_sheet),
+            ("--timeout", args.timeout),
+            ("--retries", args.retries),
+            ("--retry-backoff", args.retry_backoff),
+        ],
+    )
+    return command
+
+
+def build_otimizador_command(args: argparse.Namespace, candidate_root: Path, todos_workbook: Path) -> list[str]:
+    command = [
+        sys.executable,
+        str(OTIMIZADOR),
+        "--downloads-dir",
+        str(candidate_root),
+        "--workbook",
+        str(todos_workbook),
+    ]
+    if args.white_background:
+        command.append("--white-background")
+    if args.overwrite:
+        command.append("--overwrite")
+    append_optional_pairs(
+        command,
+        [
+            ("--timeout", args.timeout),
+            ("--download-timeout", args.download_timeout),
+            ("--retries", args.retries),
+            ("--retry-backoff", args.retry_backoff),
+        ],
+    )
+    return command
+
+
+def append_optional_pairs(command: list[str], pairs: list[tuple[str, object | None]]) -> None:
+    for flag, value in pairs:
+        if value is not None:
+            command.extend([flag, str(value)])
+
+
+def redact_command(command: list[str], secret_flags: set[str]) -> list[str]:
+    return ["***" if index > 0 and command[index - 1] in secret_flags else value for index, value in enumerate(command)]
+
+
+def record_step(manifest: dict[str, object], name: str, command: list[str], exit_code: int) -> None:
+    manifest["steps"].append({"name": name, "command": command, "exit_code": exit_code})  # type: ignore[index]
+
+
+def finish_manifest(manifest: dict[str, object], manifesto_path: Path, exit_code: int) -> int:
+    manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
+    manifest["exit_code"] = exit_code
+    write_manifest(manifesto_path, manifest)
+    return exit_code
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Executa os scripts MSN em sequencia local.")
     parser.add_argument(
         "--conciliacao-folder",
@@ -129,19 +303,36 @@ def main() -> int:
     parser.add_argument("--retries", type=int, help="Retentativas HTTP repassadas ao buscador/otimizador.")
     parser.add_argument("--retry-backoff", type=float, help="Backoff HTTP repassado ao buscador/otimizador.")
     parser.add_argument("--skip-images", action="store_true", help="Roda apenas o conciliador e para antes do buscador/otimizador.")
+    parser.add_argument("--skip-verify", action="store_true", help="Nao roda o verificador local apos o conciliador.")
+    parser.add_argument("--woo-pilot", action="store_true", help="Roda importacao piloto WooCommerce em dry-run apos o conciliador.")
+    parser.add_argument("--woo-apply", action="store_true", help="Com --woo-pilot, executa criacao real no WooCommerce.")
+    parser.add_argument("--woo-preflight-only", action="store_true", help="Com --woo-pilot, valida API WooCommerce e nao cria produtos.")
+    parser.add_argument("--woo-workbook", type=Path, help="Planilha usada no piloto WooCommerce. Padrao: amostra de 5 ou produtos-novos.")
+    parser.add_argument("--woo-limit", type=int, default=5, help="Quantidade de produtos no piloto WooCommerce.")
+    parser.add_argument("--woo-status", choices=["draft", "publish", "private"], default="draft", help="Status dos produtos criados no piloto.")
+    parser.add_argument("--woo-update-existing", action="store_true", help="Atualiza produto existente encontrado por SKU no piloto.")
+    parser.add_argument("--woo-env-file", type=Path, help="Arquivo local com credenciais WooCommerce para o piloto.")
+    parser.add_argument("--woo-site-url", help="URL base da loja WooCommerce; alternativa a WOOCOMMERCE_URL.")
+    parser.add_argument("--woo-consumer-key", help="Consumer key WooCommerce; alternativa a WOOCOMMERCE_CONSUMER_KEY.")
+    parser.add_argument("--woo-consumer-secret", help="Consumer secret WooCommerce; alternativa a WOOCOMMERCE_CONSUMER_SECRET.")
     parser.add_argument("--manifesto", type=Path, help="Arquivo JSON com resumo dos comandos, artefatos e exit codes.")
     parser.add_argument("--log-dir", type=Path, help="Pasta para gravar logs da execucao. Padrao: MSN/logs.")
-    args = parser.parse_args()
-    logger, log_path = setup_script_logging("run_all_scripts", SCRIPT_ROOT, args.log_dir)
+    return parser.parse_args(argv)
 
-    conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
-    candidate_root = DEFAULT_DESKTOP / args.desktop_folder_name
-    candidate_root.mkdir(parents=True, exist_ok=True)
-    todos_workbook = expected_conciliador_output(args, conciliacao_folder)
-    relatorio_workbook = expected_relatorio_output(args, todos_workbook, conciliacao_folder)
-    novos_workbook = expected_novos_output(args, todos_workbook, conciliacao_folder)
-    manifesto_path = args.manifesto or (conciliacao_folder / "manifesto-execucao.json")
-    manifest: dict[str, object] = {
+
+def build_manifest(
+    args: argparse.Namespace,
+    conciliacao_folder: Path,
+    candidate_root: Path,
+    todos_workbook: Path,
+    relatorio_workbook: Path,
+    novos_workbook: Path,
+    woo_pilot_workbook: Path,
+    verification_output: Path,
+    manifesto_path: Path,
+    log_path: Path,
+) -> dict[str, object]:
+    return {
         "started_at": datetime.now().isoformat(timespec="seconds"),
         "conciliacao_folder": str(conciliacao_folder),
         "candidate_root": str(candidate_root),
@@ -149,124 +340,84 @@ def main() -> int:
             "todos_workbook": str(todos_workbook),
             "produtos_novos": str(novos_workbook),
             "relatorio": str(relatorio_workbook),
+            "woo_pilot_workbook": str(woo_pilot_workbook),
+            "verificacao": str(verification_output),
         },
         "steps": [],
-        "args": json_safe(vars(args) | {
-            "conciliacao_folder": str(conciliacao_folder),
-            "desktop_folder_name": args.desktop_folder_name,
-            "manifesto": str(manifesto_path),
-            "log": str(log_path),
-        }),
+        "args": manifest_args(args, conciliacao_folder, manifesto_path, log_path),
     }
 
-    conciliador_command = [
-        sys.executable,
-        str(CONCILIADOR),
-        "--conciliacao-folder",
-        str(conciliacao_folder),
-    ]
-    if args.sheet_cliente:
-        conciliador_command.extend(["--sheet-cliente", args.sheet_cliente])
-    if args.sheet_wordpress:
-        conciliador_command.extend(["--sheet-wordpress", args.sheet_wordpress])
-    if args.proximo_id is not None:
-        conciliador_command.extend(["--proximo-id", str(args.proximo_id)])
-    if args.cliente:
-        conciliador_command.extend(["--cliente", str(args.cliente)])
-    if args.wordpress:
-        conciliador_command.extend(["--wordpress", str(args.wordpress)])
-    if args.saida:
-        conciliador_command.extend(["--saida", str(args.saida)])
-    if args.relatorio:
-        conciliador_command.extend(["--relatorio", str(args.relatorio)])
-    if args.saida_novos_produtos:
-        conciliador_command.extend(["--saida-novos-produtos", str(args.saida_novos_produtos)])
 
+def run_pipeline(args: argparse.Namespace, logger: object | None, log_path: Path) -> int:
+    conciliacao_folder = args.conciliacao_folder.expanduser().resolve()
+    candidate_root = DEFAULT_DESKTOP / args.desktop_folder_name
+    candidate_root.mkdir(parents=True, exist_ok=True)
+    todos_workbook = expected_conciliador_output(args, conciliacao_folder)
+    relatorio_workbook = expected_relatorio_output(args, todos_workbook, conciliacao_folder)
+    novos_workbook = expected_novos_output(args, todos_workbook, conciliacao_folder)
+    woo_pilot_workbook = expected_woo_pilot_workbook(args, novos_workbook, conciliacao_folder)
+    verification_output = expected_verification_output(conciliacao_folder)
+    manifesto_path = args.manifesto or (conciliacao_folder / "manifesto-execucao.json")
+    manifest = build_manifest(
+        args,
+        conciliacao_folder,
+        candidate_root,
+        todos_workbook,
+        relatorio_workbook,
+        novos_workbook,
+        woo_pilot_workbook,
+        verification_output,
+        manifesto_path,
+        log_path,
+    )
+
+    conciliador_command = build_conciliador_command(args, conciliacao_folder)
     code = run_script(conciliador_command, logger)
-    manifest["steps"].append({"name": "conciliador", "command": conciliador_command, "exit_code": code})  # type: ignore[index]
+    record_step(manifest, "conciliador", conciliador_command, code)
     if code != 0:
-        manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
-        manifest["exit_code"] = code
-        write_manifest(manifesto_path, manifest)
-        return code
+        return finish_manifest(manifest, manifesto_path, code)
     manifest["summary"] = summarize_conciliacao_report(relatorio_workbook)
 
+    if not args.skip_verify:
+        verifier_command = build_verifier_command(args, conciliacao_folder, verification_output)
+        code = run_script(verifier_command, logger)
+        record_step(manifest, "verificador", verifier_command, code)
+        if code != 0:
+            return finish_manifest(manifest, manifesto_path, code)
+
+    if args.woo_pilot:
+        woo_command, manifest_command = build_woo_command(args, woo_pilot_workbook)
+        code = run_script(woo_command, logger, display_command=manifest_command)
+        record_step(manifest, "woo_pilot", manifest_command, code)
+        if code != 0:
+            return finish_manifest(manifest, manifesto_path, code)
+
     if args.skip_images:
-        manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
-        manifest["exit_code"] = 0
-        write_manifest(manifesto_path, manifest)
-        return 0
+        return finish_manifest(manifest, manifesto_path, 0)
 
     if not todos_workbook.exists():
         emit(logger, f"Erro: arquivo de conciliacao esperado nao encontrado: {todos_workbook}", error=True)
-        manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
-        manifest["exit_code"] = 1
-        write_manifest(manifesto_path, manifest)
-        return 1
+        return finish_manifest(manifest, manifesto_path, 1)
 
-    buscador_command = [
-        sys.executable,
-        str(BUSCADOR),
-        "--source-root",
-        str(conciliacao_folder),
-        "--workbook",
-        str(todos_workbook),
-        "--web",
-    ]
-    if not args.no_download:
-        buscador_command.extend(["--download", "--download-root", str(candidate_root)])
-    if args.search_sheet:
-        buscador_command.extend(["--sheet", args.search_sheet])
-    if args.include_existing_products:
-        buscador_command.append("--include-existing-products")
-    if args.timeout is not None:
-        buscador_command.extend(["--timeout", str(args.timeout)])
-    if args.retries is not None:
-        buscador_command.extend(["--retries", str(args.retries)])
-    if args.retry_backoff is not None:
-        buscador_command.extend(["--retry-backoff", str(args.retry_backoff)])
-
+    buscador_command = build_buscador_command(args, conciliacao_folder, todos_workbook, candidate_root)
     code = run_script(buscador_command, logger)
-    manifest["steps"].append({"name": "buscador", "command": buscador_command, "exit_code": code})  # type: ignore[index]
+    record_step(manifest, "buscador", buscador_command, code)
     if code != 0:
-        manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
-        manifest["exit_code"] = code
-        write_manifest(manifesto_path, manifest)
-        return code
+        return finish_manifest(manifest, manifesto_path, code)
 
-    otimizador_command = [
-        sys.executable,
-        str(OTIMIZADOR),
-        "--downloads-dir",
-        str(candidate_root),
-        "--workbook",
-        str(todos_workbook),
-    ]
-    if args.white_background:
-        otimizador_command.append("--white-background")
-    if args.overwrite:
-        otimizador_command.append("--overwrite")
-    if args.timeout is not None:
-        otimizador_command.extend(["--timeout", str(args.timeout)])
-    if args.download_timeout is not None:
-        otimizador_command.extend(["--download-timeout", str(args.download_timeout)])
-    if args.retries is not None:
-        otimizador_command.extend(["--retries", str(args.retries)])
-    if args.retry_backoff is not None:
-        otimizador_command.extend(["--retry-backoff", str(args.retry_backoff)])
-
+    otimizador_command = build_otimizador_command(args, candidate_root, todos_workbook)
     code = run_script(otimizador_command, logger)
-    manifest["steps"].append({"name": "otimizador", "command": otimizador_command, "exit_code": code})  # type: ignore[index]
+    record_step(manifest, "otimizador", otimizador_command, code)
     if code != 0:
-        manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
-        manifest["exit_code"] = code
-        write_manifest(manifesto_path, manifest)
-        return code
+        return finish_manifest(manifest, manifesto_path, code)
 
-    manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
-    manifest["exit_code"] = 0
-    write_manifest(manifesto_path, manifest)
-    return 0
+    return finish_manifest(manifest, manifesto_path, 0)
+
+
+def main() -> int:
+    args = parse_args()
+    logger, log_path = setup_script_logging("run_all_scripts", SCRIPT_ROOT, args.log_dir)
+    return run_pipeline(args, logger, log_path)
 
 
 if __name__ == "__main__":
