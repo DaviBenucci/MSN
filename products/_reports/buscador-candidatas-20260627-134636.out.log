@@ -1,0 +1,29 @@
+SKUs pulados por ja terem imagens prontas/localizadas: 457
+Relatorio de pulados: C:\Users\Davi Benucci\Desktop\MSN\products\_reports\skus-pulados-imagens.csv
+Fonte de SKUs: C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\Controle_de_estoque_Com_Filtro.xlsx
+Fonte local de imagens candidatas: C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos
+Produtos selecionados: 19
+Destino dos downloads: C:\Users\Davi Benucci\Desktop\cópia de produtos\Produtos\[SKU]
+OCR: ativo
+[1/19] TON-HP-W9060X-PRT - Toner HP W9060X-EVP Preto
+[2/19] TON-HP-W9061X-CIA - Toner HP W9061X-EVP Ciano
+[3/19] TON-HP-W9062X-AMR - Toner HP W9062X-EVP Amarelo
+[4/19] TON-HP-W9063X-MAG - Toner HP W9063X-EVP Magenta
+[5/19] TON-HP-CF287XZ-PRT - Toner HP CF287XZ Preto
+[6/19] TON-HP-CE390XZ-PRT - Toner HP CE390XZ Preto
+[7/19] TON-HP-CF281XZ-PRT - Toner HP CF281XZ Preto
+[8/19] TON-HP-CE255XZ-PRT - Toner HP CE255XZ Preto
+[9/19] TON-HP-CE253AZ-MAG - Toner HP CE253AZ Magenta
+[10/19] PROD-SAM-JC9611705A660AX5V0021 - Samsung JC9611705A660AX5V0021
+[11/19] TON-GEN-3503H-CIA - Toner Ricoh 3503H Ciano
+[12/19] TON-GEN-3503H-AMR - Toner Ricoh 3503H Amarelo
+[13/19] TON-GEN-310K-PRT - Toner Ricoh SP 310K Preto
+[14/19] TON-LEX-64018HB - Toner Lexmark 64018HB
+[15/19] TON-LEX-CBH56A00 - Toner Lexmark CBH56A00
+[16/19] TON-MIN-C3100O-MAG - Toner Minolta Bizhub C3100O - TNP50M Magenta
+[17/19] IMP-SAM-C6260FR - Impressora Multifuncional Samsung C6260FR
+[18/19] IMP-SAM-238K - Impressora Samsung Color CLP-680 - Contador 40K / 68K / 238K
+[19/19] IMP-SAM-X4200RX - Impressora Multifuncional Samsung X4200RX
+CSV gerado: C:\Users\Davi Benucci\Desktop\MSN\products\_reports\candidatas-imagens.csv
+CSV para aprovacao manual: C:\Users\Davi Benucci\Desktop\MSN\products\_reports\candidatas-aprovacao.csv
+HTML de revisao: C:\Users\Davi Benucci\Desktop\MSN\products\_reports\revisao-candidatas.html
